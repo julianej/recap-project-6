@@ -1,24 +1,30 @@
-import connect from "../../../db/connect";
-import Project from "../../../db/models/Project";
+import useSWR from "swr";
 
-export default async function handler(req, res) {
-  if (req.method === "GET") {
-    try {
-      await connect();
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
-      const transactions = await Project.find();
+export default function HomePage() {
+  const { data, error, isLoading } = useSWR(
+    "/api/transactions",
+    fetcher
+  );
 
-      return res.status(200).json(transactions);
-    } catch (error) {
-      console.error("Database error:", error);
-
-      return res.status(500).json({
-        error: "Failed to fetch transactions",
-      });
-    }
+  if (isLoading) {
+    return <p>Loading...</p>;
   }
 
-  return res.status(405).json({
-    error: "Method not allowed",
-  });
+  if (error) {
+    return <p>Failed to load transactions.</p>;
+  }
+
+  return (
+    <main>
+      {data.map((transaction) => (
+        <div key={transaction._id}>
+          <h2>{transaction.title}</h2>
+          <p>{transaction.amount}</p>
+          <p>{transaction.category}</p>
+        </div>
+      ))}
+    </main>
+  );
 }
