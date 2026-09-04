@@ -1,10 +1,10 @@
-import connect from "../../../db/connect";
+import dbConnect from "../../../db/connect";
 import Project from "../../../db/models/Project";
 
 export default async function handler(request, response) {
   if (request.method === "GET") {
     try {
-      await connect();
+      await dbConnect();
 
       const transactions = await Project.find();
 
