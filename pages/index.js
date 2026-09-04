@@ -1,30 +1,34 @@
-import useSWR from "swr";
+// import useSWR from "swr";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+// const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function HomePage() {
-  const { data, error, isLoading } = useSWR(
-    "/api/transactions",
-    fetcher
-  );
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+    return <h1>Hello!</h1>;
 
-  if (error) {
-    return <p>Failed to load transactions.</p>;
-  }
+  // Use SWR to fetch transactions from the API
+  // const { data, error, isLoading } = useSWR(
+  //   "/api/transactions",
+  //   fetcher
+  // );
 
-  return (
-    <main>
-      {data.map((transaction) => (
-        <div key={transaction._id}>
-          <h2>{transaction.title}</h2>
-          <p>{transaction.amount}</p>
-          <p>{transaction.category}</p>
-        </div>
-      ))}
-    </main>
-  );
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
+
+  // if (error) {
+  //   return <p>Failed to load transactions.</p>;
+  // }
+
+  // return (
+  //   <main>
+  //     {data.map((transaction) => (
+  //       <div key={transaction._id}>
+  //         <h2>{transaction.title}</h2>
+  //         <p>{transaction.amount}</p>
+  //         <p>{transaction.category}</p>
+  //       </div>
+  //     ))}
+  //   </main>
+  // );
 }

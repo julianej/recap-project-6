@@ -1,24 +1,24 @@
 import connect from "../../../db/connect";
 import Project from "../../../db/models/Project";
 
-export default async function handler(req, res) {
-  if (req.method === "GET") {
+export default async function handler(request, response) {
+  if (request.method === "GET") {
     try {
       await connect();
 
       const transactions = await Project.find();
 
-      return res.status(200).json(transactions);
+      return response.status(200).json(transactions);
     } catch (error) {
       console.error("Database error:", error);
 
-      return res.status(500).json({
+      return response.status(500).json({
         error: "Failed to fetch transactions",
       });
     }
   }
 
-  return res.status(405).json({
+  return response.status(405).json({
     error: "Method not allowed",
   });
 }
