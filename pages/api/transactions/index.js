@@ -10,10 +10,10 @@ export default async function handler(req, res) {
 
       return res.status(200).json(transactions);
     } catch (error) {
-      console.error("Database connection failed:", error);
+      console.error("Database error:", error);
 
       return res.status(500).json({
-        error: "Failed to connect to the database",
+        error: "Failed to fetch transactions",
       });
     }
   }
