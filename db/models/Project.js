@@ -1,24 +1,26 @@
-import connect from "../../../db/connect";
-import Project from "../../../db/models/Project";
+import mongoose from "mongoose";
 
-export default async function handler(req, res) {
-  if (req.method === "GET") {
-    try {
-      await connect();
-
-      const transactions = await Project.find();
-
-      return res.status(200).json(transactions);
-    } catch (error) {
-      console.error("Database error:", error);
-
-      return res.status(500).json({
-        error: "Failed to fetch transactions",
-      });
-    }
+const projectSchema = new mongoose.Schema(
+  {
+    amount: {
+      type: Number,
+    },
+    title: {
+      type: String,
+    },
+    category: {
+      type: String,
+    },
+    date: {
+      type: Date,
+    },
+  },
+  {
+    collection: "transactions",
   }
+);
 
-  return res.status(405).json({
-    message: "Method not allowed",
-  });
-}
+const Project =
+  mongoose.models.Project || mongoose.model("Project", projectSchema);
+
+export default Project;
