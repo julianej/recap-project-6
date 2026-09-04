@@ -1,6 +1,6 @@
 # New Next Project
 
-### Local Development
+### Local Development Recap Project-6
 
 To work locally, please install the dependencies using `npm i` first.
 
