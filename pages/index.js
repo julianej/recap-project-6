@@ -1,11 +1,9 @@
 import useSWR from "swr";
 import styled from "styled-components";
 
-
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function HomePage() {
-  // Fetch transactions from the API
   const { data, error, isLoading } = useSWR(
     "/api/transactions",
     fetcher
@@ -24,30 +22,43 @@ export default function HomePage() {
       <Title>Money Manager</Title>
 
       <TransactionList>
-        {data.map((transaction) => (
-          <Transaction key={transaction._id}>
+        {data.map((transaction) => {
+          const date = new Date(transaction.date);
+
+          return (
+            <Transaction key={transaction._id}>
+              <div>
+                <TransactionTitle>
+                  {transaction.title}
+                </TransactionTitle>
+
+                <Category>
+                  {transaction.category}
+                </Category>
+           </div>
             <div>
-              <TransactionTitle>
-                {transaction.title}
-              </TransactionTitle>
+                <DateText>
+                  {date.toLocaleDateString("de-DE")}
+                </DateText>
+
+                <Time>
+                  {date.toLocaleTimeString("de-DE", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Time>
+              </div>
 
               <Amount $isIncome={transaction.amount >= 0}>
                 {transaction.amount} €
               </Amount>
-
-              <Category>
-                {transaction.category}
-              </Category>
-
-              <Date>
-                {transaction.date}
-              </Date>
-            </div>
-          </Transaction>
-        ))}
+            </Transaction>
+          );
+        })}
       </TransactionList>
     </Main>
- );
+  );
+}
 
     // <main>
     //   <h1>Money Manager</h1>
@@ -65,7 +76,6 @@ export default function HomePage() {
     //     ))}
     //   </section>
     // </main>
-}
 
 
 const Main = styled.main`
@@ -87,13 +97,24 @@ const TransactionList = styled.section`
   gap: 12px;
 `;
 
+
 const Transaction = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  gap: 20px;
+  border: 1px solid #ccc;
+  padding: 1rem;
+
+  > div:first-child {
+    flex: 2;
+  }
+
+  > div:nth-child(2) {
+    flex: 1;
+  }
+
+  > p {
+    flex: 1;
+  }
 `;
 
 const TransactionTitle = styled.h2`
@@ -105,22 +126,31 @@ const Category = styled.p`
   margin: 4px 0;
 `;
 
-const Date = styled.p`
+const Time = styled.p`
   margin: 4px 0;
+`;
+
+const DateText = styled.p`
+  margin: 4px 0;
+`;
+
+const DateTime = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const TransactionInfo = styled.div`
+  flex: 1;
 `;
 
 const Amount = styled.p`
   font-weight: bold;
   font-size: 20px;
+  margin: 0;
+  padding: 0 1rem;
+  flex: 1;
+  text-align: right;
 
   color: ${(props) =>
     props.$isIncome ? "green" : "red"};
-`;
-
-const Income = styled.p`
-  color: green;
-`;
-
-const Expense = styled.p`
-  color: red;
 `;
