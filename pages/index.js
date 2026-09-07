@@ -60,24 +60,6 @@ export default function HomePage() {
   );
 }
 
-    // <main>
-    //   <h1>Money Manager</h1>
-
-    //   <section>
-    //     {data.map((transaction) => (
-    //       <div key={transaction._id}>
-    //         <h2>{transaction.title}</h2>
-    //         <p className={transaction.amount >= 0 ? "income" : "expense"}> 
-    //           {transaction.amount} €
-    //         </p>
-    //         <p>{transaction.category}</p>
-    //         <p>{transaction.date}</p>
-    //       </div>
-    //     ))}
-    //   </section>
-    // </main>
-
-
 const Main = styled.main`
   max-width: 700px;
   margin: 0 auto;
