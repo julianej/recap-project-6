@@ -121,10 +121,6 @@ const DateTime = styled.div`
   gap: 10px;
 `;
 
-const TransactionInfo = styled.div`
-  flex: 1;
-`;
-
 const Amount = styled.p`
   font-weight: bold;
   font-size: 20px;
