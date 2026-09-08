@@ -9,7 +9,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
   border: 1px solid #e5e5e5;
@@ -158,64 +157,65 @@ export default function TransactionForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Add Transaction</h2>
-      <div>
-        <label htmlFor="title">
-            Transaction Title
-        </label>
+  <Form onSubmit={handleSubmit}>
+    <Heading>Add Transaction</Heading>
 
-        <input
-            id="title"
-            type="text"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            required
-        />
-        </div>
+    <Field>
+      <Label htmlFor="title">
+        Transaction Title
+      </Label>
 
-      <div>
-        <label htmlFor="amount">
-          Transaction Amount
-        </label>
+      <Input
+        id="title"
+        type="text"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        required
+      />
+    </Field>
 
-        <input
-          id="amount"
-          type="number"
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-          required
-        />
-      </div>
+    <Field>
+      <Label htmlFor="amount">
+        Transaction Amount
+      </Label>
 
-      <div>
-        <fieldset>
-          <label htmlFor="category">
-            Transaction Category
-          </label>
+      <Input
+        id="amount"
+        type="number"
+        value={amount}
+        onChange={(event) => setAmount(event.target.value)}
+        required
+      />
+    </Field>
 
-          <select
-            id="category"
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
-            required
-          >
-            <option value="">
-              Please choose a category
-            </option>
-                {categories.map((category) => (
-                <option key={category._id} value={category.category}>
-                    {category.category}
-                </option>
-                ))}
-          </select>
-        </fieldset>
-      </div>
+    <Fieldset>
+      <Label htmlFor="category">
+        Transaction Category
+      </Label>
 
-      <fieldset>
-        <legend>Transaction Type</legend>
+      <Select
+        id="category"
+        value={category}
+        onChange={(event) => setCategory(event.target.value)}
+        required
+      >
+        <option value="">
+          Please select a category
+        </option>
 
-        <label>
+        {categories.map((category) => (
+          <option key={category._id} value={category.category}>
+            {category.category}
+          </option>
+        ))}
+      </Select>
+    </Fieldset>
+
+    <Fieldset>
+      <Label>Transaction Type</Label>
+
+      <RadioGroup>
+        <RadioLabel>
           <input
             type="radio"
             name="type"
@@ -225,9 +225,9 @@ export default function TransactionForm() {
             required
           />
           Income
-        </label>
+        </RadioLabel>
 
-        <label>
+        <RadioLabel>
           <input
             type="radio"
             name="type"
@@ -236,26 +236,27 @@ export default function TransactionForm() {
             onChange={(event) => setType(event.target.value)}
           />
           Expense
-        </label>
-      </fieldset>
+        </RadioLabel>
+      </RadioGroup>
+    </Fieldset>
 
-      <fieldset>
-        <label htmlFor="date">
-          Transaction Date
-        </label>
+    <Field>
+      <Label htmlFor="date">
+        Transaction Date
+      </Label>
 
-        <input
-          id="date"
-          type="date"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-          required
-        />
-      </fieldset>
+      <Input
+        id="date"
+        type="date"
+        value={date}
+        onChange={(event) => setDate(event.target.value)}
+        required
+      />
+    </Field>
 
-      <button type="submit">
-        Add transaction
-      </button>
-    </form>
-  );
+    <Button type="submit">
+      Add transaction
+    </Button>
+  </Form>
+);
 }
