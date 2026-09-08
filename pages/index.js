@@ -26,7 +26,7 @@ export default function HomePage() {
 
       <TransactionForm />
 
-            <h2>Transaction List</h2>
+        <h2>Transaction List</h2>
       <TransactionList transactions={data} />
     </Main>
   );

@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export default function TransactionCard({ transaction }) {
   const date = new Date(transaction.date);
-  console.log("TYPE:", transaction.type);
 
   return (
     <Transaction>

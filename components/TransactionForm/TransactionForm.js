@@ -15,17 +15,15 @@ export default function TransactionForm() {
          new Date().toISOString().split("T")[0]
     );
 
-  // fetch categories from the backend
   const { data: categories, error, isLoading } =
     useSWR("/api/categories", fetcher);
-    console.log(categories);
 
-//   // get mutate for transactions
+//   // get mutate for transactions (use GLOBAL mutate)
 //   const { mutate } = useSWR("/api/transactions", fetcher);
 
   async function handleSubmit(event) {
     event.preventDefault();
-      console.log("SUBMIT WORKS");
+      // console.log("SUBMIT WORKS");
 
     const response = await fetch("/api/transactions", {
       method: "POST",
@@ -42,9 +40,6 @@ export default function TransactionForm() {
     });
 
     const data = await response.json();
-
-    console.log("Response status:", response.status);
-    console.log("Response data:", data);
 
     if (!response.ok) {
       return;
