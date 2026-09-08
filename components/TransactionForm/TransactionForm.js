@@ -2,28 +2,40 @@ import { useState } from "react";
 import useSWR, { mutate } from "swr"; 
 import styled from "styled-components";
 
-const fetcher = (url) =>
-  fetch(url).then((response) => response.json());
+// make the fetcher throw when the response isn't OK,
+// so that useSWR can handle the error state
+// NOT const fetcher = (url) =>
+// fetch(url).then((response) => response.json());
+const fetcher = async (url) => {
+  const response = await fetch(url);
+
+// SWR fetcher handles HTTP errors
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return response.json();
+};
 
 export default function TransactionForm() {
-    const [amount, setAmount] = useState("");
-    const [title, setTitle] = useState("");
-    const [category, setCategory] = useState("");
-    const [type, setType] = useState("");
+  const [amount, setAmount] = useState("");
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
-    const [date, setDate] = useState(
-         new Date().toISOString().split("T")[0]
-    );
+  const [date, setDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
-  const { data: categories, error, isLoading } =
+   const { data: categories, error, isLoading } =
     useSWR("/api/categories", fetcher);
 
-//   // get mutate for transactions (use GLOBAL mutate)
-//   const { mutate } = useSWR("/api/transactions", fetcher);
-
   async function handleSubmit(event) {
-    event.preventDefault();
+  event.preventDefault();
+  setSubmitError("");
 
+  try {
     const response = await fetch("/api/transactions", {
       method: "POST",
       headers: {
@@ -31,7 +43,10 @@ export default function TransactionForm() {
       },
       body: JSON.stringify({
         title,
-        amount: type === "expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount)),
+        amount:
+          type === "expense"
+            ? -Math.abs(Number(amount))
+            : Math.abs(Number(amount)),
         category,
         type,
         date,
@@ -40,14 +55,18 @@ export default function TransactionForm() {
 
     const data = await response.json();
 
+// Network/unexpected errors are handled
     if (!response.ok) {
+      setSubmitError(data.error || "Failed to create transaction.");
       return;
     }
 
     await mutate("/api/transactions");
+    } catch (error) {
+      setSubmitError("Something went wrong. Please try again.");
+    }
   }
 
-  // These belong OUTSIDE handleSubmit
   if (isLoading) {
     return <p>Loading categories...</p>;
   }
@@ -59,6 +78,7 @@ export default function TransactionForm() {
   return (
   <Form onSubmit={handleSubmit}>
     <Heading>Add Transaction</Heading>
+    {submitError && <p>{submitError}</p>}
 
     <Field>
       <Label htmlFor="title">
