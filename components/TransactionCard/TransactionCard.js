@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export default function TransactionCard({ transaction }) {
-  console.log(transaction);
+  const date = new Date(transaction.date);
   console.log("TYPE:", transaction.type);
 
   return (
@@ -29,9 +29,9 @@ export default function TransactionCard({ transaction }) {
         </Time>
       </div>
 
-      <Amount type={transaction.type}>
-        {transaction.amount} €
-        </Amount>
+    <Amount $isIncome={transaction.type === "income"}>
+     {transaction.amount} €
+    </Amount>
     </Transaction>
   );
 }
@@ -67,7 +67,6 @@ const DateText = styled.p`
 const Time = styled.p`
   margin: 4px 0;
 `;
-
 const Amount = styled.p`
   font-weight: bold;
   font-size: 20px;
@@ -76,5 +75,6 @@ const Amount = styled.p`
   flex: 1;
   text-align: right;
 
-  color: ${({ type }) => (type === "expense" ? "red" : "green")};
+  color: ${({ $isIncome }) =>
+    $isIncome ? "green" : "red"};
 `;
