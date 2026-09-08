@@ -23,7 +23,6 @@ export default function TransactionForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-      // console.log("SUBMIT WORKS");
 
     const response = await fetch("/api/transactions", {
       method: "POST",
