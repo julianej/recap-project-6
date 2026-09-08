@@ -90,6 +90,6 @@ const Amount = styled.p`
   flex: 1;
   text-align: right;
 
-  color: ${(props) =>
-    props.$isIncome ? "green" : "red"};
+  color: ${({ $isIncome }) =>
+    $isIncome ? "green" : "red"};
 `;
