@@ -2,16 +2,23 @@ import dbConnect from "@/db/connect";
 import Categories from "@/db/models/Categories/Categories";
 
 export default async function handler(request, response) {
-  
-  await dbConnect();
+  try {
+    await dbConnect();
 
-  if (request.method === "GET") {
-    const categories = await Categories.find();
+    if (request.method === "GET") {
+      const categories = await Categories.find();
 
-    return response.status(200).json(categories);
+      return response.status(200).json(categories);
+    }
+
+    return response.status(405).json({
+      error: "Method not allowed",
+    });
+  } catch (error) {
+    console.error(error);
+
+    return response.status(500).json({
+      error: "Internal server error",
+    });
   }
-
-  return response.status(405).json({
-    error: "Method not allowed",
-  });
 }

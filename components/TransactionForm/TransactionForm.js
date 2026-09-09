@@ -74,7 +74,20 @@ export default function TransactionForm() {
       return;
     }
 
-    await mutate("/api/transactions");
+     await mutate("/api/transactions");
+
+    // Reset form after successful submission
+    setAmount("");
+    setTitle("");
+    setCategory("");
+    setType("");
+
+    setDate(
+      `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(now.getDate()).padStart(2, "0")}`
+    );
   } catch (error) {
     setSubmitError("Something went wrong. Please try again.");
   }
@@ -87,6 +100,7 @@ export default function TransactionForm() {
   if (error) {
     return <p>Failed to load categories.</p>;
   }
+
 
   return (
   <Form onSubmit={handleSubmit}>
