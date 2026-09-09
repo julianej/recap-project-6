@@ -2,14 +2,10 @@ import { useState } from "react";
 import useSWR, { mutate } from "swr"; 
 import styled from "styled-components";
 
-// make the fetcher throw when the response isn't OK,
-// so that useSWR can handle the error state
-// NOT const fetcher = (url) =>
-// fetch(url).then((response) => response.json());
 const fetcher = async (url) => {
   const response = await fetch(url);
 
-// SWR fetcher handles HTTP errors
+  // // SWR fetcher handles HTTP errors
   if (!response.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -24,16 +20,34 @@ export default function TransactionForm() {
   const [type, setType] = useState("");
   const [submitError, setSubmitError] = useState("");
 
-  const [date, setDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [date, setDate] = useState(() => {
+  const now = new Date();
 
-   const { data: categories, error, isLoading } =
+  // Without padStart, we'd get month: 2026-9-09, but we want 2026-09-09
+  // `${year}-${month}-${day}`
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2,"0"
+    )}-${String(now.getDate()).padStart(2, "0")}`;
+  });
+
+  const { data: categories, error, isLoading } =
     useSWR("/api/categories", fetcher);
 
   async function handleSubmit(event) {
-  event.preventDefault();
-  setSubmitError("");
+    event.preventDefault();
+    setSubmitError("");
+
+    const now = new Date();
+
+    const [year, month, day] = date.split("-").map(Number);
+
+    const transactionDate = new Date(
+      year,
+      month - 1,
+      day,
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds()
+    );
 
   try {
     const response = await fetch("/api/transactions", {
@@ -49,23 +63,22 @@ export default function TransactionForm() {
             : Math.abs(Number(amount)),
         category,
         type,
-        date,
+        date: transactionDate.toISOString(),
       }),
     });
 
     const data = await response.json();
 
-// Network/unexpected errors are handled
     if (!response.ok) {
       setSubmitError(data.error || "Failed to create transaction.");
       return;
     }
 
     await mutate("/api/transactions");
-    } catch (error) {
-      setSubmitError("Something went wrong. Please try again.");
-    }
+  } catch (error) {
+    setSubmitError("Something went wrong. Please try again.");
   }
+}
 
   if (isLoading) {
     return <p>Loading categories...</p>;

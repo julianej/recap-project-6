@@ -2,6 +2,7 @@ import dbConnect from "@/db/connect";
 import Project from "@/db/models/Project";
 
 export default async function handler(request, response) {
+ 
   try {
     await dbConnect();
 
@@ -20,6 +21,7 @@ export default async function handler(request, response) {
     return response.status(405).json({
       error: "Method not allowed",
     });
+
   } catch (error) {
     console.error(error);
 

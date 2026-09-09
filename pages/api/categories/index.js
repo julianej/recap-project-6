@@ -2,6 +2,7 @@ import dbConnect from "@/db/connect";
 import Categories from "@/db/models/Categories/Categories";
 
 export default async function handler(request, response) {
+  
   await dbConnect();
 
   if (request.method === "GET") {

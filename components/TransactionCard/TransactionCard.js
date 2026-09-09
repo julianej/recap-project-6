@@ -20,12 +20,9 @@ export default function TransactionCard({ transaction }) {
           {date.toLocaleDateString("de-DE")}
         </DateText>
 
-        <Time>
-          {date.toLocaleTimeString("de-DE", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Time>
+        <DateText>
+          {date.toLocaleDateString("de-DE")}
+        </DateText>
       </div>
 
     <Amount $isIncome={transaction.type === "income"}>
