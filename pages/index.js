@@ -3,6 +3,21 @@ import styled from "styled-components";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
 
+
+
+const Main = styled.main`
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px;
+`;
+
+const Title = styled.h1`
+  font-size: 40px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+`;
+
+
 const fetcher = (url) =>
   fetch(url).then((response) => response.json());
 
@@ -24,21 +39,11 @@ export default function HomePage() {
     <Main>
       <Title>Money Manager</Title>
 
+      {/* Create new transaction */}
       <TransactionForm />
 
-            <h2>Transaction List</h2>
+      {/* Edit existing transaction */}
       <TransactionList transactions={data} />
     </Main>
   );
 }
-
-const Main = styled.main`
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 40px 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 40px;
-  margin-bottom: 30px;
-`;
