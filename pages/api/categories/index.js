@@ -1,27 +1,19 @@
 import dbConnect from "@/db/connect";
-import Project from "@/db/models/Project";
+import Categories from "@/db/models/Categories/Categories";
 
 export default async function handler(request, response) {
- 
   try {
     await dbConnect();
 
     if (request.method === "GET") {
-      const transactions = await Project.find().sort({ date: -1 });
+      const categories = await Categories.find();
 
-      return response.status(200).json(transactions);
-    }
-
-    if (request.method === "POST") {
-      const transaction = await Project.create(request.body);
-
-      return response.status(201).json(transaction);
+      return response.status(200).json(categories);
     }
 
     return response.status(405).json({
       error: "Method not allowed",
     });
-
   } catch (error) {
     console.error(error);
 
