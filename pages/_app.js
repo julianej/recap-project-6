@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { SWRConfig } from 'swr';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -9,11 +10,31 @@ const GlobalStyle = createGlobalStyle`
     background-size: 600px 300px;
   }
 `;
+
+// ====================
+// FETCHER FUNCTION for useSWR
+// ====================
+
+const fetcher = async (url) => {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return response.json();
+};
+
+
 export default function App({ Component, pageProps }) {
-  return (
-    <>
+
+     return (
+    <SWRConfig 
+      value={{
+        fetcher: fetcher
+      }}
+    >
       <GlobalStyle />
       <Component {...pageProps} />
-    </>
-  );
-}
+    </SWRConfig>
+)}

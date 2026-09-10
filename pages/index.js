@@ -3,7 +3,9 @@ import styled from "styled-components";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
 
-
+// ====================
+// STYLES
+// ====================
 
 const Main = styled.main`
   max-width: 700px;
@@ -17,14 +19,21 @@ const Title = styled.h1`
   margin-bottom: 30px;
 `;
 
+// ====================
+// FETCHER in APP
+// ====================
 
-const fetcher = (url) =>
-  fetch(url).then((response) => response.json());
+// const fetcher = (url) =>
+//   fetch(url).then((response) => response.json());
+
+
+// ====================
+// COMPONENT
+// ====================
 
 export default function HomePage() {
   const { data, error, isLoading } = useSWR(
-    "/api/transactions",
-    fetcher
+    "/api/transactions"
   );
 
   if (isLoading) {

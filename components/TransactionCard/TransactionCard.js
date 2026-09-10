@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+// ====================
+// STYLES
+// ====================
 
 const Button = styled.button`
   padding: 0.5rem 1rem;
@@ -73,6 +76,12 @@ const Amount = styled.p`
   color: ${({ $isIncome }) =>
     $isIncome ? "black" : "red"};
 `;
+
+
+// ====================
+// COMPONENT
+// ====================
+
 
 
 export default function TransactionCard({

@@ -3,6 +3,9 @@ import styled from "styled-components";
 import TransactionCard from "../TransactionCard/TransactionCard";
 import TransactionForm from "../TransactionForm/TransactionForm";
 
+// ====================
+// STYLES
+// ====================
 
 const CardWrapper = styled.div`
   display: flex;
@@ -26,6 +29,12 @@ const List = styled.section`
   flex-direction: column;
   gap: 12px;
 `;
+
+
+// ====================
+// COMPONENT
+// ====================
+
 
 export default function TransactionList({ transactions }) {
   const [editingTransaction, setEditingTransaction] = useState(null);

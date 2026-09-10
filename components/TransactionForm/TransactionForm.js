@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import styled from "styled-components";
 
-const fetcher = async (url) => {
-  const response = await fetch(url);
+// const fetcher = async (url) => {
+//   const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
+//   if (!response.ok) {
+//     throw new Error("Failed to fetch data");
+//   }
 
-  return response.json();
-};
+//   return response.json();
+// };
 
 
 // ====================
@@ -187,6 +187,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
       const now = new Date();
 
+      // date NOW
       setDate(
         `${now.getFullYear()}-${String(
           now.getMonth() + 1
@@ -199,14 +200,14 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
 
   // ====================
-  // CATEGORIES
+  // CATEGORIES FETCH
   // ====================
 
   const {
     data: categories,
     error,
     isLoading,
-  } = useSWR("/api/categories", fetcher);
+  } = useSWR("/api/categories");
 
 
   // ====================
@@ -267,6 +268,10 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
       );
       return;
     }
+
+  // ====================
+  // TRANSACTION MUTATE
+  // ====================
 
     await mutate("/api/transactions");
 
