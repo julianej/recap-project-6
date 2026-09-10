@@ -124,6 +124,27 @@ const Button = styled.button`
   }
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  width:100%;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const SaveButton = styled(Button)`
+  background: black;
+  width: 80%;
+  color: white;
+`;
+
+const CancelButton = styled(Button)`
+  background: transparent;
+  width: 20%;
+  color: black;
+  border: 1px solid black;
+`;
+
 // Used ONLY by the edit form
 const EditRow = styled.div`
   display: flex;
@@ -439,19 +460,18 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
       </EditRow>
 
       <EditRow>
-          {/* Save */}
-          <Button type="submit">
-            Save
-          </Button>
+          <ButtonWrapper>
+            <SaveButton type="submit">
+              Save
+            </SaveButton>
 
-
-          {/* Cancel */}
-          <Button
-            type="button"
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
+            <CancelButton
+              type="button"
+              onClick={onCancel}
+            >
+              Cancel
+            </CancelButton>
+          </ButtonWrapper>
       </EditRow>
         </>
       ) : (

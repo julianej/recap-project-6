@@ -4,11 +4,27 @@ import styled from "styled-components";
 // STYLES
 // ====================
 
-const Button = styled.button`
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const EditButton = styled.div`
+  background: transparent;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+  padding: 0.7rem;
+  color:grey;
+`;
+
+const DeleteButton = styled.div`
+  background: lightgrey;
+  padding: 0.7rem 0.7rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid lightgray;
+  color: #0d0d0d ;
 `;
 
 const Transaction = styled.div`
@@ -41,17 +57,21 @@ const Transaction = styled.div`
     `}
 
   > div:first-child {
-    flex: 2;
+    flex: 1 0 0 ;
   }
 
   > div:nth-child(2) {
-    flex: 1;
+      flex: 1 0 0 ;
+  }
+  > div:nth-child(3) {
+      flex: 2 0 0 ;
   }
 `;
 
 const TransactionTitle = styled.h2`
   margin: 0 0 8px;
   font-size: 20px;
+   flex: 2 0 0; 
 `;
 
 const Category = styled.p`
@@ -67,10 +87,10 @@ const Time = styled.p`
 `;
 const Amount = styled.p`
   font-weight: bold;
-  font-size: 20px;
+  font-size: 2rem;
   margin: 0;
   padding: 0 1rem;
-  flex: 0 0 auto;
+  flex: 1 0 0; 
   text-align: right;
 
   color: ${({ $isIncome }) =>
@@ -82,13 +102,12 @@ const Amount = styled.p`
 // COMPONENT
 // ====================
 
-
-
 export default function TransactionCard({
   transaction,
   onEdit,
   isSelected,
   isHighlighted,
+  onDelete,
 }) {
   const date = new Date(transaction.date);
 
@@ -120,9 +139,28 @@ export default function TransactionCard({
    <Amount $isIncome={transaction.amount >= 0}>
     {transaction.amount} €
   </Amount>
-    <Button type="button" onClick={onEdit}>
-        Edit
-      </Button>
+  <ButtonWrapper>
+     <DeleteButton type="button" onClick={onDelete}>
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 6L18 18M18 6L6 18"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+    </DeleteButton>
+    <EditButton type="button" onClick={onEdit}>
+      Edit
+    </EditButton>
+
+  </ButtonWrapper>
     </Transaction>
   );
 }

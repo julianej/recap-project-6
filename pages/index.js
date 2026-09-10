@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { useState } from "react";
 import styled from "styled-components";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
@@ -32,6 +33,8 @@ const Title = styled.h1`
 // ====================
 
 export default function HomePage() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   const { data, error, isLoading } = useSWR(
     "/api/transactions"
   );
@@ -46,10 +49,19 @@ export default function HomePage() {
 
   return (
     <Main>
-      <Title>Money Manager</Title>
+      <Title>Juli'/ Money Manager</Title>
 
       {/* "Create" new transaction */}
-      <TransactionForm />
+      <button onClick={() => setIsFormOpen(!isFormOpen)}>
+        {isFormOpen ? "Close" : "Add transaction"}
+      </button>
+
+      {isFormOpen && (
+        <TransactionForm
+          onCancel={() => setIsFormOpen(false)}
+        />
+      )}
+
 
       {/* "Edit" existing transaction */}
       <TransactionList transactions={data} />

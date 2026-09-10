@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import TransactionCard from "../TransactionCard/TransactionCard";
 import TransactionForm from "../TransactionForm/TransactionForm";
+import DialogPopup from "../DialogPopup/DialogPopup";
 
 // ====================
 // STYLES
@@ -23,12 +24,13 @@ const CardWrapper = styled.div`
 `;
 
 const List = styled.section`
-  max-height: 500px;
+  max-height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
 `;
+
 
 
 // ====================
@@ -39,7 +41,10 @@ const List = styled.section`
 export default function TransactionList({ transactions }) {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
+  const [deletingTransaction, setDeletingTransaction] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
+  // handle EDIT
   function handleEdit(transaction) {
     setEditingTransaction(transaction);
   }
@@ -58,7 +63,21 @@ export default function TransactionList({ transactions }) {
     setEditingTransaction(null);
   }
 
-  return (
+  // handle DELETE
+    function handleDeleteClick(transaction) {
+      setDeletingTransaction(transaction);
+    }
+
+    function handleCancelDelete() {
+      setDeletingTransaction(null);
+    }
+
+    function handleDelete(id) {
+    console.log("Delete transaction:", id);
+  }
+
+   return (
+  <>
     <List>
       <h2>Transaction List</h2>
 
@@ -70,12 +89,9 @@ export default function TransactionList({ transactions }) {
           <TransactionCard
             transaction={transaction}
             onEdit={() => handleEdit(transaction)}
-            isSelected={
-              editingTransaction?._id === transaction._id
-            }
-            isHighlighted={
-              highlightedId === transaction._id
-            }
+            isSelected={editingTransaction?._id === transaction._id}
+            isHighlighted={highlightedId === transaction._id}
+            onDelete={() => handleDeleteClick(transaction)}
           />
 
           {editingTransaction?._id === transaction._id && (
@@ -88,6 +104,13 @@ export default function TransactionList({ transactions }) {
         </CardWrapper>
       ))}
     </List>
-  );
-}
 
+    {deletingTransaction && (
+      <DialogPopup
+        transaction={deletingTransaction}
+        onCancel={handleCancelDelete}
+        onDelete={() => handleDelete(deletingTransaction._id)}
+      />
+    )}
+  </>
+  )};
