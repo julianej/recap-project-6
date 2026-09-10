@@ -30,10 +30,17 @@ const Form = styled.form`
 `;
 
 const EditForm = styled(Form)`
-  width : 95%;
+  width: 95%;
   gap: 0.75rem;
   padding: 1rem;
   border-radius: 10px;
+
+  ${({ $isSelected }) =>
+    $isSelected &&
+    `
+      border: 2px solid black;
+      background-color: #f0f0f0;
+    `}
 `;
 
 const Heading = styled.h2`
@@ -263,8 +270,9 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
     await mutate("/api/transactions");
 
+    // If editing, call onSave updates the TransactionCard
     if (isEditing) {
-      onSave();
+      onSave(transaction._id);
       return;
     }
 

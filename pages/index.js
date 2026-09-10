@@ -39,10 +39,10 @@ export default function HomePage() {
     <Main>
       <Title>Money Manager</Title>
 
-      {/* Create new transaction */}
+      {/* "Create" new transaction */}
       <TransactionForm />
 
-      {/* Edit existing transaction */}
+      {/* "Edit" existing transaction */}
       <TransactionList transactions={data} />
     </Main>
   );
