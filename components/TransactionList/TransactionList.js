@@ -32,7 +32,6 @@ export default function TransactionList({ transactions }) {
   const [highlightedId, setHighlightedId] = useState(null);
 
   function handleEdit(transaction) {
-    console.log("EDIT:", transaction);
     setEditingTransaction(transaction);
   }
 
