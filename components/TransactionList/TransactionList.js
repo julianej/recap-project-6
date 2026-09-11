@@ -42,7 +42,6 @@ export default function TransactionList({ transactions }) {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
   const [deletingTransaction, setDeletingTransaction] = useState(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
 
   // handle EDIT
   function handleEdit(transaction) {

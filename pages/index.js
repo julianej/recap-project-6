@@ -49,7 +49,7 @@ export default function HomePage() {
 
   return (
     <Main>
-      <Title>Juli'/ Money Manager</Title>
+      <Title>Julianes Money Manager</Title>
 
       {/* "Create" new transaction */}
       <button onClick={() => setIsFormOpen(!isFormOpen)}>
