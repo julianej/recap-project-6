@@ -22,7 +22,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin: 2rem auto;
+  margin: 0  auto 2rem;
   padding: 2rem;
   border: 1px solid #e5e5e5;
   border-radius: 16px;
@@ -110,7 +110,7 @@ const RadioLabel = styled.label`
 `;
 
 const Button = styled.button`
-  padding: 2rem;
+  padding: 0.8rem 1.2rem;
   border: none;
   border-radius: 8px;
   background: #000;
@@ -122,6 +122,18 @@ const Button = styled.button`
   &:hover {
     opacity: 0.8;
   }
+`;
+
+const SubmitButton = styled.button`
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  background: #111;
+  color: white;
+
+  font-size: 16px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -619,9 +631,9 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
           </Field>
 
 
-          <Button type="submit">
+          <SubmitButton type="submit">
             Add transaction
-          </Button>
+          </SubmitButton>
 
         </>
 

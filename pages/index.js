@@ -31,6 +31,7 @@ const AddButton = styled.button`
   cursor: pointer;
   font-size: 16px;
   position: relative;
+  margin-bottom: 2rem;
 
   svg {
     position: absolute;

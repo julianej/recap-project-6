@@ -33,7 +33,7 @@ const List = styled.section`
   border-radius: 1rem;
   padding: 0 0.7rem;
   border: ${({ $isEmpty }) =>
-    $isEmpty ? "none" : "1px solid #000"};
+    $isEmpty ? "none" : "2px solid #000"};
 `;
 
 const EmptyState = styled.p`
@@ -115,7 +115,7 @@ async function handleDelete(id) {
   return (
   <>
     <List>
-      <h2>Transaction List</h2>
+      <h2>Your Transaction List</h2>
 
       {/* Empty State */}
       {transactions.length === 0 ? (

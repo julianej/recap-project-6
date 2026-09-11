@@ -34,6 +34,7 @@ const Transaction = styled.article`
   padding: 1rem;
   border-radius: 8px;
   align-items: center;
+  margin: 0 0 2rem;
 
   border: ${({ $isSelected }) =>
     $isSelected ? "2px solid black" : "1px solid #ccc"};
