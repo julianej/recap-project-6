@@ -10,7 +10,7 @@ export default async function handler(request, response) {
       // Data sent by the frontend
       const transactionData = request.body;
 
-      await Project.findByIdAndUpdate(
+      const transaction = await Project.findByIdAndUpdate(
         id,
         transactionData
       );
