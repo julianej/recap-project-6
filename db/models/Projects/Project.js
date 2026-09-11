@@ -5,7 +5,7 @@ const projectSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 3,
-    match: /^[A-Za-z]+$/,
+    match: /^[A-Za-zÄÖÜäöüß ]+$/,
   },
 
   amount: {
