@@ -27,7 +27,8 @@ const DeleteButton = styled.div`
   color: #0d0d0d ;
 `;
 
-const Transaction = styled.div`
+const Transaction = styled.article`
+  position: relative;
   display: flex;
   gap: 20px;
   padding: 1rem;
@@ -97,6 +98,31 @@ const Amount = styled.p`
     $isIncome ? "black" : "red"};
 `;
 
+const Loading = styled.div`
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.8);
+`;
+
+const Spinner = styled.div`
+  width: 24px;
+  height: 24px;
+  border: 3px solid #ddd;
+  border-top: 3px solid #333;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
 
 // ====================
 // COMPONENT
@@ -108,60 +134,71 @@ export default function TransactionCard({
   isSelected,
   isHighlighted,
   onDelete,
+  isDeleting,
 }) {
   const date = new Date(transaction.date);
 
   return (
-    <Transaction $isSelected={isSelected} $isHighlighted={isHighlighted}>
-      <div>
-        <TransactionTitle>
-          {transaction.title}
-        </TransactionTitle>
+     <Transaction
+        $isSelected={isSelected}
+        $isHighlighted={isHighlighted}
+      >
 
-        <Category>
-          {transaction.category}
-        </Category>
-      </div>
+       {isDeleting && (
+          <Loading>
+            <Spinner />
+          </Loading>
+        )}
 
-      <div>
-       <DateText>
-          {date.toLocaleDateString("de-DE")}
-        </DateText>
+        <div>
+          <TransactionTitle>
+            {transaction.title}
+          </TransactionTitle>
 
-        <Time>
-          {date.toLocaleTimeString("de-DE", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Time>
-      </div>
+          <Category>
+            {transaction.category}
+          </Category>
+        </div>
 
-   <Amount $isIncome={transaction.amount >= 0}>
-    {transaction.amount} €
-  </Amount>
-  <ButtonWrapper>
-     <DeleteButton type="button" onClick={onDelete}>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M6 6L18 18M18 6L6 18"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
-    </DeleteButton>
-    <EditButton type="button" onClick={onEdit}>
-      Edit
-    </EditButton>
+        <div>
+          <DateText>
+            {date.toLocaleDateString("de-DE")}
+          </DateText>
 
-  </ButtonWrapper>
-    </Transaction>
-  );
-}
+          <Time>
+            {date.toLocaleTimeString("de-DE", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Time>
+        </div>
+
+        <Amount $isIncome={transaction.amount >= 0}>
+          {transaction.amount} €
+        </Amount>
+
+        <ButtonWrapper>
+          <DeleteButton type="button" onClick={onDelete}>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 6L18 18M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </DeleteButton>
+
+          <EditButton type="button" onClick={onEdit}>
+            Edit
+          </EditButton>
+        </ButtonWrapper>
+      </Transaction>
+    )}
 

@@ -110,7 +110,7 @@ const RadioLabel = styled.label`
 `;
 
 const Button = styled.button`
-  padding: 0.8rem 1.2rem;
+  padding: 2rem;
   border: none;
   border-radius: 8px;
   background: #000;
@@ -131,7 +131,7 @@ const ButtonWrapper = styled.div`
   justify-content: flex-end;
   align-items: center;
 `;
-ś
+
 const SaveButton = styled(Button)`
   background: black;
   width: 80%;

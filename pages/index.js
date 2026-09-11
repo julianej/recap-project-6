@@ -20,12 +20,23 @@ const Title = styled.h1`
   margin-bottom: 30px;
 `;
 
-// ====================
-// FETCHER in APP
-// ====================
+const AddButton = styled.button`
+  background: white;
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.7rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid lightgray;
+  color: #0d0d0d ;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
 
-// const fetcher = (url) =>
-//   fetch(url).then((response) => response.json());
+  svg {
+    position: absolute;
+    right: 1rem;
+  }
+`;
 
 
 // ====================
@@ -33,9 +44,10 @@ const Title = styled.h1`
 // ====================
 
 export default function HomePage() {
+// CREATE TRANSACTIOn is closed by default
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
 
@@ -49,13 +61,50 @@ export default function HomePage() {
 
   return (
     <Main>
-      <Title>Julianes Money Manager</Title>
+      <Title>Julis Money Manager</Title>
 
       {/* "Create" new transaction */}
-      <button onClick={() => setIsFormOpen(!isFormOpen)}>
-        {isFormOpen ? "Close" : "Add transaction"}
-      </button>
+      <AddButton onClick={() => setIsFormOpen(!isFormOpen)}>
+      {isFormOpen ? (
+        <>
+          Close Transaction Form
 
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 6L18 18M18 6L6 18"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </>
+      ) : (
+        <>
+          Add transaction
+
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 5V19M5 12H19"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </>
+      )}
+    </AddButton>
       {isFormOpen && (
         <TransactionForm
           onCancel={() => setIsFormOpen(false)}
@@ -64,7 +113,9 @@ export default function HomePage() {
 
 
       {/* "Edit" existing transaction */}
-      <TransactionList transactions={data} />
+      <TransactionList
+        transactions={data} 
+        mutate={mutate}/>
     </Main>
   );
 }
