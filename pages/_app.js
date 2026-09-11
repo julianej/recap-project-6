@@ -1,15 +1,5 @@
-import { createGlobalStyle } from "styled-components";
+import { GlobalStyle } from "../styles";
 import { SWRConfig } from 'swr';
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    background-color: #f2f2f2;
-    font-family: Arial, sans-serif;
-    background-repeat: repeat;
-    background-size: 600px 300px;
-  }
-`;
 
 // ====================
 // FETCHER FUNCTION for useSWR
@@ -24,7 +14,6 @@ const fetcher = async (url) => {
 
   return response.json();
 };
-
 
 export default function App({ Component, pageProps }) {
 

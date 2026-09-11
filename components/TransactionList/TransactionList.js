@@ -41,6 +41,14 @@ const EmptyState = styled.p`
   padding: 40px 20px;
 `;
 
+const Loading = styled.div`
+  ...
+`;
+
+const Spinner = styled.div`
+  ...
+`;
+
 
 
 // ====================

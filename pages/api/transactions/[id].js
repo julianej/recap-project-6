@@ -1,20 +1,18 @@
-import dbConnect from "../../../db/connect";
-import Projects from "../../../db/models/Project";
+import dbConnect from "@/db/connect";
+import Project from "@/db/models/Projects/Project";
 
 export default async function handler(request, response) {
   await dbConnect();
-
   const { id } = request.query;
 
   if (request.method === "PATCH") {
     try {
-      const transaction = await Projects.findByIdAndUpdate(
+      // Data sent by the frontend
+      const transactionData = request.body;
+
+      const transaction = await Project.findByIdAndUpdate(
         id,
-        request.body,
-        {
-          new: true,
-          runValidators: true,
-        }
+        transactionData
       );
 
       if (!transaction) {
@@ -23,35 +21,20 @@ export default async function handler(request, response) {
         });
       }
 
-      return response.status(200).json(transaction);
-    } catch (error) {
-      return response.status(500).json({
-        error: "Failed to update transaction",
+      response.status(200).json({
+        status: "Success",
       });
+      return;
+
+    } catch (error) {
+      response.status(500).json({
+        error: "Internal Server Error",
+      });
+      return;
     }
   }
 
-   if (request.method === "DELETE") {
-    try {
-      const transaction = await Projects.findByIdAndDelete(id);
-
-      if (!transaction) {
-        return response.status(404).json({
-          error: "Transaction not found",
-        });
-      }
-
-      return response.status(200).json(transaction);
-    } catch (error) {
-      console.error(error);
-
-      return response.status(500).json({
-        error: "Failed to delete transaction",
-      });
-    }
-  }
-
-  return response.status(405).json({
-    error: "Method not allowed",
+  response.status(405).json({
+    status: "Method not allowed.",
   });
 }

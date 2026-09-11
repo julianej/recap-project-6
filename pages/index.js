@@ -44,6 +44,7 @@ const AddButton = styled.button`
 // COMPONENT
 // ====================
 
+  
 export default function HomePage() {
 // CREATE TRANSACTIOn is closed by default
   const [isFormOpen, setIsFormOpen] = useState(false);
