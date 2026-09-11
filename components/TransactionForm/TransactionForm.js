@@ -1,11 +1,11 @@
-import { useState } from "react";
-import useSWR, { mutate } from "swr"; 
+
+import { useEffect, useState } from "react";
+import useSWR, { mutate } from "swr";
 import styled from "styled-components";
 
 const fetcher = async (url) => {
   const response = await fetch(url);
 
-  // // SWR fetcher handles HTTP errors
   if (!response.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -13,202 +13,10 @@ const fetcher = async (url) => {
   return response.json();
 };
 
-export default function TransactionForm() {
-  const [amount, setAmount] = useState("");
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
-  const [submitError, setSubmitError] = useState("");
 
-  const [date, setDate] = useState(() => {
-  const now = new Date();
-
-  // Without padStart, we'd get month: 2026-9-09, but we want 2026-09-09
-  // `${year}-${month}-${day}`
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2,"0"
-    )}-${String(now.getDate()).padStart(2, "0")}`;
-  });
-
-  const { data: categories, error, isLoading } =
-    useSWR("/api/categories", fetcher);
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-    setSubmitError("");
-
-    const now = new Date();
-
-    const [year, month, day] = date.split("-").map(Number);
-
-    const transactionDate = new Date(
-      year,
-      month - 1,
-      day,
-      now.getHours(),
-      now.getMinutes(),
-      now.getSeconds()
-    );
-
-  try {
-    const response = await fetch("/api/transactions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        amount:
-          type === "expense"
-            ? -Math.abs(Number(amount))
-            : Math.abs(Number(amount)),
-        category,
-        type,
-        date: transactionDate.toISOString(),
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      setSubmitError(data.error || "Failed to create transaction.");
-      return;
-    }
-
-     await mutate("/api/transactions");
-
-    // Reset form after successful submission
-    setAmount("");
-    setTitle("");
-    setCategory("");
-    setType("");
-
-    setDate(
-      `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
-        2,
-        "0"
-      )}-${String(now.getDate()).padStart(2, "0")}`
-    );
-  } catch (error) {
-    setSubmitError("Something went wrong. Please try again.");
-  }
-}
-
-  if (isLoading) {
-    return <p>Loading categories...</p>;
-  }
-
-  if (error) {
-    return <p>Failed to load categories.</p>;
-  }
-
-
-  return (
-  <Form onSubmit={handleSubmit}>
-    <Heading>Add Transaction</Heading>
-    {submitError && <p>{submitError}</p>}
-
-    <Field>
-      <Label htmlFor="title">
-        Transaction Title
-      </Label>
-
-      <Input
-        id="title"
-        type="text"
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-        required
-      />
-    </Field>
-
-    <Field>
-      <Label htmlFor="amount">
-        Transaction Amount
-      </Label>
-
-      <Input
-        id="amount"
-        type="number"
-        value={amount}
-        onChange={(event) => setAmount(event.target.value)}
-        required
-      />
-    </Field>
-
-    <Fieldset>
-      <Label htmlFor="category">
-        Transaction Category
-      </Label>
-
-      <Select
-        id="category"
-        value={category}
-        onChange={(event) => setCategory(event.target.value)}
-        required
-      >
-        <option value="">
-          Please select a category
-        </option>
-
-        {categories.map((category) => (
-          <option key={category._id} value={category.category}>
-            {category.category}
-          </option>
-        ))}
-      </Select>
-    </Fieldset>
-
-    <Fieldset>
-      <Label>Transaction Type</Label>
-
-      <RadioGroup>
-        <RadioLabel>
-          <input
-            type="radio"
-            name="type"
-            value="income"
-            checked={type === "income"}
-            onChange={(event) => setType(event.target.value)}
-            required
-          />
-          Income
-        </RadioLabel>
-
-        <RadioLabel>
-          <input
-            type="radio"
-            name="type"
-            value="expense"
-            checked={type === "expense"}
-            onChange={(event) => setType(event.target.value)}
-          />
-          Expense
-        </RadioLabel>
-      </RadioGroup>
-    </Fieldset>
-
-    <Field>
-      <Label htmlFor="date">
-        Transaction Date
-      </Label>
-
-      <Input
-        id="date"
-        type="date"
-        value={date}
-        onChange={(event) => setDate(event.target.value)}
-        required
-      />
-    </Field>
-
-    <Button type="submit">
-      Add transaction
-    </Button>
-  </Form>
-);
-}
-
-
+// ====================
+// STYLES
+// ====================
 
 const Form = styled.form`
   display: flex;
@@ -219,6 +27,20 @@ const Form = styled.form`
   border: 1px solid #e5e5e5;
   border-radius: 16px;
   background: #ffffff;
+`;
+
+const EditForm = styled(Form)`
+  width: 95%;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 10px;
+
+  ${({ $isSelected }) =>
+    $isSelected &&
+    `
+      border: 2px solid black;
+      background-color: #f0f0f0;
+    `}
 `;
 
 const Heading = styled.h2`
@@ -280,7 +102,6 @@ const RadioGroup = styled.div`
   gap: 1.5rem;
 `;
 
-
 const RadioLabel = styled.label`
   display: flex;
   align-items: center;
@@ -302,3 +123,331 @@ const Button = styled.button`
     opacity: 0.8;
   }
 `;
+
+// Used ONLY by the edit form
+const EditRow = styled.div`
+  display: flex;
+  gap: 1rem;
+
+  > ${Field} {
+    flex: 1;
+  }
+`;
+
+
+// ====================
+// COMPONENT
+// ====================
+
+export default function TransactionForm({ transaction, onCancel, onSave }) {
+
+  // ====================
+  // STATE
+  // ====================
+
+  const [submitError, setSubmitError] = useState("");
+
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
+  const [date, setDate] = useState("");
+
+
+  // ====================
+  // POPULATE FORM
+  // ====================
+
+  useEffect(() => {
+    if (transaction) {
+
+      // Edit mode
+      setTitle(transaction.title);
+      setAmount(Math.abs(transaction.amount));
+      setCategory(transaction.category);
+      setType(transaction.type);
+
+      const transactionDate = new Date(transaction.date);
+
+      setDate(
+        `${transactionDate.getFullYear()}-${String(
+          transactionDate.getMonth() + 1
+        ).padStart(2, "0")}-${String(
+          transactionDate.getDate()
+        ).padStart(2, "0")}`
+      );
+
+    } else {
+
+      // Create mode
+      setTitle("");
+      setAmount("");
+      setCategory("");
+      setType("");
+
+      const now = new Date();
+
+      setDate(
+        `${now.getFullYear()}-${String(
+          now.getMonth() + 1
+        ).padStart(2, "0")}-${String(
+          now.getDate()
+        ).padStart(2, "0")}`
+      );
+    }
+  }, [transaction]);
+
+
+  // ====================
+  // CATEGORIES
+  // ====================
+
+  const {
+    data: categories,
+    error,
+    isLoading,
+  } = useSWR("/api/categories", fetcher);
+
+
+  // ====================
+  // FORM SUBMIT
+  // ====================
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    // Current date and time
+    const now = new Date();
+
+    const [year, month, day] = date
+      .split("-")
+      .map(Number);
+
+    // Create transaction date
+    const transactionDate = new Date(
+      year,
+      month - 1,
+      day,
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds()
+    );
+
+    try {
+
+      const isEditing = Boolean(transaction);
+
+      const response = await fetch(
+      isEditing
+        ? `/api/transactions/${transaction._id}`
+        : "/api/transactions",
+      {
+        method: isEditing ? "PATCH" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          amount:
+            type === "expense"
+              ? -Math.abs(Number(amount))
+              : Math.abs(Number(amount)),
+          category,
+          type,
+          date: transactionDate.toISOString(),
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setSubmitError(
+        data.error || "Failed to save transaction."
+      );
+      return;
+    }
+
+    await mutate("/api/transactions");
+
+    // If editing, call onSave updates the TransactionCard
+    if (isEditing) {
+      onSave(transaction._id);
+      return;
+    }
+
+
+      // ====================
+      // RESET FORM
+      // ====================
+
+      setAmount("");
+      setTitle("");
+      setCategory("");
+      setType("");
+
+      setDate(
+        `${now.getFullYear()}-${String(
+          now.getMonth() + 1
+        ).padStart(2, "0")}-${String(
+          now.getDate()
+        ).padStart(2, "0")}`
+      );
+
+    } catch (error) {
+
+      setSubmitError(
+        "Something went wrong. Please try again."
+      );
+    }
+  }
+
+
+  // ====================
+  // LOADING / ERROR
+  // ====================
+
+  if (isLoading) {
+    return <p>Loading categories...</p>;
+  }
+
+  if (error) {
+    return <p>Failed to load categories.</p>;
+  }
+
+
+  // Select which form style to use
+  const FormComponent = transaction
+    ? EditForm
+    : Form;
+
+
+  // ====================
+  // RENDER
+  // ====================
+
+  return (
+  <FormComponent onSubmit={handleSubmit}>
+    <Heading>
+      {transaction ? "Edit Transaction" : "Add Transaction"}
+    </Heading>
+
+    {submitError && <p>{submitError}</p>}
+
+    <Field>
+      <Label htmlFor="title">
+        {transaction ? "Transaction Title" : "Transaction Title"}
+      </Label>
+
+      <Input
+        id="title"
+        type="text"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        required
+      />
+    </Field>
+
+    <Field>
+      <Label htmlFor="amount">
+        {transaction ? "Amount" : "Transaction Amount"}
+      </Label>
+
+      <Input
+        id="amount"
+        type="number"
+        value={amount}
+        onChange={(event) => setAmount(event.target.value)}
+        required
+      />
+    </Field>
+
+    <Field>
+      <Label htmlFor="category">
+        {transaction ? "Category" : "Transaction Category"}
+      </Label>
+
+      <Select
+        id="category"
+        value={category}
+        onChange={(event) => setCategory(event.target.value)}
+        required
+      >
+        <option value="">
+          Please select a category
+        </option>
+
+        {categories.map((category) => (
+          <option
+            key={category._id}
+            value={category.category}
+          >
+            {category.category}
+          </option>
+        ))}
+      </Select>
+    </Field>
+
+    <Fieldset>
+      <Label>Transaction Type</Label>
+
+      <RadioGroup>
+        <RadioLabel>
+          <input
+            type="radio"
+            name="type"
+            value="income"
+            checked={type === "income"}
+            onChange={(event) => setType(event.target.value)}
+            required
+          />
+          Income
+        </RadioLabel>
+
+        <RadioLabel>
+          <input
+            type="radio"
+            name="type"
+            value="expense"
+            checked={type === "expense"}
+            onChange={(event) => setType(event.target.value)}
+          />
+          Expense
+        </RadioLabel>
+      </RadioGroup>
+    </Fieldset>
+
+    <Field>
+      <Label htmlFor="date">
+        {transaction ? "Date" : "Transaction Date"}
+      </Label>
+
+      <Input
+        id="date"
+        type="date"
+        value={date}
+        onChange={(event) => setDate(event.target.value)}
+        required
+      />
+    </Field>
+
+    {transaction ? (
+      <EditRow>
+        <Button type="submit">
+          Save
+        </Button>
+
+        <Button
+          type="button"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
+      </EditRow>
+    ) : (
+      <Button type="submit">
+        Add transaction
+      </Button>
+    )}
+  </FormComponent>
+)};
