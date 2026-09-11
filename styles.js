@@ -9,6 +9,9 @@ export default createGlobalStyle`
 
   body {
     margin: 0;
-    font-family: system-ui;
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+    background-repeat: repeat;
+    background-size: 600px 300px;
   }
 `;
