@@ -4,6 +4,8 @@ const projectSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    minlength: 3,
+    match: /^[A-Za-z]+$/,
   },
 
   amount: {

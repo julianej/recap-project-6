@@ -25,13 +25,18 @@ export default async function handler(request, response) {
 
       return response.status(200).json(transaction);
     } catch (error) {
+      console.error(error);
+
+    {/* Validate 400 = the request contains invalid data.*/}
+      if (error.name === "ValidationError") {
+        return response.status(400).json({
+          error: error.message,
+        });
+      }
+
       return response.status(500).json({
         error: "Failed to update transaction",
       });
     }
   }
-
-  response.status(405).json({
-    error: "Method not allowed",
-  });
 }
