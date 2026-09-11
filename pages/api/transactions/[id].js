@@ -15,6 +15,12 @@ export default async function handler(request, response) {
         transactionData
       );
 
+      if (!transaction) {
+        return response.status(404).json({
+          error: "Transaction not found",
+        });
+      }
+
       response.status(200).json({
         status: "Success",
       });
