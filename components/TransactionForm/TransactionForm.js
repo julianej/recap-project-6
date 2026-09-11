@@ -327,281 +327,127 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
   // ====================
 
   return (
-    <FormComponent onSubmit={handleSubmit}>
+  <FormComponent onSubmit={handleSubmit}>
+    <Heading>
+      {transaction ? "Edit Transaction" : "Add Transaction"}
+    </Heading>
 
-      <Heading>
-        {transaction
-          ? "Edit Transaction"
-          : "Add Transaction"}
-      </Heading>
+    {submitError && <p>{submitError}</p>}
 
+    <Field>
+      <Label htmlFor="title">
+        {transaction ? "Transaction Title" : "Transaction Title"}
+      </Label>
 
-      {submitError && (
-        <p>{submitError}</p>
-      )}
+      <Input
+        id="title"
+        type="text"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        required
+      />
+    </Field>
 
+    <Field>
+      <Label htmlFor="amount">
+        {transaction ? "Amount" : "Transaction Amount"}
+      </Label>
 
-      {/* ====================
-          EDIT FORM
-          ==================== */}
+      <Input
+        id="amount"
+        type="number"
+        value={amount}
+        onChange={(event) => setAmount(event.target.value)}
+        required
+      />
+    </Field>
 
-      {transaction ? (
-        <>
+    <Field>
+      <Label htmlFor="category">
+        {transaction ? "Category" : "Transaction Category"}
+      </Label>
 
-          {/* Title + Amount */}
-         <EditRow>
-      <Field>
-        <Label htmlFor="title">Transaction Title</Label>
-        <Input
-          id="title"
-          type="text"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          required
-        />
-      </Field>
+      <Select
+        id="category"
+        value={category}
+        onChange={(event) => setCategory(event.target.value)}
+        required
+      >
+        <option value="">
+          Please select a category
+        </option>
 
-      <Field>
-        <Label htmlFor="date">Date</Label>
-        <Input
-          id="date"
-          type="date"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-          required
-        />
-      </Field>
+        {categories.map((category) => (
+          <option
+            key={category._id}
+            value={category.category}
+          >
+            {category.category}
+          </option>
+        ))}
+      </Select>
+    </Field>
 
-      <Field>
-        <Label htmlFor="amount">Amount</Label>
-        <Input
-          id="amount"
-          type="number"
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-          required
-        />
-      </Field>
-    </EditRow>
+    <Fieldset>
+      <Label>Transaction Type</Label>
 
-      <EditRow>
-        <Field>
-          <Label htmlFor="category">Category</Label>
-          <Select
-            id="category"
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
+      <RadioGroup>
+        <RadioLabel>
+          <input
+            type="radio"
+            name="type"
+            value="income"
+            checked={type === "income"}
+            onChange={(event) => setType(event.target.value)}
             required
-          >
-            <option value="">Please select a category</option>
+          />
+          Income
+        </RadioLabel>
 
-            {categories.map((category) => (
-              <option key={category._id} value={category.category}>
-                {category.category}
-              </option>
-            ))}
-          </Select>
-        </Field>
+        <RadioLabel>
+          <input
+            type="radio"
+            name="type"
+            value="expense"
+            checked={type === "expense"}
+            onChange={(event) => setType(event.target.value)}
+          />
+          Expense
+        </RadioLabel>
+      </RadioGroup>
+    </Fieldset>
 
-        <Fieldset>
-          <Label>Transaction Type</Label>
+    <Field>
+      <Label htmlFor="date">
+        {transaction ? "Date" : "Transaction Date"}
+      </Label>
 
-          <RadioGroup>
-            <RadioLabel>
-              <input
-                type="radio"
-                name="type"
-                value="income"
-                checked={type === "income"}
-                onChange={(event) => setType(event.target.value)}
-                required
-              />
-              Income
-            </RadioLabel>
+      <Input
+        id="date"
+        type="date"
+        value={date}
+        onChange={(event) => setDate(event.target.value)}
+        required
+      />
+    </Field>
 
-            <RadioLabel>
-              <input
-                type="radio"
-                name="type"
-                value="expense"
-                checked={type === "expense"}
-                onChange={(event) => setType(event.target.value)}
-              />
-              Expense
-            </RadioLabel>
-          </RadioGroup>
-        </Fieldset>
-      </EditRow>
-
+    {transaction ? (
       <EditRow>
-          {/* Save */}
-          <Button type="submit">
-            Save
-          </Button>
+        <Button type="submit">
+          Save
+        </Button>
 
-
-          {/* Cancel */}
-          <Button
-            type="button"
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
+        <Button
+          type="button"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
       </EditRow>
-        </>
-      ) : (
-
-        /* ====================
-           CREATE FORM
-           ==================== */
-
-        <>
-
-          <Field>
-
-            <Label htmlFor="title">
-              Transaction Title
-            </Label>
-
-            <Input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(event) =>
-                setTitle(event.target.value)
-              }
-              required
-            />
-
-          </Field>
-
-
-          <Field>
-
-            <Label htmlFor="amount">
-              Transaction Amount
-            </Label>
-
-            <Input
-              id="amount"
-              type="number"
-              value={amount}
-              onChange={(event) =>
-                setAmount(event.target.value)
-              }
-              required
-            />
-
-          </Field>
-
-
-          <Fieldset>
-
-            <Label htmlFor="category">
-              Transaction Category
-            </Label>
-
-            <Select
-              id="category"
-              value={category}
-              onChange={(event) =>
-                setCategory(event.target.value)
-              }
-              required
-            >
-
-              <option value="">
-                Please select a category
-              </option>
-
-              {categories.map((category) => (
-                <option
-                  key={category._id}
-                  value={category.category}
-                >
-                  {category.category}
-                </option>
-              ))}
-
-            </Select>
-
-          </Fieldset>
-
-
-          <Fieldset>
-
-            <Label>
-              Transaction Type
-            </Label>
-
-            <RadioGroup>
-
-              <RadioLabel>
-
-                <input
-                  type="radio"
-                  name="type"
-                  value="income"
-                  checked={type === "income"}
-                  onChange={(event) =>
-                    setType(event.target.value)
-                  }
-                  required
-                />
-
-                Income
-
-              </RadioLabel>
-
-
-              <RadioLabel>
-
-                <input
-                  type="radio"
-                  name="type"
-                  value="expense"
-                  checked={type === "expense"}
-                  onChange={(event) =>
-                    setType(event.target.value)
-                  }
-                />
-
-                Expense
-
-              </RadioLabel>
-
-            </RadioGroup>
-
-          </Fieldset>
-
-
-          <Field>
-
-            <Label htmlFor="date">
-              Transaction Date
-            </Label>
-
-            <Input
-              id="date"
-              type="date"
-              value={date}
-              onChange={(event) =>
-                setDate(event.target.value)
-              }
-              required
-            />
-
-          </Field>
-
-
-          <Button type="submit">
-            Add transaction
-          </Button>
-
-        </>
-
-      )}
-
-    </FormComponent>
-  );
-}
+    ) : (
+      <Button type="submit">
+        Add transaction
+      </Button>
+    )}
+  </FormComponent>
+)};

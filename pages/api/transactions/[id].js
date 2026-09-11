@@ -1,5 +1,5 @@
-import dbConnect from "../../../db/connect";
-import Projects from "../../../db/models/Project";
+import dbConnect from "@/db/connect";
+import Projects from "@/db/models/Project";
 
 export default async function handler(request, response) {
   await dbConnect();
