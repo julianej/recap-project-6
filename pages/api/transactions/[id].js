@@ -34,6 +34,23 @@ export default async function handler(request, response) {
     }
   }
 
+  if (request.method === "DELETE") {
+    try {
+      const { id } = request.query;
+
+      await Project.findByIdAndDelete(id);
+
+      return response.status(200).json({
+        message: "Transaction deleted",
+      });
+    } catch (error) {
+      return response.status(500).json({
+        error: "Failed to delete transaction",
+      });
+    }
+  }
+
+
   response.status(405).json({
     status: "Method not allowed.",
   });

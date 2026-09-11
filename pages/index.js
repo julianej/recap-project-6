@@ -49,9 +49,26 @@ export default function HomePage() {
 // CREATE TRANSACTIOn is closed by default
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+// mutate is needed here
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
+
+    // handle onDELETE for TransactionList
+    async function handleDelete(id) {
+      console.log("DELETE ID:", id);
+
+      const response = await fetch(`/api/transactions/${id}`, {
+        method: "DELETE",
+      });
+
+      console.log("DELETE response:", response.status);
+
+      const result = await response.json();
+      console.log("DELETE result:", result);
+
+      mutate();
+    }
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -116,8 +133,10 @@ export default function HomePage() {
 
       {/* "Edit" existing transaction */}
       <TransactionList
-        transactions={data} 
-        mutate={mutate}/>
+        transactions={data}
+        mutate={mutate}
+        onDelete={handleDelete}
+      />
     </Main>
   );
 }
