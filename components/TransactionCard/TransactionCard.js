@@ -11,7 +11,7 @@ const ButtonWrapper = styled.div`
   align-items: center;
 `;
 
-const EditButton = styled.div`
+const EditButton = styled.button`
   background: transparent;
   border: 1px solid lightgray;
   border-radius: 0.5rem;
@@ -19,7 +19,7 @@ const EditButton = styled.div`
   color:grey;
 `;
 
-const DeleteButton = styled.div`
+const DeleteButton = styled.button`
   background: lightgrey;
   padding: 0.7rem 0.7rem 0.6rem;
   border-radius: 0.5rem;
@@ -145,6 +145,7 @@ export default function TransactionCard({
         $isHighlighted={isHighlighted}
       >
 
+      {/*LOADING SPINNER */}
        {isDeleting && (
           <Loading>
             <Spinner />
@@ -179,7 +180,7 @@ export default function TransactionCard({
         </Amount>
 
         <ButtonWrapper>
-          <DeleteButton type="button" onClick={onDelete}>
+          <DeleteButton type="button" aria-label="Delete transaction" onClick={onDelete}>
             <svg
               width="16"
               height="16"

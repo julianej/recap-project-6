@@ -35,20 +35,26 @@ export default async function handler(request, response) {
   }
 
   if (request.method === "DELETE") {
-    try {
-      const { id } = request.query;
+  try {
+    const transaction = await Project.findByIdAndDelete(id);
 
-      await Project.findByIdAndDelete(id);
-
-      return response.status(200).json({
-        message: "Transaction deleted",
-      });
-    } catch (error) {
-      return response.status(500).json({
-        error: "Failed to delete transaction",
+    if (!transaction) {
+      return response.status(404).json({
+        error: "Transaction not found",
       });
     }
+
+    return response.status(200).json({
+      message: "Transaction deleted",
+    });
+  } catch (error) {
+    console.error(error);
+
+    return response.status(500).json({
+      error: "Failed to delete transaction",
+    });
   }
+}
 
 
   response.status(405).json({

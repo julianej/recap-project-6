@@ -41,13 +41,6 @@ const EmptyState = styled.p`
   padding: 40px 20px;
 `;
 
-const Loading = styled.div`
-  ...
-`;
-
-const Spinner = styled.div`
-  ...
-`;
 
 
 
@@ -67,7 +60,7 @@ export default function TransactionList({ transactions, mutate }) {
     setEditingTransaction(transaction);
   }
 
-  // handle SAVE
+  // handle editSAVE
   function handleSave(id) {
     setEditingTransaction(null);
     setHighlightedId(id);
@@ -94,10 +87,8 @@ export default function TransactionList({ transactions, mutate }) {
 
   // handle DELETE in DialogPopup
 async function handleDelete(id) {
-  setDeletingId(id);
-
-  // close popup immediately
   setDeletingTransaction(null);
+  setDeletingId(id);
 
   try {
     const response = await fetch(`/api/transactions/${id}`, {
@@ -108,17 +99,21 @@ async function handleDelete(id) {
       throw new Error("Failed to delete transaction");
     }
 
+    // Wait 1.2 seconds
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    // Stop spinner
+    setDeletingId(null);
+
+    // Update transaction list
     await mutate();
 
-    // keep spinner visible a little longer
-    setTimeout(() => {
-      setDeletingId(null);
-    }, 1200);
   } catch (error) {
     console.error(error);
     setDeletingId(null);
   }
 }
+
 
   return (
   <>
@@ -162,7 +157,6 @@ async function handleDelete(id) {
         transaction={deletingTransaction}
         onCancel={handleCancelDelete}
         onDelete={() => handleDelete(deletingTransaction._id)}
-        isDeleting={deletingId === deletingTransaction._id}
       />
     )}
   </>

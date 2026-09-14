@@ -54,22 +54,6 @@ export default function HomePage() {
     "/api/transactions"
   );
 
-    // handle onDELETE for TransactionList
-    async function handleDelete(id) {
-      console.log("DELETE ID:", id);
-
-      const response = await fetch(`/api/transactions/${id}`, {
-        method: "DELETE",
-      });
-
-      console.log("DELETE response:", response.status);
-
-      const result = await response.json();
-      console.log("DELETE result:", result);
-
-      mutate();
-    }
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -83,7 +67,7 @@ export default function HomePage() {
       <Title>Julis Money Manager</Title>
 
       {/* "Create" new transaction */}
-      <AddButton onClick={() => setIsFormOpen(!isFormOpen)}>
+     <AddButton onClick={() => setIsFormOpen((isOpen) => !isOpen)}>
       {isFormOpen ? (
         <>
           Close Transaction Form
@@ -135,7 +119,7 @@ export default function HomePage() {
       <TransactionList
         transactions={data}
         mutate={mutate}
-        onDelete={handleDelete}
+        // onDelete={handleDelete}
       />
     </Main>
   );

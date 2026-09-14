@@ -3,16 +3,6 @@ import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import styled from "styled-components";
 
-// const fetcher = async (url) => {
-//   const response = await fetch(url);
-
-//   if (!response.ok) {
-//     throw new Error("Failed to fetch data");
-//   }
-
-//   return response.json();
-// };
-
 
 // ====================
 // STYLES
@@ -91,7 +81,7 @@ const Select = styled.select`
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.50rem;
   border: none;
   padding: 0;
   margin: 0;
@@ -107,16 +97,22 @@ const RadioLabel = styled.label`
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+    padding: 0.8rem;
+    border: 1px solid lightgrey;
+    border-radius: 0.5rem;
 `;
 
 const Button = styled.button`
   padding: 0.8rem 1.2rem;
   border: none;
   border-radius: 8px;
+
   background: #000;
   color: #fff;
+
   font: inherit;
   font-weight: 600;
+
   cursor: pointer;
 
   &:hover {
@@ -162,8 +158,9 @@ const EditRow = styled.div`
   display: flex;
   gap: 1rem;
 
-  > ${Field} {
-    flex: 1;
+  > ${Field},
+  > ${Fieldset} {
+   flex: 1 1 0;
   }
 `;
 
@@ -315,9 +312,9 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
     }
 
 
-      // ====================
-      // RESET FORM
-      // ====================
+    // ====================
+    // RESET FORM
+    // ====================
 
       setAmount("");
       setTitle("");
@@ -372,28 +369,30 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
     {submitError && <p>{submitError}</p>}
 
-    <Field>
-      <Label htmlFor="title">Transaction Title</Label>
-      <Input
-        id="title"
-        type="text"
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-        required
-      />
-    </Field>
+  <EditRow>
+      <Field>
+        <Label htmlFor="title">Transaction Title</Label>
+        <Input
+          id="title"
+          type="text"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          required
+        />
+      </Field>
 
-    <Field>
-      <Label htmlFor="amount">Transaction Amount</Label>
-      <Input
-        id="amount"
-        type="number"
-        value={amount}
-        onChange={(event) => setAmount(event.target.value)}
-        required
-      />
-    </Field>
-
+      <Field>
+        <Label htmlFor="amount">Transaction Amount</Label>
+        <Input
+          id="amount"
+          type="number"
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
+          required
+        />
+      </Field>
+  </EditRow>
+  <EditRow>
     <Field>
       <Label htmlFor="category">Transaction Category</Label>
       <Select
@@ -431,7 +430,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
         ))}
       </RadioGroup>
     </Fieldset>
-
+</EditRow>
     <Field>
       <Label htmlFor="date">Transaction Date</Label>
       <Input
