@@ -12,8 +12,9 @@ export default async function handler(request, response) {
 
       const transaction = await Project.findByIdAndUpdate(
         id,
-        transactionData
-      );
+          transactionData,
+          { runValidators: true }
+        );
 
       if (!transaction) {
         return response.status(404).json({

@@ -95,7 +95,8 @@ const RadioGroup = styled.div`
 const RadioLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5rem;    
+  width: 50%;
   cursor: pointer;
     padding: 0.8rem;
     border: 1px solid lightgrey;
@@ -191,7 +192,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
   useEffect(() => {
     if (transaction) {
 
-      // Edit mode
+      // Edit mode INPUTS
       setTitle(transaction.title);
       setAmount(Math.abs(transaction.amount));
       setCategory(transaction.category);
@@ -209,7 +210,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
     } else {
 
-      // Create mode
+      // Create mode EMPTY INPUTS
       setTitle("");
       setAmount("");
       setCategory("");
@@ -377,6 +378,8 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
           type="text"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
+          minLength={3}
+          pattern="[A-Za-zÄÖÜäöüß ]+"
           required
         />
       </Field>
