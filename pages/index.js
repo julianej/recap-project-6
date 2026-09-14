@@ -1,12 +1,25 @@
 import useSWR from "swr";
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes }  from "styled-components";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
 
 // ====================
 // STYLES
 // ====================
+
+
+const slideUp = keyframes`
+  from {
+    transform: translate(-50%, 100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+`;
 
 const Main = styled.main`
   max-width: 700px;
@@ -40,6 +53,26 @@ const AddButton = styled.button`
 `;
 
 
+const Toast = styled.div`
+  position: fixed;
+  top: 2rem;
+  left: 0;
+  right: 0;
+
+  width: fit-content;
+  margin: 0 auto;
+
+  z-index: 9999;
+
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+
+  background: black;
+  color: white;
+`;
+
+
+
 // ====================
 // COMPONENT
 // ====================
@@ -48,11 +81,20 @@ const AddButton = styled.button`
 export default function HomePage() {
 // CREATE TRANSACTIOn is closed by default
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
-// mutate is needed here
+  // mutate is needed here
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
+
+  function showToast(message) {
+    setMessage(message);
+
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+  }
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -64,6 +106,9 @@ export default function HomePage() {
 
   return (
     <Main>
+
+      {message && <Toast>{message}</Toast>}
+
       <Title>Julis Money Manager</Title>
 
       {/* "Create" new transaction */}
@@ -111,6 +156,7 @@ export default function HomePage() {
       {isFormOpen && (
         <TransactionForm
           onCancel={() => setIsFormOpen(false)}
+          showToast={showToast}
         />
       )}
 
@@ -119,6 +165,7 @@ export default function HomePage() {
       <TransactionList
         transactions={data}
         mutate={mutate}
+        showToast={showToast}
         // onDelete={handleDelete}
       />
     </Main>

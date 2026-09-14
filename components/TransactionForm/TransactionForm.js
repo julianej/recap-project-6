@@ -8,7 +8,7 @@ import styled from "styled-components";
 // STYLES
 // ====================
 
-const Form = styled.form`
+const CreateForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -19,7 +19,7 @@ const Form = styled.form`
   background: #ffffff;
 `;
 
-const EditForm = styled(Form)`
+const EditForm = styled(CreateForm)`
   width: 95%;
   gap: 0.75rem;
   padding: 1rem;
@@ -170,7 +170,7 @@ const EditRow = styled.div`
 // COMPONENT
 // ====================
 
-export default function TransactionForm({ transaction, onCancel, onSave }) {
+export default function TransactionForm({ transaction, onCancel, onSave, showToast }) {
 
   // ====================
   // STATE
@@ -183,6 +183,8 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
   const [date, setDate] = useState("");
+
+  const {data: categories, error, isLoading } = useSWR("/api/categories");
 
 
   // ====================
@@ -228,17 +230,6 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
       );
     }
   }, [transaction]);
-
-
-  // ====================
-  // CATEGORIES FETCH
-  // ====================
-
-  const {
-    data: categories,
-    error,
-    isLoading,
-  } = useSWR("/api/categories");
 
 
   // ====================
@@ -300,6 +291,12 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
       return;
     }
 
+    showToast(
+      isEditing
+        ? "Transaction updated successfully."
+        : "Transaction added successfully."
+    );
+
   // ====================
   // TRANSACTION MUTATE
   // ====================
@@ -309,6 +306,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
     // If editing, call onSave updates the TransactionCard
     if (isEditing) {
       onSave(transaction._id);
+      showToast("Transaction updated successfully.");
       return;
     }
 
@@ -355,7 +353,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
   // Select which form style to use
   const FormComponent = transaction
     ? EditForm
-    : Form;
+    : CreateForm;
 
 
   // ====================

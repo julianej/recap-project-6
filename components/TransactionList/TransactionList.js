@@ -49,7 +49,7 @@ const EmptyState = styled.p`
 // ====================
 
 
-export default function TransactionList({ transactions, mutate }) {
+export default function TransactionList({ transactions, mutate, showToast }) {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
   const [deletingTransaction, setDeletingTransaction] = useState(null);
@@ -99,6 +99,7 @@ async function handleDelete(id) {
       throw new Error("Failed to delete transaction");
     }
 
+
     // Wait 1.2 seconds
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
@@ -107,6 +108,8 @@ async function handleDelete(id) {
 
     // Update transaction list
     await mutate();
+
+    showToast("Transaction deleted successfully.");
 
   } catch (error) {
     console.error(error);
@@ -145,6 +148,7 @@ async function handleDelete(id) {
                 transaction={editingTransaction}
                 onCancel={handleCancel}
                 onSave={handleSave}
+                showToast={showToast}
               />
             )}
           </CardWrapper>
