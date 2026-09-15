@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { useState } from "react";
 import styled, { keyframes }  from "styled-components";
+import AccountBalance from "../components/AccountBalance/AccountBalance";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
 
@@ -79,22 +80,15 @@ const Toast = styled.div`
 
   
 export default function HomePage() {
-// CREATE TRANSACTIOn is closed by default
+// CREATE TRANSACTION FORM is closed by default
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-  // mutate is needed here
+// MUTATE DB
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
 
-  function showToast(message) {
-    setMessage(message);
-
-    setTimeout(() => {
-      setMessage("");
-    }, 2000);
-  }
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -104,12 +98,23 @@ export default function HomePage() {
     return <p>Failed to load transactions.</p>;
   }
 
+  function showToast(message) {
+    setMessage(message);
+
+    setTimeout(() => {
+      setMessage("");
+    }, 2000);
+  }
+
+
   return (
     <Main>
 
       {message && <Toast>{message}</Toast>}
 
       <Title>Julis Money Manager</Title>
+
+      <AccountBalance transactions={data} />
 
       {/* "Create" new transaction */}
      <AddButton onClick={() => setIsFormOpen((isOpen) => !isOpen)}>
@@ -153,13 +158,13 @@ export default function HomePage() {
         </>
       )}
     </AddButton>
+
       {isFormOpen && (
         <TransactionForm
           onCancel={() => setIsFormOpen(false)}
           showToast={showToast}
         />
       )}
-
 
       {/* "Edit" existing transaction */}
       <TransactionList
