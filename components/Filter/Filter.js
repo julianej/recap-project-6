@@ -107,8 +107,8 @@ export default function Filter({
         </FilterGroup>
     </FilterWrapper>
     <FilterWrapper>
-        <FilterGroup>
-            <FilterLabel>Category</FilterLabel>
+    <FilterGroup>
+        <FilterLabel>Category</FilterLabel>
 
             <FilterButton
             $active={selectedCategory === "all"}
@@ -117,15 +117,25 @@ export default function Filter({
             All
             </FilterButton>
 
-            {availableCategories.map((category) => (
-            <FilterButton
+            {availableCategories
+            .slice(0, showAllCategories ? availableCategories.length : 4)
+            .map((category) => (
+                <FilterButton
                 key={category}
                 $active={selectedCategory === category}
                 onClick={() => setSelectedCategory(category)}
-            >
+                >
                 {category}
-            </FilterButton>
+                </FilterButton>
             ))}
+
+            {availableCategories.length > 4 && (
+            <FilterButton
+                onClick={() => setShowAllCategories((isOpen) => !isOpen)}
+            >
+                {showAllCategories ? "−" : "..."}
+            </FilterButton>
+            )}
         </FilterGroup>
     </FilterWrapper>
     </>
