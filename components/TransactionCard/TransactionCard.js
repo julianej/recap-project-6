@@ -137,6 +137,7 @@ export default function TransactionCard({
   onDelete,
   isDeleting,
 }) {
+  
   const date = new Date(transaction.date);
 
   return (

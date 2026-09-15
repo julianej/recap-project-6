@@ -99,8 +99,7 @@ async function handleDelete(id) {
       throw new Error("Failed to delete transaction");
     }
 
-
-    // Wait 1.2 seconds
+    // Wait 1.2 seconds to load spinner
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
     // Stop spinner

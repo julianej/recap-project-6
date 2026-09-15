@@ -55,6 +55,27 @@ const AddButton = styled.button`
 `;
 
 
+const PrimaryButton = styled.button`
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+
 const Toast = styled.div`
   position: fixed;
   top: 2rem;
