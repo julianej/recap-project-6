@@ -3,33 +3,23 @@ import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 import styled from "styled-components";
 
-const fetcher = async (url) => {
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return response.json();
-};
-
 
 // ====================
 // STYLES
 // ====================
 
-const Form = styled.form`
+const CreateForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin: 2rem auto;
+  margin: 0  auto 2rem;
   padding: 2rem;
   border: 1px solid #e5e5e5;
   border-radius: 16px;
   background: #ffffff;
 `;
 
-const EditForm = styled(Form)`
+const EditForm = styled(CreateForm)`
   width: 95%;
   gap: 0.75rem;
   padding: 1rem;
@@ -91,7 +81,7 @@ const Select = styled.select`
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.50rem;
   border: none;
   padding: 0;
   margin: 0;
@@ -105,18 +95,25 @@ const RadioGroup = styled.div`
 const RadioLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5rem;    
+  width: 50%;
   cursor: pointer;
+    padding: 0.8rem;
+    border: 1px solid lightgrey;
+    border-radius: 0.5rem;
 `;
 
 const Button = styled.button`
   padding: 0.8rem 1.2rem;
   border: none;
   border-radius: 8px;
+
   background: #000;
   color: #fff;
+
   font: inherit;
   font-weight: 600;
+
   cursor: pointer;
 
   &:hover {
@@ -124,13 +121,47 @@ const Button = styled.button`
   }
 `;
 
+const SubmitButton = styled.button`
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  background: #111;
+  color: white;
+
+  font-size: 16px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  width:100%;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const SaveButton = styled(Button)`
+  background: black;
+  width: 80%;
+  color: white;
+`;
+
+const CancelButton = styled(Button)`
+  background: transparent;
+  width: 20%;
+  color: black;
+  border: 1px solid black;
+`;
+
 // Used ONLY by the edit form
 const EditRow = styled.div`
   display: flex;
   gap: 1rem;
 
-  > ${Field} {
-    flex: 1;
+  > ${Field},
+  > ${Fieldset} {
+   flex: 1 1 0;
   }
 `;
 
@@ -139,7 +170,7 @@ const EditRow = styled.div`
 // COMPONENT
 // ====================
 
-export default function TransactionForm({ transaction, onCancel, onSave }) {
+export default function TransactionForm({ transaction, onCancel, onSave, showToast }) {
 
   // ====================
   // STATE
@@ -153,6 +184,8 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
   const [type, setType] = useState("");
   const [date, setDate] = useState("");
 
+  const {data: categories, error, isLoading } = useSWR("/api/categories");
+
 
   // ====================
   // POPULATE FORM
@@ -161,7 +194,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
   useEffect(() => {
     if (transaction) {
 
-      // Edit mode
+      // Edit mode INPUTS
       setTitle(transaction.title);
       setAmount(Math.abs(transaction.amount));
       setCategory(transaction.category);
@@ -179,7 +212,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
     } else {
 
-      // Create mode
+      // Create mode EMPTY INPUTS
       setTitle("");
       setAmount("");
       setCategory("");
@@ -187,6 +220,7 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
       const now = new Date();
 
+      // date NOW
       setDate(
         `${now.getFullYear()}-${String(
           now.getMonth() + 1
@@ -196,17 +230,6 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
       );
     }
   }, [transaction]);
-
-
-  // ====================
-  // CATEGORIES
-  // ====================
-
-  const {
-    data: categories,
-    error,
-    isLoading,
-  } = useSWR("/api/categories", fetcher);
 
 
   // ====================
@@ -268,18 +291,29 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
       return;
     }
 
+    showToast(
+      isEditing
+        ? "Transaction updated successfully."
+        : "Transaction added successfully."
+    );
+
+  // ====================
+  // TRANSACTION MUTATE
+  // ====================
+
     await mutate("/api/transactions");
 
     // If editing, call onSave updates the TransactionCard
     if (isEditing) {
       onSave(transaction._id);
+      showToast("Transaction updated successfully.");
       return;
     }
 
 
-      // ====================
-      // RESET FORM
-      // ====================
+    // ====================
+    // RESET FORM
+    // ====================
 
       setAmount("");
       setTitle("");
@@ -319,14 +353,14 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
   // Select which form style to use
   const FormComponent = transaction
     ? EditForm
-    : Form;
+    : CreateForm;
 
 
   // ====================
   // RENDER
   // ====================
 
-  return (
+ return (
   <FormComponent onSubmit={handleSubmit}>
     <Heading>
       {transaction ? "Edit Transaction" : "Add Transaction"}
@@ -334,54 +368,44 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
     {submitError && <p>{submitError}</p>}
 
+  <EditRow>
+      <Field>
+        <Label htmlFor="title">Transaction Title</Label>
+        <Input
+          id="title"
+          type="text"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          minLength={3}
+          pattern="[A-Za-zÄÖÜäöüß ]+"
+          required
+        />
+      </Field>
+
+      <Field>
+        <Label htmlFor="amount">Transaction Amount</Label>
+        <Input
+          id="amount"
+          type="number"
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
+          required
+        />
+      </Field>
+  </EditRow>
+  <EditRow>
     <Field>
-      <Label htmlFor="title">
-        {transaction ? "Transaction Title" : "Transaction Title"}
-      </Label>
-
-      <Input
-        id="title"
-        type="text"
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-        required
-      />
-    </Field>
-
-    <Field>
-      <Label htmlFor="amount">
-        {transaction ? "Amount" : "Transaction Amount"}
-      </Label>
-
-      <Input
-        id="amount"
-        type="number"
-        value={amount}
-        onChange={(event) => setAmount(event.target.value)}
-        required
-      />
-    </Field>
-
-    <Field>
-      <Label htmlFor="category">
-        {transaction ? "Category" : "Transaction Category"}
-      </Label>
-
+      <Label htmlFor="category">Transaction Category</Label>
       <Select
         id="category"
         value={category}
         onChange={(event) => setCategory(event.target.value)}
         required
       >
-        <option value="">
-          Please select a category
-        </option>
+        <option value="">Please select a category</option>
 
         {categories.map((category) => (
-          <option
-            key={category._id}
-            value={category.category}
-          >
+          <option key={category._id} value={category.category}>
             {category.category}
           </option>
         ))}
@@ -392,36 +416,24 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
       <Label>Transaction Type</Label>
 
       <RadioGroup>
-        <RadioLabel>
-          <input
-            type="radio"
-            name="type"
-            value="income"
-            checked={type === "income"}
-            onChange={(event) => setType(event.target.value)}
-            required
-          />
-          Income
-        </RadioLabel>
-
-        <RadioLabel>
-          <input
-            type="radio"
-            name="type"
-            value="expense"
-            checked={type === "expense"}
-            onChange={(event) => setType(event.target.value)}
-          />
-          Expense
-        </RadioLabel>
+        {["income", "expense"].map((option) => (
+          <RadioLabel key={option}>
+            <input
+              type="radio"
+              name="type"
+              value={option}
+              checked={type === option}
+              onChange={(event) => setType(event.target.value)}
+              required={option === "income"}
+            />
+            {option === "income" ? "Income" : "Expense"}
+          </RadioLabel>
+        ))}
       </RadioGroup>
     </Fieldset>
-
+</EditRow>
     <Field>
-      <Label htmlFor="date">
-        {transaction ? "Date" : "Transaction Date"}
-      </Label>
-
+      <Label htmlFor="date">Transaction Date</Label>
       <Input
         id="date"
         type="date"
@@ -433,21 +445,17 @@ export default function TransactionForm({ transaction, onCancel, onSave }) {
 
     {transaction ? (
       <EditRow>
-        <Button type="submit">
-          Save
-        </Button>
-
-        <Button
-          type="button"
-          onClick={onCancel}
-        >
-          Cancel
-        </Button>
+        <ButtonWrapper>
+          <SaveButton type="submit">Save</SaveButton>
+          <CancelButton type="button" onClick={onCancel}>
+            Cancel
+          </CancelButton>
+        </ButtonWrapper>
       </EditRow>
     ) : (
-      <Button type="submit">
+      <SubmitButton type="submit">
         Add transaction
-      </Button>
+      </SubmitButton>
     )}
   </FormComponent>
 )};

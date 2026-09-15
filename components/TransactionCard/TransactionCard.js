@@ -1,19 +1,40 @@
 import styled from "styled-components";
 
+// ====================
+// STYLES
+// ====================
 
-const Button = styled.button`
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
-const Transaction = styled.div`
+const EditButton = styled.button`
+  background: transparent;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+  padding: 0.7rem;
+  color:grey;
+`;
+
+const DeleteButton = styled.button`
+  background: lightgrey;
+  padding: 0.7rem 0.7rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid lightgray;
+  color: #0d0d0d ;
+`;
+
+const Transaction = styled.article`
+  position: relative;
   display: flex;
   gap: 20px;
   padding: 1rem;
   border-radius: 8px;
   align-items: center;
+  margin: 0 0 2rem;
 
   border: ${({ $isSelected }) =>
     $isSelected ? "2px solid black" : "1px solid #ccc"};
@@ -38,17 +59,21 @@ const Transaction = styled.div`
     `}
 
   > div:first-child {
-    flex: 2;
+    flex: 1 0 0 ;
   }
 
   > div:nth-child(2) {
-    flex: 1;
+      flex: 1 0 0 ;
+  }
+  > div:nth-child(3) {
+      flex: 2 0 0 ;
   }
 `;
 
 const TransactionTitle = styled.h2`
   margin: 0 0 8px;
   font-size: 20px;
+   flex: 2 0 0; 
 `;
 
 const Category = styled.p`
@@ -64,57 +89,118 @@ const Time = styled.p`
 `;
 const Amount = styled.p`
   font-weight: bold;
-  font-size: 20px;
+  font-size: 2rem;
   margin: 0;
   padding: 0 1rem;
-  flex: 0 0 auto;
+  flex: 1 0 0; 
   text-align: right;
 
   color: ${({ $isIncome }) =>
     $isIncome ? "black" : "red"};
 `;
 
+const Loading = styled.div`
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.8);
+`;
+
+const Spinner = styled.div`
+  width: 24px;
+  height: 24px;
+  border: 3px solid #ddd;
+  border-top: 3px solid #333;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+// ====================
+// COMPONENT
+// ====================
 
 export default function TransactionCard({
   transaction,
   onEdit,
   isSelected,
   isHighlighted,
+  onDelete,
+  isDeleting,
 }) {
   const date = new Date(transaction.date);
 
   return (
-    <Transaction $isSelected={isSelected} $isHighlighted={isHighlighted}>
-      <div>
-        <TransactionTitle>
-          {transaction.title}
-        </TransactionTitle>
+     <Transaction
+        $isSelected={isSelected}
+        $isHighlighted={isHighlighted}
+      >
 
-        <Category>
-          {transaction.category}
-        </Category>
-      </div>
+      {/*LOADING SPINNER */}
+       {isDeleting && (
+          <Loading>
+            <Spinner />
+          </Loading>
+        )}
 
-      <div>
-       <DateText>
-          {date.toLocaleDateString("de-DE")}
-        </DateText>
+        <div>
+          <TransactionTitle>
+            {transaction.title}
+          </TransactionTitle>
 
-        <Time>
-          {date.toLocaleTimeString("de-DE", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Time>
-      </div>
+          <Category>
+            {transaction.category}
+          </Category>
+        </div>
 
-   <Amount $isIncome={transaction.amount >= 0}>
-    {transaction.amount} €
-  </Amount>
-    <Button type="button" onClick={onEdit}>
-        Edit
-      </Button>
-    </Transaction>
-  );
-}
+        <div>
+          <DateText>
+            {date.toLocaleDateString("de-DE")}
+          </DateText>
+
+          <Time>
+            {date.toLocaleTimeString("de-DE", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Time>
+        </div>
+
+        <Amount $isIncome={transaction.amount >= 0}>
+          {transaction.amount} €
+        </Amount>
+
+        <ButtonWrapper>
+          <DeleteButton type="button" aria-label="Delete transaction" onClick={onDelete}>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 6L18 18M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </DeleteButton>
+
+          <EditButton type="button" onClick={onEdit}>
+            Edit
+          </EditButton>
+        </ButtonWrapper>
+      </Transaction>
+    )}
 
