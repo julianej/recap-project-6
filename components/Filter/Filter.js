@@ -40,9 +40,13 @@ export default function Filter({
   setSelectedYear,
   selectedType,
   setSelectedType,
+  selectedCategory,
+  setSelectedCategory,
+  availableCategories,
 }) {
 
   return (
+     <>
     <FilterWrapper>
         <FilterGroup>
             <FilterLabel>Year</FilterLabel>
@@ -102,5 +106,28 @@ export default function Filter({
             </FilterButton>
         </FilterGroup>
     </FilterWrapper>
+    <FilterWrapper>
+        <FilterGroup>
+            <FilterLabel>Category</FilterLabel>
+
+            <FilterButton
+            $active={selectedCategory === "all"}
+            onClick={() => setSelectedCategory("all")}
+            >
+            All
+            </FilterButton>
+
+            {availableCategories.map((category) => (
+            <FilterButton
+                key={category}
+                $active={selectedCategory === category}
+                onClick={() => setSelectedCategory(category)}
+            >
+                {category}
+            </FilterButton>
+            ))}
+        </FilterGroup>
+    </FilterWrapper>
+    </>
   );
 }
