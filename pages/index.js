@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { useState } from "react";
 import styled, { keyframes }  from "styled-components";
+import Filter from "../components/Filter/Filter";
 import AccountBalance from "../components/AccountBalance/AccountBalance";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
@@ -80,25 +81,56 @@ const Toast = styled.div`
 
   
 export default function HomePage() {
-// CREATE TRANSACTION FORM is closed by default
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-// MUTATE DB
+  // SWR
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
 
+  const [selectedYear, setSelectedYear] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
 
+  // FILTER 
+  function matchesFilter(transaction) {
+    const matchesYear =
+      selectedYear === "all" ||
+
+      // from TRANSACTION CARD 
+      // const date = new Date(transaction.date);
+      new Date(transaction.date).getFullYear() === Number(selectedYear);
+
+    const matchesType =
+      selectedType === "all" ||
+      transaction.type === selectedType;
+
+    return matchesYear && matchesType;
+  }
+
+  const filteredTransactions = data?.filter(matchesFilter);
+
+  // LOADING
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
   if (error) {
-    return <p>Failed to load transactions.</p>;
+    return (
+      <div>
+        <p>Failed to load transactions.</p>
+
+        <PrimaryButton
+          type="button"
+          buttonText="Try again"
+          onClick={mutate}
+        />
+      </div>
+    );
   }
 
-  function showToast(message) {
+  // TOAST 
+    function showToast(message) {
     setMessage(message);
 
     setTimeout(() => {
@@ -106,13 +138,19 @@ export default function HomePage() {
     }, 2000);
   }
 
-
   return (
     <Main>
 
       {message && <Toast>{message}</Toast>}
 
-      <Title>Julis Money Manager</Title>
+      <Title>Money Manager</Title>
+
+      <Filter
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+      />
 
       <AccountBalance transactions={data} />
 
@@ -168,11 +206,10 @@ export default function HomePage() {
 
       {/* "Edit" existing transaction */}
       <TransactionList
-        transactions={data}
-        mutate={mutate}
-        showToast={showToast}
-        // onDelete={handleDelete}
-      />
+          transactions={filteredTransactions}
+          mutate={mutate}
+          showToast={showToast}
+        />
     </Main>
   );
 }
