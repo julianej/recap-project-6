@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { useState } from "react";
 import styled, { keyframes }  from "styled-components";
+import Filter from "../components/Filter/Filter";
 import AccountBalance from "../components/AccountBalance/AccountBalance";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
@@ -78,26 +79,71 @@ const Toast = styled.div`
 // COMPONENT
 // ====================
 
-  
-export default function HomePage() {
-// CREATE TRANSACTION FORM is closed by default
+ export default function HomePage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-// MUTATE DB
+  // FILTER STATE
+  const [selectedYear, setSelectedYear] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  // SWR
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
 
+  // FILTER BY YEAR + TYPE
+  const transactionsForCategoryFilter = data?.filter((transaction) => {
+    const matchesYear =
+      selectedYear === "all" ||
+      new Date(transaction.date).getFullYear() === Number(selectedYear);
 
+    const matchesType =
+      selectedType === "all" ||
+      transaction.type === selectedType;
+
+    return matchesYear && matchesType;
+  });
+
+  // AVAILABLE CATEGORIES
+  const availableCategories = [
+    ...new Set(
+      transactionsForCategoryFilter?.map(
+        (transaction) => transaction.category
+      )
+    ),
+  ];
+
+  // FILTER BY CATEGORY
+  // const transactionsForCategoryFilter = data?.filter(...)
+  const filteredTransactions = transactionsForCategoryFilter?.filter(
+    (transaction) =>
+      selectedCategory === "all" ||
+      transaction.category === selectedCategory
+  );
+
+  // LOADING
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
+  // ERROR
   if (error) {
-    return <p>Failed to load transactions.</p>;
+    return (
+      <div>
+        <p>Failed to load transactions.</p>
+
+        <PrimaryButton
+          type="button"
+          buttonText="Try again"
+          onClick={mutate}
+        />
+      </div>
+    );
   }
 
+  // TOAST
   function showToast(message) {
     setMessage(message);
 
@@ -106,58 +152,68 @@ export default function HomePage() {
     }, 2000);
   }
 
-
   return (
     <Main>
 
       {message && <Toast>{message}</Toast>}
 
-      <Title>Julis Money Manager</Title>
+      <Title>Money Manager</Title>
+
+      <Filter
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        availableCategories={availableCategories}
+      />
 
       <AccountBalance transactions={data} />
 
-      {/* "Create" new transaction */}
-     <AddButton onClick={() => setIsFormOpen((isOpen) => !isOpen)}>
-      {isFormOpen ? (
-        <>
-          Close Transaction Form
+      <AddButton
+        onClick={() => setIsFormOpen((isOpen) => !isOpen)}
+      >
+        {isFormOpen ? (
+          <>
+            Close Transaction Form
 
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 6L18 18M18 6L6 18"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </>
-      ) : (
-        <>
-          Add transaction
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 6L18 18M18 6L6 18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </>
+        ) : (
+          <>
+            Add transaction
 
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 5V19M5 12H19"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </>
-      )}
-    </AddButton>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 5V19M5 12H19"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </>
+        )}
+      </AddButton>
 
       {isFormOpen && (
         <TransactionForm
@@ -166,13 +222,12 @@ export default function HomePage() {
         />
       )}
 
-      {/* "Edit" existing transaction */}
       <TransactionList
-        transactions={data}
+        transactions={filteredTransactions}
         mutate={mutate}
         showToast={showToast}
-        // onDelete={handleDelete}
       />
+
     </Main>
   );
 }
