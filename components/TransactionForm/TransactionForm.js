@@ -191,10 +191,6 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
   // POPULATE FORM
   // ====================
 
-  // Pattern to use:
-  // const { errors } = useFormState();
-  // const { trigger } = useFormContext(); //
-
   // useEffect(()=>{
   //   setTrigger(); // After this the errors are re/generated 
   // },[someDependency])
