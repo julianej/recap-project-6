@@ -204,7 +204,7 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
       setCategory(transaction.category);
       setType(transaction.type);
 
-
+      // transaction.date from "2024-07-01T00:00:00"
       const transactionDate = new Date(transaction.date);
 
       // Expected Output:
@@ -244,20 +244,20 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
 
 
   // ====================
-  // FORM SUBMIT
+  // FORM SUBMIT 
   // ====================
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    // Current date and time
+    // current date and time
     const now = new Date();
 
     const [year, month, day] = date
       .split("-")
       .map(Number);
 
-    // Create transaction date
+    // current transactionDate
     const transactionDate = new Date(
       year,
       month - 1,
@@ -269,6 +269,7 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
 
     try {
 
+      // EDIT MODE = true _id 
       const isEditing = Boolean(transaction);
 
       const response = await fetch(
