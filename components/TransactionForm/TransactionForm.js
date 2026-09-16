@@ -204,14 +204,21 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
       setCategory(transaction.category);
       setType(transaction.type);
 
+
       const transactionDate = new Date(transaction.date);
+
+      // Expected Output:
+      // getFullYear() → 2026
+      // getMonth()    → 8 + 1 → 09 //// January  = 0
+      // getDate()     → 16
+      // .padStart(2, "0")}` // month always has two digits "12"
 
       setDate(
         `${transactionDate.getFullYear()}-${String(
-          transactionDate.getMonth() + 1
+          transactionDate.getMonth() + 1 
         ).padStart(2, "0")}-${String(
           transactionDate.getDate()
-        ).padStart(2, "0")}`
+        ).padStart(2, "0")}` 
       );
 
     } else {
@@ -295,7 +302,7 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
       return;
     }
 
-    // Success Message
+    // setSuccessMessage
     showToast(
       isEditing
         ? "Transaction updated successfully."
