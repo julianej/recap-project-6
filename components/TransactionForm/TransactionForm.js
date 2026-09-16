@@ -184,12 +184,20 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
   const [type, setType] = useState("");
   const [date, setDate] = useState("");
 
+  // const { data: errors, .. } = useFormState();
   const {data: categories, error, isLoading } = useSWR("/api/categories");
-
 
   // ====================
   // POPULATE FORM
   // ====================
+
+  // Pattern to use:
+  // const { errors } = useFormState();
+  // const { trigger } = useFormContext(); //
+
+  // useEffect(()=>{
+  //   setTrigger(); // After this the errors are re/generated 
+  // },[someDependency])
 
   useEffect(() => {
     if (transaction) {
@@ -291,6 +299,7 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
       return;
     }
 
+    // Success Message
     showToast(
       isEditing
         ? "Transaction updated successfully."

@@ -103,33 +103,35 @@ const Toast = styled.div`
   
 export default function HomePage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setSuccessMessage] = useState("");
 
   // SWR
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
 
+  // FILTER 
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
 
-  // FILTER 
-  function matchesFilter(transaction) {
-    const matchesYear =
-      selectedYear === "all" ||
-
-      // from TRANSACTION CARD 
-      // const date = new Date(transaction.date);
-      new Date(transaction.date).getFullYear() === Number(selectedYear);
-
-    const matchesType =
-      selectedType === "all" ||
-      transaction.type === selectedType;
-
-    return matchesYear && matchesType;
-  }
-
   const filteredTransactions = data?.filter(matchesFilter);
+
+  // FILTER YEAR & TYPE
+  function matchesFilter(transaction) {
+   const matchesYear =
+          //true || anything → true
+          selectedYear === "all" || 
+          //// checks SWR data "2025-08-20"
+          new Date(transaction.date).getFullYear() === Number(selectedYear);
+
+  const matchesType =
+        selectedType === "all" ||
+        //// checks SWR data
+        transaction.type === selectedType;
+
+        return matchesYear && matchesType;
+}
+
 
   // LOADING
   if (isLoading) {
@@ -152,10 +154,10 @@ export default function HomePage() {
 
   // TOAST 
     function showToast(message) {
-    setMessage(message);
+    setSuccessMessage(message);
 
     setTimeout(() => {
-      setMessage("");
+      setSuccessMessage("");
     }, 2000);
   }
 
@@ -177,6 +179,7 @@ export default function HomePage() {
 
       {/* "Create" new transaction */}
      <AddButton onClick={() => setIsFormOpen((isOpen) => !isOpen)}>
+      
       {isFormOpen ? (
         <>
           Close Transaction Form

@@ -138,6 +138,7 @@ export default function TransactionCard({
   isDeleting,
 }) {
   
+  // "2025-08-20"
   const date = new Date(transaction.date);
 
   return (
