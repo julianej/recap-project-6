@@ -277,7 +277,7 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
 
     try {
 
-      // EDIT MODE = true _id 
+      // EDIT MODE = Boolean true _id 
       const isEditing = Boolean(transaction);
 
       const response = await fetch(

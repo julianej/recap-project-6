@@ -72,12 +72,14 @@ const Transaction = styled.article`
 
 
 const TransactionTitle = styled.h2`
+
+  @media (min-width: 739px) {
+      font-size: 2rem;
+  }
+
   margin: 0;
   flex: 2 0 0;
-
-  @media (max-width: 739px) {
-      font-size: 0.8rem;
-  }
+  font-size: 0.8rem;
 `;
 
 const Category = styled.p`
