@@ -168,6 +168,7 @@ export default function HomePage() {
 
       <Title>Money Manager</Title>
 
+      {/* recieves transacton DATA to be filtered */}
       <Filter
         transactions={data ?? []}
         selectedYear={selectedYear}

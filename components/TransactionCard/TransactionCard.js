@@ -70,19 +70,19 @@ const Transaction = styled.article`
   }
 `;
 
-const TransactionTitle = styled.h2`
-  margin: 0 0 8px;
-  font-size: 1rem;
-  flex: 2 0 0; 
 
-  @media (min-width: 740px) {
-    font-size: 2rem;
+const TransactionTitle = styled.h2`
+  margin: 0;
+  flex: 2 0 0;
+
+  @media (max-width: 739px) {
+      font-size: 0.8rem;
   }
 `;
 
 const Category = styled.p`
-  margin: 4px 0;
-  font-size: 1rem;
+  margin: 0.1rem 0;
+  font-size: 0.8rem;
 `;
 
 const DateText = styled.p`
@@ -104,11 +104,6 @@ const Amount = styled.p`
   text-align: right;
   color: ${({ $isIncome }) =>
     $isIncome ? "black" : "red"};
-
-  @media (min-width: 740px) {
-    padding: 1rem;
-    font-size: 2rem;
-  }
 `;
 
 
@@ -169,8 +164,11 @@ export default function TransactionCard({
 
         <div>
           <TransactionTitle>
-            {transaction.title}
-          </TransactionTitle>
+              {transaction.title.length > 15
+                ? `${transaction.title.slice(0, 15)}...`
+                : transaction.title}
+            </TransactionTitle>
+
 
           <Category>
             {transaction.category}
