@@ -143,11 +143,9 @@ export default function HomePage() {
       <div>
         <p>Failed to load transactions.</p>
 
-        <PrimaryButton
-          type="button"
-          buttonText="Try again"
-          onClick={mutate}
-        />
+        <PrimaryButton type="button" onClick={() => mutate()}>
+          Try again
+        </PrimaryButton>
       </div>
     );
   }

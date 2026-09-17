@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useState } from "react";
 
 const FilterWrapper = styled.div`
   display: flex;
@@ -32,8 +33,11 @@ const FilterButton = styled.button`
   padding: 8px 14px;
   border: 1px solid #ccc;
   border-radius: 20px;
-  background: ${({ $active }) => ($active ? "#000" : "#fff")};
-  color: ${({ $active }) => ($active ? "#fff" : "#000")};
+  background: ${({ $active }) =>
+    $active ? "black" : "transparent"};
+  color: ${({ $active }) =>
+    $active ? "white" : "black"};
+
   cursor: pointer;
   transition: 0.2s ease;
 
@@ -51,12 +55,12 @@ export default function Filter({
   setSelectedType,
 }) {
 
+const [showAllYears, setShowAllYears] = useState(false);
+
 // map NEW array for YEARS
-// more advanced to delete the HARDCODED pattern 
+// more advanced to delete the HARDCODED PATTERN
 // years → data from database
 
-// const a = new Set([1, 2, 3]);
-// SET year only occur once
   const years = [
     ...new 
     Set(transactions
@@ -74,39 +78,52 @@ export default function Filter({
 
       <FilterGroup>
         <FilterLabel>Year</FilterLabel>
+      
+      {/* ALL */}
+      <FilterButton
+        $active={selectedYear === "all"}
+        onClick={() => setSelectedYear("all")}
+      >
+        All
+      </FilterButton>
 
-      {/* YEARS - ALL BUTTON */}
-        {years.length >= 0 && (
+       {/* FIRST 2x YEARS */}
+      {years
+        .slice(0, 2)
+        .map((year) => (
           <FilterButton
-            $active={selectedYear === "all"}
-            onClick={() => setSelectedYear("all")}
+            key={year}
+            $active={selectedYear === year}
+            onClick={() => setSelectedYear(year)}
           >
-            All
+            {year}
           </FilterButton>
-        )}
+        ))}
 
-      {/* YEARS - 2026 BUTTON */}
-        {years
-          // .slice(0, 3 ? years.length : 2)
-          // condition ? valueIfTrue : valueIfFalse
-          .slice(0,2)
-          .map((year) => (
+       {/* REMAINING YEARS */}
+        {showAllYears &&
+          years.slice(2).map((year) => (
             <FilterButton
               key={year}
-              $active={selectedYear === year[0]}
-              onClick={() => setSelectedYear(year[0])}
+              $active={selectedYear === year}
+              onClick={() => setSelectedYear(year)}
             >
               {year}
             </FilterButton>
           ))}
 
-        {/* YEARS - ... BUTTON */}
-        {years.length > 2 && (
-          <FilterButton onClick={() => setShowAllYears(!showAllYears)}>
-            ...
-          </FilterButton>
-        )}
-    </FilterGroup>
+      {/* ... EXTENDED YEARS */}
+        {years.length > 2 &&
+          (!showAllYears ? (
+            <FilterButton onClick={() => setShowAllYears(true)}>
+              ...
+            </FilterButton>
+          ) : (
+            <FilterButton onClick={() => setShowAllYears(false)}>
+              −
+            </FilterButton>
+          ))}
+       </FilterGroup>
 
         <FilterGroup>
             <FilterLabel>Type</FilterLabel>

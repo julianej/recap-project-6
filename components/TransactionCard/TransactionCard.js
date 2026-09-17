@@ -169,7 +169,6 @@ export default function TransactionCard({
                 : transaction.title}
             </TransactionTitle>
 
-
           <Category>
             {transaction.category}
           </Category>
