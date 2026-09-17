@@ -20,7 +20,7 @@ const CreateForm = styled.form`
 `;
 
 const EditForm = styled(CreateForm)`
-  width: 95%;
+  width: 100%;
   gap: 0.75rem;
   padding: 1rem;
   border-radius: 10px;
@@ -40,6 +40,7 @@ const Heading = styled.h2`
 
 const Field = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 0.5rem;
 `;
@@ -83,13 +84,16 @@ const Fieldset = styled.fieldset`
   flex-direction: column;
   gap: 0.50rem;
   border: none;
-  padding: 0;
+  width: 100%;
   margin: 0;
+  padding: 0;
+  border: 0;
 `;
+
 
 const RadioGroup = styled.div`
   display: flex;
-  gap: 1.5rem;
+  gap: 0.5rem;
 `;
 
 const RadioLabel = styled.label`
@@ -143,13 +147,13 @@ const ButtonWrapper = styled.div`
 
 const SaveButton = styled(Button)`
   background: black;
-  width: 80%;
+  width: 70%;
   color: white;
 `;
 
 const CancelButton = styled(Button)`
   background: transparent;
-  width: 20%;
+  width: 30%;
   color: black;
   border: 1px solid black;
 `;
@@ -157,7 +161,11 @@ const CancelButton = styled(Button)`
 // Used ONLY by the edit form
 const EditRow = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 1rem;
+
+  @media (min-width: 740px) {
+    flex-direction: row;}
 
   > ${Field},
   > ${Fieldset} {
@@ -417,9 +425,9 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
       >
         <option value="">Please select a category</option>
 
-        {categories.map((category) => (
-          <option key={category._id} value={category.category}>
-            {category.category}
+        {categories.map((item) => (
+          <option key={item._id} value={item.category}>
+            {item.category}
           </option>
         ))}
       </Select>

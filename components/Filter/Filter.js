@@ -5,6 +5,15 @@ const FilterWrapper = styled.div`
   gap: 24px;
   align-items: center;
   margin-bottom: 24px;
+  width: 100%;
+  overflow: scroll;
+    /* Hide scrollbar — Firefox */
+  scrollbar-width: none;
+
+  /* Hide scrollbar — Chrome, Safari, Edge */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const FilterGroup = styled.div`

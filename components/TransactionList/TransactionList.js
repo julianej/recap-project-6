@@ -31,7 +31,7 @@ const List = styled.section`
   gap: 12px;
 
   border-radius: 1rem;
-  padding: 0 0.7rem;
+  padding: 0 0.7rem 2rem;
   border: ${({ $isEmpty }) =>
     $isEmpty ? "none" : "2px solid #000"};
 `;

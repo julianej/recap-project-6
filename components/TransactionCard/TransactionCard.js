@@ -7,7 +7,7 @@ import styled from "styled-components";
 const ButtonWrapper = styled.div`
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
 `;
 
@@ -30,11 +30,11 @@ const DeleteButton = styled.button`
 const Transaction = styled.article`
   position: relative;
   display: flex;
-  gap: 20px;
+  gap: 1rem;
   padding: 1rem;
   border-radius: 8px;
   align-items: center;
-  margin: 0 0 2rem;
+  margin: 0;
 
   border: ${({ $isSelected }) =>
     $isSelected ? "2px solid black" : "1px solid #ccc"};
@@ -72,32 +72,45 @@ const Transaction = styled.article`
 
 const TransactionTitle = styled.h2`
   margin: 0 0 8px;
-  font-size: 20px;
-   flex: 2 0 0; 
+  font-size: 1rem;
+  flex: 2 0 0; 
+
+  @media (min-width: 740px) {
+    font-size: 2rem;
+  }
 `;
 
 const Category = styled.p`
   margin: 4px 0;
+  font-size: 1rem;
 `;
 
 const DateText = styled.p`
   margin: 4px 0;
+  font-size: 0.7rem;
 `;
 
 const Time = styled.p`
   margin: 4px 0;
+  font-size: 0.7rem;
 `;
+
 const Amount = styled.p`
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin: 0;
-  padding: 0 1rem;
-  flex: 1 0 0; 
+  padding: 0;
+  flex: 1 0 0;
   text-align: right;
-
   color: ${({ $isIncome }) =>
     $isIncome ? "black" : "red"};
+
+  @media (min-width: 740px) {
+    padding: 1rem;
+    font-size: 2rem;
+  }
 `;
+
 
 const Loading = styled.div`
   position: absolute;
