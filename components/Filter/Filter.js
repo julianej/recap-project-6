@@ -57,8 +57,6 @@ export default function Filter({
 
 const [showAllYears, setShowAllYears] = useState(false);
 
-// map NEW array for YEARS
-// more advanced to delete the HARDCODED PATTERN
 // years → data from database
 
   const years = [
