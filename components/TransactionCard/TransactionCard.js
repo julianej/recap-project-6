@@ -1,4 +1,5 @@
 import styled from "styled-components";
+// import { X, Plus } from "lucide-react";
 
 // ====================
 // STYLES
@@ -17,14 +18,6 @@ const EditButton = styled.button`
   border-radius: 0.5rem;
   padding: 0.7rem;
   color:grey;
-`;
-
-const DeleteButton = styled.button`
-  background: lightgrey;
-  padding: 0.7rem 0.7rem 0.6rem;
-  border-radius: 0.5rem;
-  border: 1px solid lightgray;
-  color: #0d0d0d ;
 `;
 
 const Transaction = styled.article`
@@ -144,7 +137,6 @@ export default function TransactionCard({
   onEdit,
   isSelected,
   isHighlighted,
-  onDelete,
   isDeleting,
 }) {
   
@@ -194,23 +186,6 @@ export default function TransactionCard({
         </Amount>
 
         <ButtonWrapper>
-          <DeleteButton type="button" aria-label="Delete transaction" onClick={onDelete}>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 6L18 18M18 6L6 18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </DeleteButton>
-
           <EditButton type="button" onClick={onEdit}>
             Edit
           </EditButton>
