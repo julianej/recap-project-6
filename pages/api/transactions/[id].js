@@ -13,7 +13,6 @@ export default async function handler(request, response) {
       const transaction = await Project.findByIdAndUpdate(
         id,
           transactionData,
-          // Database Validation for test123 (to take just Test)
           { runValidators: true }
         );
 
