@@ -75,6 +75,7 @@ export default function Filter({
       <FilterGroup>
         <FilterLabel>Year</FilterLabel>
 
+      {/* YEARS - ALL BUTTON */}
         {years.length >= 0 && (
           <FilterButton
             $active={selectedYear === "all"}
@@ -84,19 +85,22 @@ export default function Filter({
           </FilterButton>
         )}
 
+      {/* YEARS - 2026 BUTTON */}
         {years
-          .slice(0, 2 ? years.length : 2)
+          // .slice(0, 3 ? years.length : 2)
+          // condition ? valueIfTrue : valueIfFalse
+          .slice(0,2)
           .map((year) => (
             <FilterButton
               key={year}
-              $active={selectedYear === year}
-              onClick={() => setSelectedYear(year)}
+              $active={selectedYear === year[0]}
+              onClick={() => setSelectedYear(year[0])}
             >
               {year}
             </FilterButton>
           ))}
 
-        {/* EXTENDED YEARS... BUTTON */}
+        {/* YEARS - ... BUTTON */}
         {years.length > 2 && (
           <FilterButton onClick={() => setShowAllYears(!showAllYears)}>
             ...

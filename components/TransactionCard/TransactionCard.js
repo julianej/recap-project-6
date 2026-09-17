@@ -30,7 +30,7 @@ const DeleteButton = styled.button`
 const Transaction = styled.article`
   position: relative;
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   padding: 1rem;
   border-radius: 8px;
   align-items: center;
@@ -97,7 +97,7 @@ const Time = styled.p`
 
 const Amount = styled.p`
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin: 0;
   padding: 0;
   flex: 1 0 0;
