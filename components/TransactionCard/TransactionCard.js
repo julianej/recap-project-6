@@ -37,7 +37,7 @@ const Transaction = styled.article`
   margin: 0;
 
   border: ${({ $isSelected }) =>
-    $isSelected ? "2px solid black" : "1px solid #ccc"};
+    $isSelected ? "0.1rem solid black" : "0.1rem solid #ccc"};
 
   background-color: ${({ $isSelected }) =>
     $isSelected ? "#e0e0e0" : "white"};
@@ -59,7 +59,7 @@ const Transaction = styled.article`
     `}
 
   > div:first-child {
-    flex: 1 0 0 ;
+    flex: 2 0 0 ;
   }
 
   > div:nth-child(2) {
