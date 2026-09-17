@@ -169,6 +169,7 @@ export default function HomePage() {
       <Title>Money Manager</Title>
 
       <Filter
+        transactions={data ?? []}
         selectedYear={selectedYear}
         setSelectedYear={setSelectedYear}
         selectedType={selectedType}

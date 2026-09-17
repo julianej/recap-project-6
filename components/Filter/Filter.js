@@ -44,46 +44,65 @@ const FilterButton = styled.button`
 `;
 
 export default function Filter({
+  transactions = [],
   selectedYear,
   setSelectedYear,
   selectedType,
   setSelectedType,
 }) {
 
+// map NEW array for YEARS
+// more advanced to delete the HARDCODED pattern 
+// years → data from database
+
+// const a = new Set([1, 2, 3]);
+// SET year only occur once
+  const years = [
+    ...new 
+    Set(transactions
+      .map((transaction) =>
+      //"2026-09-17T10:30:00.000Z"
+        new Date(transaction.date).getFullYear().toString()
+      )
+      // 2026
+    ),
+    ].sort((a, b) => Number(b) - Number(a));
+  ;
+
   return (
     <FilterWrapper>
-        <FilterGroup>
-            <FilterLabel>Year</FilterLabel>
 
-            <FilterButton
+      <FilterGroup>
+        <FilterLabel>Year</FilterLabel>
+
+        {years.length >= 0 && (
+          <FilterButton
             $active={selectedYear === "all"}
-            onClick={function () { setSelectedYear("all");}}
-            //* onClick={() => { setSelectedYear("all") }} */
-            >
+            onClick={() => setSelectedYear("all")}
+          >
             All
-            </FilterButton>
+          </FilterButton>
+        )}
 
+        {years
+          .slice(0, 2 ? years.length : 2)
+          .map((year) => (
             <FilterButton
-            $active={selectedYear === "2026"}
-            onClick={() => setSelectedYear("2026")}
+              key={year}
+              $active={selectedYear === year}
+              onClick={() => setSelectedYear(year)}
             >
-            2026
+              {year}
             </FilterButton>
+          ))}
 
-            <FilterButton
-            $active={selectedYear === "2025"}
-            onClick={() => setSelectedYear("2025")}
-            >
-            2025
-            </FilterButton>
-
-            <FilterButton
-            $active={selectedYear === "2024"}
-            onClick={() => setSelectedYear("2024")}
-            >
-            2024
-            </FilterButton>
-        </FilterGroup>
+        {/* EXTENDED YEARS... BUTTON */}
+        {years.length > 2 && (
+          <FilterButton onClick={() => setShowAllYears(!showAllYears)}>
+            ...
+          </FilterButton>
+        )}
+    </FilterGroup>
 
         <FilterGroup>
             <FilterLabel>Type</FilterLabel>
