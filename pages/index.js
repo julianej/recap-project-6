@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { useState } from "react";
 import styled, { keyframes }  from "styled-components";
+import Filter from "../components/Filter/Filter";
 import AccountBalance from "../components/AccountBalance/AccountBalance";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
@@ -54,6 +55,27 @@ const AddButton = styled.button`
 `;
 
 
+const PrimaryButton = styled.button`
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+
 const Toast = styled.div`
   position: fixed;
   top: 2rem;
@@ -80,44 +102,84 @@ const Toast = styled.div`
 
   
 export default function HomePage() {
-// CREATE TRANSACTION FORM is closed by default
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setSuccessMessage] = useState("");
 
-// MUTATE DB
+  // SWR
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
 
+  // FILTER 
+  const [selectedYear, setSelectedYear] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
 
+  const filteredTransactions = data?.filter(matchesFilter);
+
+  // FILTER YEAR & TYPE
+  function matchesFilter(transaction) {
+   const matchesYear =
+          //true || anything → true
+          selectedYear === "all" || 
+          //// checks SWR data "2025-08-20"
+          new Date(transaction.date).getFullYear() === Number(selectedYear);
+
+  const matchesType =
+        selectedType === "all" ||
+        //// checks SWR data
+        transaction.type === selectedType;
+
+        return matchesYear && matchesType;
+}
+
+
+  // LOADING
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
   if (error) {
-    return <p>Failed to load transactions.</p>;
+    return (
+      <div>
+        <p>Failed to load transactions.</p>
+
+        <PrimaryButton type="button" onClick={() => mutate()}>
+          Try again
+        </PrimaryButton>
+      </div>
+    );
   }
 
-  function showToast(message) {
-    setMessage(message);
+  // TOAST 
+    function showToast(message) {
+    setSuccessMessage(message);
 
     setTimeout(() => {
-      setMessage("");
+      setSuccessMessage("");
     }, 2000);
   }
-
 
   return (
     <Main>
 
       {message && <Toast>{message}</Toast>}
 
-      <Title>Julis Money Manager</Title>
+      <Title>Money Manager</Title>
+
+      {/* recieves transacton DATA to be filtered */}
+      <Filter
+        transactions={data ?? []}
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+      />
 
       <AccountBalance transactions={data} />
 
       {/* "Create" new transaction */}
      <AddButton onClick={() => setIsFormOpen((isOpen) => !isOpen)}>
+      
       {isFormOpen ? (
         <>
           Close Transaction Form
@@ -168,11 +230,10 @@ export default function HomePage() {
 
       {/* "Edit" existing transaction */}
       <TransactionList
-        transactions={data}
-        mutate={mutate}
-        showToast={showToast}
-        // onDelete={handleDelete}
-      />
+          transactions={filteredTransactions}
+          mutate={mutate}
+          showToast={showToast}
+        />
     </Main>
   );
 }

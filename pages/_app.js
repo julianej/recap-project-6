@@ -1,5 +1,6 @@
 import { GlobalStyle } from "../styles";
-import { SWRConfig } from 'swr';
+import { SWRConfig } from "swr";
+
 
 // ====================
 // FETCHER FUNCTION for useSWR

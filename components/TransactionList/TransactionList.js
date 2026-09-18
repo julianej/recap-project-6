@@ -31,7 +31,7 @@ const List = styled.section`
   gap: 12px;
 
   border-radius: 1rem;
-  padding: 0 0.7rem;
+  padding: 0 0.7rem 2rem;
   border: ${({ $isEmpty }) =>
     $isEmpty ? "none" : "2px solid #000"};
 `;
@@ -99,8 +99,7 @@ async function handleDelete(id) {
       throw new Error("Failed to delete transaction");
     }
 
-
-    // Wait 1.2 seconds
+    // Wait 1.2 seconds to load spinner
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
     // Stop spinner
