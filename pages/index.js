@@ -55,6 +55,27 @@ const AddButton = styled.button`
 `;
 
 
+const PrimaryButton = styled.button`
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+
 const Toast = styled.div`
   position: fixed;
   top: 2rem;
@@ -79,76 +100,75 @@ const Toast = styled.div`
 // COMPONENT
 // ====================
 
- export default function HomePage() {
+  
+export default function HomePage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setSuccessMessage] = useState("");
 
-  // FILTER STATE
-  const [selectedYear, setSelectedYear] = useState("all");
-  const [selectedType, setSelectedType] = useState("all");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  // SWR
+  // SWR HOOK Destructoring
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
 
-  // FILTER BY YEAR + TYPE
-  const transactionsForCategoryFilter = data?.filter((transaction) => {
-    const matchesYear =
-      selectedYear === "all" ||
-      new Date(transaction.date).getFullYear() === Number(selectedYear);
+  // FILTER 
+  const [selectedYear, setSelectedYear] = useState("all");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
-    const matchesType =
-      selectedType === "all" ||
-      transaction.type === selectedType;
+  const filteredTransactions = data?.filter(matchesFilter);
 
-    return matchesYear && matchesType;
-  });
+  // FILTER YEAR & TYPE
+  function matchesFilter(transaction) {
+      //// checks SWR data "2025-08-20"
+    const transactionYear = new Date(transaction.date)
+    .getFullYear()
+    .toString();
 
-  // AVAILABLE CATEGORIES
-  const availableCategories = [
-    ...new Set(
-      transactionsForCategoryFilter?.map(
-        (transaction) => transaction.category
-      )
-    ),
-  ];
+   const matchesYear =
+          //true || anything → true
+          selectedYear === "all" || 
+          //// checks SWR data "2025-08-20"
+           transactionYear === selectedYear;
 
-  // FILTER BY CATEGORY
-  // const transactionsForCategoryFilter = data?.filter(...)
-  const filteredTransactions = transactionsForCategoryFilter?.filter(
-    (transaction) =>
-      selectedCategory === "all" ||
-      transaction.category === selectedCategory
-  );
+  const matchesType =
+        selectedType === "all" ||
+        //// checks SWR data
+        transaction.type === selectedType;
+
+  const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(transaction.category);
+
+  return matchesYear && matchesType && matchesCategory;
+};
 
   // LOADING
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  // ERROR
   if (error) {
     return (
       <div>
         <p>Failed to load transactions.</p>
 
-        <PrimaryButton
-          type="button"
-          buttonText="Try again"
-          onClick={mutate}
-        />
+        {/* <PrimaryButton type="button" 
+           WRONG onClick={mutate}> */}
+
+        {/* ANONYME WRAPPER FUNCTION onClick={(e)*/}
+        <PrimaryButton type="button" onClick={() => mutate()}> 
+          Try again
+        </PrimaryButton>
       </div>
     );
   }
 
-  // TOAST
-  function showToast(message) {
-    setMessage(message);
+  // TOAST 
+    function showToast(message) {
+    setSuccessMessage(message);
 
     setTimeout(() => {
-      setMessage("");
+      setSuccessMessage("");
     }, 2000);
   }
 
@@ -159,61 +179,62 @@ const Toast = styled.div`
 
       <Title>Money Manager</Title>
 
+      {/* recieves transacton DATA to be filtered */}
       <Filter
+        transactions={data ?? []}
         selectedYear={selectedYear}
         setSelectedYear={setSelectedYear}
         selectedType={selectedType}
         setSelectedType={setSelectedType}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        availableCategories={availableCategories}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
       />
 
       <AccountBalance transactions={data} />
 
-      <AddButton
-        onClick={() => setIsFormOpen((isOpen) => !isOpen)}
-      >
-        {isFormOpen ? (
-          <>
-            Close Transaction Form
+      {/* "Create" new transaction */}
+     <AddButton onClick={() => setIsFormOpen((isOpen) => !isOpen)}>
+      
+      {isFormOpen ? (
+        <>
+          Close Transaction Form
 
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 6L18 18M18 6L6 18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </>
-        ) : (
-          <>
-            Add transaction
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 6L18 18M18 6L6 18"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </>
+      ) : (
+        <>
+          Add transaction
 
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 5V19M5 12H19"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </>
-        )}
-      </AddButton>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 5V19M5 12H19"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </>
+      )}
+    </AddButton>
 
       {isFormOpen && (
         <TransactionForm
@@ -222,12 +243,12 @@ const Toast = styled.div`
         />
       )}
 
+      {/* "Edit" existing transaction */}
       <TransactionList
-        transactions={filteredTransactions}
-        mutate={mutate}
-        showToast={showToast}
-      />
-
+           transactions={filteredTransactions}
+          mutate={mutate}
+          showToast={showToast}
+        />
     </Main>
   );
 }

@@ -7,7 +7,7 @@ import styled from "styled-components";
 const ButtonWrapper = styled.div`
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
 `;
 
@@ -30,14 +30,14 @@ const DeleteButton = styled.button`
 const Transaction = styled.article`
   position: relative;
   display: flex;
-  gap: 20px;
+  gap: 0.5rem;
   padding: 1rem;
   border-radius: 8px;
   align-items: center;
-  margin: 0 0 2rem;
+  margin: 0;
 
   border: ${({ $isSelected }) =>
-    $isSelected ? "2px solid black" : "1px solid #ccc"};
+    $isSelected ? "0.1rem solid black" : "0.1rem solid #ccc"};
 
   background-color: ${({ $isSelected }) =>
     $isSelected ? "#e0e0e0" : "white"};
@@ -59,7 +59,7 @@ const Transaction = styled.article`
     `}
 
   > div:first-child {
-    flex: 1 0 0 ;
+    flex: 2 0 0 ;
   }
 
   > div:nth-child(2) {
@@ -70,34 +70,44 @@ const Transaction = styled.article`
   }
 `;
 
+
 const TransactionTitle = styled.h2`
-  margin: 0 0 8px;
-  font-size: 20px;
-   flex: 2 0 0; 
+
+  @media (min-width: 739px) {
+      font-size: 2rem;
+  }
+
+  margin: 0;
+  flex: 2 0 0;
+  font-size: 0.8rem;
 `;
 
 const Category = styled.p`
-  margin: 4px 0;
+  margin: 0.1rem 0;
+  font-size: 0.8rem;
 `;
 
 const DateText = styled.p`
   margin: 4px 0;
+  font-size: 0.7rem;
 `;
 
 const Time = styled.p`
   margin: 4px 0;
+  font-size: 0.7rem;
 `;
+
 const Amount = styled.p`
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1.2rem;
   margin: 0;
-  padding: 0 1rem;
-  flex: 1 0 0; 
+  padding: 0;
+  flex: 1 0 0;
   text-align: right;
-
   color: ${({ $isIncome }) =>
     $isIncome ? "black" : "red"};
 `;
+
 
 const Loading = styled.div`
   position: absolute;
@@ -137,6 +147,8 @@ export default function TransactionCard({
   onDelete,
   isDeleting,
 }) {
+  
+  // "2025-08-20"
   const date = new Date(transaction.date);
 
   return (
@@ -154,8 +166,10 @@ export default function TransactionCard({
 
         <div>
           <TransactionTitle>
-            {transaction.title}
-          </TransactionTitle>
+              {transaction.title.length > 15
+                ? `${transaction.title.slice(0, 15)}...`
+                : transaction.title}
+            </TransactionTitle>
 
           <Category>
             {transaction.category}

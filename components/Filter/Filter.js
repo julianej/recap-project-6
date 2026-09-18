@@ -1,31 +1,41 @@
-import { useState } from "react";
 import styled from "styled-components";
+import { useEffect, useState } from "react";
 
 const FilterWrapper = styled.div`
   display: flex;
-  gap: 24px;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 0;
+`;
+
+const FilterRow = styled.div`
+  display: flex;
   align-items: center;
-  margin-bottom: 24px;
+  gap: 1rem;
+  flex-wrap: wrap;
 `;
 
 const FilterGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
 `;
 
 const FilterLabel = styled.span`
-  margin-right: 4px;
-  font-size: 14px;
   font-weight: 600;
+    margin-right: 4px;
+  font-size: 14px;
 `;
 
 const FilterButton = styled.button`
   padding: 8px 14px;
   border: 1px solid #ccc;
   border-radius: 20px;
-  background: ${({ $active }) => ($active ? "#000" : "#fff")};
-  color: ${({ $active }) => ($active ? "#fff" : "#000")};
+  background: ${({ $active }) =>
+    $active ? "black" : "transparent"};
+  color: ${({ $active }) =>
+    $active ? "white" : "black"};
+
   cursor: pointer;
   transition: 0.2s ease;
 
@@ -36,51 +46,144 @@ const FilterButton = styled.button`
 `;
 
 export default function Filter({
+  transactions = [],
   selectedYear,
   setSelectedYear,
   selectedType,
   setSelectedType,
-  selectedCategory,
-  setSelectedCategory,
-  availableCategories,
+  selectedCategories,
+  setSelectedCategories,
 }) {
 
+const [showAllYears, setShowAllYears] = useState(false);
+const [showAllCategories, setShowAllCategories] = useState(false);
+
+// ====================
+// YEARS
+// ====================
+
+// years → data from database
+
+  const years = [
+    ...new Set(transactions
+      .map((transaction) =>
+      //"2026-09-17T10:30:00.000Z"
+        new Date(transaction.date).getFullYear().toString()
+      )
+      // 2026
+    ),
+    ].sort((a, b) => Number(b) - Number(a));
+  ;
+
+
+// ====================
+// CATEGORIES
+// ====================
+
+  const availableCategories = [
+    ...new Set(
+      transactions
+        .filter((transaction) => {
+          const transactionYear = new Date(transaction.date)
+            .getFullYear()
+            .toString();
+
+          const matchesYear =
+            selectedYear === "all" || transactionYear === selectedYear;
+
+          const matchesType =
+            selectedType === "all" || transaction.type === selectedType;
+
+          return matchesYear && matchesType;
+        })
+        .map((transaction) => transaction.category)
+    ),
+  ].sort();
+
+
+function toggleCategory(category) {
+  setSelectedCategories((current) => {
+    if (current.includes(category)) {
+      return current.filter((item) => item !== category);
+    }
+
+    return [...current, category];
+  });
+}
+
+// First 4 categories
+  const visibleCategories = showAllCategories
+    ? availableCategories
+    : availableCategories.slice(0, 4);
+
+// ====================
+// RESET CATEGORY
+// ====================
+
+useEffect(() => {
+  setSelectedCategories((current) => {
+    const validCategories = current.filter((category) =>
+      availableCategories.includes(category)
+    );
+
+    return validCategories;
+  });
+}, [selectedYear, selectedType, availableCategories]);
+
   return (
-     <>
     <FilterWrapper>
-        <FilterGroup>
-            <FilterLabel>Year</FilterLabel>
+       <FilterRow>
+{/* ==================== YEAR ==================== */}
+      <FilterGroup>
+        <FilterLabel>Year</FilterLabel>
+      
+      {/* ALL */}
+      <FilterButton
+        $active={selectedYear === "all"}
+        onClick={() => setSelectedYear("all")}
+      >
+        All
+      </FilterButton>
 
+       {/* FIRST 2x YEARS */}
+      {years
+        .slice(0, 2)
+        .map((year) => (
+          <FilterButton
+            key={year}
+            $active={selectedYear === year}
+            onClick={() => setSelectedYear(year)}
+          >
+            {year}
+          </FilterButton>
+        ))}
+
+       {/* REMAINING YEARS */}
+        {showAllYears &&
+          years.slice(2).map((year) => (
             <FilterButton
-            $active={selectedYear === "all"}
-            onClick={function () { setSelectedYear("all");}}
-            //* onClick={() => { setSelectedYear("all") }} */
+              key={year}
+              $active={selectedYear === year}
+              onClick={() => setSelectedYear(year)}
             >
-            All
+              {year}
             </FilterButton>
+          ))}
 
-            <FilterButton
-            $active={selectedYear === "2026"}
-            onClick={() => setSelectedYear("2026")}
-            >
-            2026
+      {/* ... EXTENDED YEARS */}
+        {years.length > 2 &&
+          (!showAllYears ? (
+            <FilterButton onClick={() => setShowAllYears(true)}>
+              ...
             </FilterButton>
-
-            <FilterButton
-            $active={selectedYear === "2025"}
-            onClick={() => setSelectedYear("2025")}
-            >
-            2025
+          ) : (
+            <FilterButton onClick={() => setShowAllYears(false)}>
+              −
             </FilterButton>
+          ))}
+       </FilterGroup>
 
-            <FilterButton
-            $active={selectedYear === "2024"}
-            onClick={() => setSelectedYear("2024")}
-            >
-            2024
-            </FilterButton>
-        </FilterGroup>
-
+    {/* ==================== TYPE ==================== */}
         <FilterGroup>
             <FilterLabel>Type</FilterLabel>
 
@@ -105,39 +208,33 @@ export default function Filter({
             Expense
             </FilterButton>
         </FilterGroup>
-    </FilterWrapper>
-    <FilterWrapper>
-    <FilterGroup>
-        <FilterLabel>Category</FilterLabel>
+    </FilterRow>
 
+    {/* ====================  ROW 2:CATEGORY ==================== */}
+       <FilterRow>
+          <FilterGroup>
+
+            {/* ALL */}
             <FilterButton
-            $active={selectedCategory === "all"}
-            onClick={() => setSelectedCategory("all")}
+              $active={selectedCategories.length === 0}
+              onClick={() => setSelectedCategories([])}
             >
-            All
+              All
             </FilterButton>
 
-            {availableCategories
-            .slice(0, showAllCategories ? availableCategories.length : 4)
-            .map((category) => (
-                <FilterButton
+            {/* CATEGORIES */}
+            {visibleCategories.map((category) => (
+              <FilterButton
                 key={category}
-                $active={selectedCategory === category}
-                onClick={() => setSelectedCategory(category)}
-                >
+                $active={selectedCategories.includes(category)}
+                onClick={() => toggleCategory(category)}
+              >
                 {category}
-                </FilterButton>
+              </FilterButton>
             ))}
 
-            {availableCategories.length > 4 && (
-            <FilterButton
-                onClick={() => setShowAllCategories((isOpen) => !isOpen)}
-            >
-                {showAllCategories ? "−" : "..."}
-            </FilterButton>
-            )}
-        </FilterGroup>
+          </FilterGroup>
+        </FilterRow>
     </FilterWrapper>
-    </>
   );
 }
