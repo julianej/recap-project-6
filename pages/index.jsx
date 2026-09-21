@@ -2,7 +2,8 @@ import useSWR from "swr";
 import { useState } from "react";
 import { X, Plus } from "lucide-react";
 import styled, { keyframes }  from "styled-components";
-import Filter from "../components/Filter/Filter";
+import { BankSidebar } from "../components/BankSidebar/BankSidebar";
+import TransactionFilter from "../components/TransactionFilter/TransactionFilter";
 import AccountBalance from "../components/AccountBalance/AccountBalance";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
 import TransactionList from "../components/TransactionList/TransactionList";
@@ -11,6 +12,28 @@ import TransactionList from "../components/TransactionList/TransactionList";
 // STYLES
 // ====================
 
+const Main = styled.main`
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 740px) {
+   grid-template-columns: 1fr 4fr;
+  }
+`;
+
+const MainContent = styled.div`
+  width: 100%;
+  padding: 40px 20px;
+  margin: 0 auto;
+   @media (min-width: 740px) {
+   width: 70%;
+  }
+`;
+
+const SidebarWrapper = styled.aside`
+  padding: 3rem 2rem;
+  border-right: 2px solid black;
+`;
 
 const slideUp = keyframes`
   from {
@@ -22,18 +45,6 @@ const slideUp = keyframes`
     transform: translate(-50%, 0);
     opacity: 1;
   }
-`;
-
-const Main = styled.main`
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 40px 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 40px;
-  text-transform: uppercase;
-  margin-bottom: 30px;
 `;
 
 const AddButton = styled.button`
@@ -53,6 +64,12 @@ const AddButton = styled.button`
     position: absolute;
     right: 1rem;
   }
+`;
+
+const Title = styled.h1`
+  font-size: 40px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
 `;
 
 
@@ -96,6 +113,18 @@ const Toast = styled.div`
 `;
 
 
+const BankAccountForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  padding: 1.5rem;
+
+  border: 2px solid #000;
+  border-radius: 16px;
+  background: #fff;
+`;
+
 
 // ====================
 // COMPONENT
@@ -103,6 +132,7 @@ const Toast = styled.div`
 
   
 export default function HomePage() {
+  const [isBankFormOpen, setIsBankFormOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [message, setSuccessMessage] = useState("");
 
@@ -174,11 +204,22 @@ export default function HomePage() {
     <Main>
 
       {message && <Toast>{message}</Toast>}
+        <SidebarWrapper>
+         <BankSidebar
+              onAddAccount={() => setIsBankFormOpen(true)}
+            />
 
-      <Title>Money Manager</Title>
+        </SidebarWrapper>
 
-      {/* recieves transacton DATA to be filtered */}
-      <Filter
+      <MainContent>
+        <Title> Deutsche Bank <br></br>Girokonto</Title>
+     {isBankFormOpen && (
+        <BankAccountForm
+            onCancel={() => setIsBankFormOpen(false)}
+          />
+        )}
+
+      <TransactionFilter
         transactions={data ?? []}
         selectedYear={selectedYear}
         setSelectedYear={setSelectedYear}
@@ -219,6 +260,8 @@ export default function HomePage() {
           mutate={mutate}
           showToast={showToast}
         />
+        </MainContent>
+
     </Main>
   );
 }
