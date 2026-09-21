@@ -19,6 +19,8 @@ const FilterGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
+  overflow: hidden;
 `;
 
 const FilterLabel = styled.span`
@@ -209,8 +211,7 @@ useEffect(() => {
         </FilterGroup>
     </FilterRow>
 
-    {/* ====================  ROW 2:CATEGORY ==================== */}
-       {/* ==================== ROW 2: CATEGORY ==================== */}
+    {/* ==================== ROW 2: CATEGORY ==================== */}
 <FilterRow>
   <FilterGroup>
 
