@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import BankAccountCard from "../BankSideBar/BankAccountCard";
 import { Plus } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 
 
@@ -28,18 +29,6 @@ const accounts = [
   },
 ];
 
-const BankSidebarWrapper = styled.aside`
-    width: 100%;
-    min-height: auto;
-    /* background: #fff; */
-    position: sticky;
-    top: 0;
-    align-self: start;
-    left: 0;
-    @media (min-width: 740px) {
-       min-height: 100vh;
-  }
-`;
 
 const SidebarTitle = styled.h2`
   margin: 0 0 1.5rem;
@@ -74,10 +63,70 @@ const AddAccountButton = styled.button`
   cursor: pointer;
 `;
 
+const SidebarSection = styled.section`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    /* background: #fff; */
+    position: sticky;
+    top: 0;
+    align-self: start;
+    left: 0;
+    @media (min-width: 740px) {
+       min-height: 90vh;
+  }
+`;
+
+const SyncSection = styled.div`
+  margin-top: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem; 
+`;
+
+const SyncButton = styled.button`
+  width: 100%;
+  padding: 0.75rem 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  border: none;
+  /* border-radius: 8px;
+  background: #000;
+  color: #fff; */
+
+  font: inherit;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+`;
+
+const SyncStatus = styled.span`
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+`;
+
+
 export function BankSidebar({ onAddAccount }) {
 const [selectedAccount, setSelectedAccount] = useState(1);
+const [lastSyncedAt, setLastSyncedAt] = useState(null);
+
   return (
-    <BankSidebarWrapper>
+    <SidebarSection>
         <Title>Money Manager</Title>
       <SidebarTitle>Bank Accounts</SidebarTitle>
 
@@ -98,6 +147,23 @@ const [selectedAccount, setSelectedAccount] = useState(1);
         Add Bank Account
         <Plus size={18} />
       </AddAccountButton>
-    </BankSidebarWrapper>
+
+      <SyncSection>
+        <SyncButton
+            type="button"
+            onClick={() => setLastSyncedAt(new Date())}
+            >
+            Synchronisieren
+              <RefreshCw size={16} />
+            </SyncButton>
+
+            <SyncStatus>
+            Zuletzt synchronisiert:{" "}
+            {lastSyncedAt
+                ? lastSyncedAt.toLocaleString("de-DE")
+                : "Noch nie"}
+            </SyncStatus>
+        </SyncSection>
+    </SidebarSection>
   );
 }
