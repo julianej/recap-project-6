@@ -9,24 +9,28 @@ const accounts = [
     id: 1,
     name: "Girokonto",
     bank: "Deutsche Bank",
+    iban: "DE89 3704 0044 0532 0130 00",
+    bic: "COBADEFFXXX",
   },
   {
     id: 2,
     name: "Tagesgeld",
     bank: "ING",
+    iban: "DE12 3456 7890 1234 5678 90",
+    bic: "INGDDEFFXXX",
   },
-    {
+  {
     id: 3,
     name: "Business",
     bank: "N26",
+    iban: "DE98 7654 3210 9876 5432 10",
+    bic: "NTSBDEB1XXX",
   },
 ];
 
 const BankSidebarWrapper = styled.aside`
- width: 100%;
+    width: 100%;
     min-height: auto;
-    padding: 1.5rem;
-    border-right: 2px solid #000;
     /* background: #fff; */
     position: sticky;
     top: 0;
@@ -70,9 +74,8 @@ const AddAccountButton = styled.button`
   cursor: pointer;
 `;
 
-export function BankSidebar(onAddAccount) {
-  const [selectedAccount, setSelectedAccount] = useState("Girokonto");
-
+export function BankSidebar({ onAddAccount }) {
+const [selectedAccount, setSelectedAccount] = useState(1);
   return (
     <BankSidebarWrapper>
         <Title>Money Manager</Title>
@@ -80,14 +83,14 @@ export function BankSidebar(onAddAccount) {
 
       <AccountList>
         {accounts.map((account) => (
-          <BankAccountCard
+            <BankAccountCard
             key={account.id}
             account={account}
-            selected={selectedAccount === account.name}
-            onClick={() => setSelectedAccount(account.name)}
-          />
+            selected={selectedAccount === account.id}
+            onClick={() => setSelectedAccount(account.id)}
+            />
         ))}
-      </AccountList>
+        </AccountList>
       <AddAccountButton
         type="button"
         onClick={onAddAccount}

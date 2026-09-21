@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-const AccountCard = styled.button`
+const AccountCard = styled.div`
   width: 100%;
   padding: 1rem;
+  text-align: center;
 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 0.35rem;
 
   border: 2px solid #000;
@@ -19,11 +19,38 @@ const AccountCard = styled.button`
     $selected ? "#fff" : "#000"};
 
   cursor: pointer;
-  text-align: left;
+`;
 
-  &:hover {
-    background: ${({ $selected }) =>
-      $selected ? "#000" : "#f5f5f5"};
+const CardHeader = styled.div`
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+
+const AccountDetails = styled.div`
+  margin-top: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const Detail = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.15rem;
+
+  font-size: 0.8rem;
+
+  span {
+    opacity: 0.6;
+  }
+
+  strong {
+    font-weight: 500;
   }
 `;
 
@@ -34,12 +61,30 @@ export default function BankAccountCard({
 }) {
   return (
     <AccountCard
-      type="button"
       $selected={selected}
       onClick={onClick}
     >
-      <strong>{account.name}</strong>
-      <span>{account.bank}</span>
+      <CardHeader>
+        <strong>{account.name}</strong>
+             <span>{account.bank}</span>
+      </CardHeader>
+
+
+     {/* Show IBAN + BIC only when this card is selected */}
+      {selected && (
+        <AccountDetails>
+          <Detail>
+            <span>IBAN</span>
+            <strong>{account.iban}</strong>
+          </Detail>
+
+          <Detail>
+            <span>BIC</span>
+            <strong>{account.bic}</strong>
+          </Detail>
+        </AccountDetails>
+      )}
+
     </AccountCard>
   );
 }
