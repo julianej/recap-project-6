@@ -187,7 +187,7 @@ const EditRow = styled.div`
 // COMPONENT
 // ====================
 
-export default function TransactionForm({ transaction, onCancel, onDelete, onSave, showToast }) {
+export default function TransactionForm({ transaction, onCancel, onDelete, onSave, isDeleting, showToast }) {
 
   // ====================
   // STATE
@@ -484,20 +484,11 @@ export default function TransactionForm({ transaction, onCancel, onDelete, onSav
             </CancelButton>
 
               <DeleteButton
-                      type="button"
-                      aria-label="Delete transaction"
-                      onClick={() => onDelete(transaction)}
-                    // onDelete is not the function itself. It is a prop name.
-                    
-                    // onClick={() => onDelete(transaction._id)}
-                    // console.log("transaction:", transaction);
-                    //  console.log("onDelete:", onDelete);
-                    // console.log("DELETE BUTTON CLICKED");
-  
+                type="button"
+                onClick={onDelete}
               >
-                <Trash2 />
+                <Trash2 size={18} />
               </DeleteButton>
-
           </ButtonWrapper>
         </EditRow>
       ) : (

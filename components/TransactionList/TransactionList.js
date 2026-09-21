@@ -81,10 +81,13 @@ export default function TransactionList({ transactions, mutate, showToast }) {
   }
 
   async function handleConfirmDelete(id) {
-  // Close popup
+  // 1. Close edit form
+  setEditingTransaction(null);
+
+  // 2. Close confirmation popup
   setDeletingTransaction(null);
 
-  // Start spinner
+  // 3. Show spinner on the card
   setDeletingId(id);
 
   try {
@@ -96,15 +99,14 @@ export default function TransactionList({ transactions, mutate, showToast }) {
       throw new Error("Failed to delete transaction");
     }
 
-    // Keep spinner visible for 1.2 seconds
+    // Keep spinner visible
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    // Stop spinner
+    // 4. Hide spinner
     setDeletingId(null);
 
-    // Refresh list
+    // 5. Refresh transactions
     await mutate();
-
   } catch (error) {
     console.error(error);
     setDeletingId(null);
