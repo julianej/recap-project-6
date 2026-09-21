@@ -152,9 +152,6 @@ export default function HomePage() {
       <div>
         <p>Failed to load transactions.</p>
 
-        {/* <PrimaryButton type="button" 
-           WRONG onClick={mutate}> */}
-
         {/* ANONYME WRAPPER FUNCTION onClick={(e)*/}
         <PrimaryButton type="button" onClick={() => mutate()}> 
           Try again

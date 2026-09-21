@@ -96,9 +96,10 @@ const [showAllCategories, setShowAllCategories] = useState(false);
 
           return matchesYear && matchesType;
         })
-        .map((transaction) => transaction.category)
-    ),
-  ].sort();
+          .map((transaction) => transaction.category)
+      .filter(Boolean)
+  ),
+].sort();
 
 
 function toggleCategory(category) {
@@ -209,30 +210,45 @@ useEffect(() => {
     </FilterRow>
 
     {/* ====================  ROW 2:CATEGORY ==================== */}
-       <FilterRow>
-          <FilterGroup>
+       {/* ==================== ROW 2: CATEGORY ==================== */}
+<FilterRow>
+  <FilterGroup>
 
-            {/* ALL */}
+    <FilterLabel>Category</FilterLabel>
+
+    {/* ALL */}
+      <FilterButton
+        $active={selectedCategories.length === 0}
+        onClick={() => setSelectedCategories([])}
+      >
+        All
+          </FilterButton>
+
+          {/* FIRST 4 CATEGORIES */}
+          {visibleCategories.map((category) => (
             <FilterButton
-              $active={selectedCategories.length === 0}
-              onClick={() => setSelectedCategories([])}
+              key={category}
+              $active={selectedCategories.includes(category)}
+              onClick={() => toggleCategory(category)}
             >
-              All
+              {category}
             </FilterButton>
+          ))}
 
-            {/* CATEGORIES */}
-            {visibleCategories.map((category) => (
-              <FilterButton
-                key={category}
-                $active={selectedCategories.includes(category)}
-                onClick={() => toggleCategory(category)}
-              >
-                {category}
+          {/* ... / COLLAPSE */}
+          {availableCategories.length > 4 &&
+            (!showAllCategories ? (
+              <FilterButton onClick={() => setShowAllCategories(true)}>
+                ...
+              </FilterButton>
+            ) : (
+              <FilterButton onClick={() => setShowAllCategories(false)}>
+                −
               </FilterButton>
             ))}
 
-          </FilterGroup>
-        </FilterRow>
+        </FilterGroup>
+      </FilterRow>
     </FilterWrapper>
   );
 }
