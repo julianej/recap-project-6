@@ -105,7 +105,7 @@ export default function HomePage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [message, setSuccessMessage] = useState("");
 
-  // SWR
+  // SWR HOOK Destructoring
   const { data, error, isLoading, mutate } = useSWR(
     "/api/transactions"
   );
@@ -113,25 +113,34 @@ export default function HomePage() {
   // FILTER 
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const filteredTransactions = data?.filter(matchesFilter);
 
   // FILTER YEAR & TYPE
   function matchesFilter(transaction) {
+      //// checks SWR data "2025-08-20"
+    const transactionYear = new Date(transaction.date)
+    .getFullYear()
+    .toString();
+
    const matchesYear =
           //true || anything → true
           selectedYear === "all" || 
           //// checks SWR data "2025-08-20"
-          new Date(transaction.date).getFullYear() === Number(selectedYear);
+           transactionYear === selectedYear;
 
   const matchesType =
         selectedType === "all" ||
         //// checks SWR data
         transaction.type === selectedType;
 
-        return matchesYear && matchesType;
-}
+  const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(transaction.category);
 
+  return matchesYear && matchesType && matchesCategory;
+};
 
   // LOADING
   if (isLoading) {
@@ -143,7 +152,8 @@ export default function HomePage() {
       <div>
         <p>Failed to load transactions.</p>
 
-        <PrimaryButton type="button" onClick={() => mutate()}>
+        {/* ANONYME WRAPPER FUNCTION onClick={(e)*/}
+        <PrimaryButton type="button" onClick={() => mutate()}> 
           Try again
         </PrimaryButton>
       </div>
@@ -173,6 +183,8 @@ export default function HomePage() {
         setSelectedYear={setSelectedYear}
         selectedType={selectedType}
         setSelectedType={setSelectedType}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
       />
 
       <AccountBalance transactions={data} />
@@ -230,7 +242,7 @@ export default function HomePage() {
 
       {/* "Edit" existing transaction */}
       <TransactionList
-          transactions={filteredTransactions}
+           transactions={filteredTransactions}
           mutate={mutate}
           showToast={showToast}
         />
