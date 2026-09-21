@@ -3,6 +3,7 @@ import { useState } from "react";
 
 const FilterWrapper = styled.div`
   display: flex;
+<<<<<<< Updated upstream
   gap: 24px;
   align-items: center;
   margin-bottom: 24px;
@@ -12,6 +13,25 @@ const FilterWrapper = styled.div`
   scrollbar-width: none;
 
   /* Hide scrollbar — Chrome, Safari, Edge */
+=======
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 0;
+  width: 100%;
+`;
+
+const FilterRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
+  /* Hide scrollbar */
+  scrollbar-width: none;
+
+>>>>>>> Stashed changes
   &::-webkit-scrollbar {
     display: none;
   }
@@ -24,6 +44,10 @@ const FilterGroup = styled.div`
 `;
 
 const FilterLabel = styled.span`
+<<<<<<< Updated upstream
+=======
+  font-weight: 600;
+>>>>>>> Stashed changes
   margin-right: 4px;
   font-size: 14px;
   font-weight: 600;
