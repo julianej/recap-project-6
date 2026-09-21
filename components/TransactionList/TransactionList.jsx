@@ -55,6 +55,7 @@ export default function TransactionList({ transactions, mutate, showToast }) {
   const [deletingTransactionPopup, setDeletingTransaction] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
+
   function handleEdit(transaction) {
     setEditingTransaction(transaction);
   }

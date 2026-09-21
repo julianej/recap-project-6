@@ -6,6 +6,10 @@ const FilterWrapper = styled.div`
   flex-direction: column;
   gap: 1rem;
   padding: 2rem 0;
+
+    @media (min-width: 739px) {
+        flex-direction: row;
+  }
 `;
 
 const FilterRow = styled.div`
@@ -209,7 +213,6 @@ useEffect(() => {
         </FilterGroup>
     </FilterRow>
 
-    {/* ====================  ROW 2:CATEGORY ==================== */}
        {/* ==================== ROW 2: CATEGORY ==================== */}
 <FilterRow>
   <FilterGroup>
