@@ -49,7 +49,7 @@ const FilterButton = styled.button`
   }
 `;
 
-export default function Filter({
+export default function TransactionFilter({
   transactions = [],
   selectedYear,
   setSelectedYear,

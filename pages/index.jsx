@@ -2,12 +2,14 @@ import useSWR from "swr";
 import { useState } from "react";
 import { X, Plus } from "lucide-react";
 import styled, { keyframes }  from "styled-components";
-import BankSideBar from "../components/BankSideBar/BankSideBar";
-import BankAccountForm from "../components/BankSideBar/BankAccountForm";
-import TransactionFilter from "../components/TransactionFilter/TransactionFilter";
-import AccountBalance from "../components/AccountBalance/AccountBalance";
-import TransactionForm from "../components/TransactionForm/TransactionForm";
-import TransactionList from "../components/TransactionList/TransactionList";
+
+import BankSideBar from "@/components/BankSideBar/BankSideBar";
+import BankAccountForm from "@/components/BankSideBar/BankAccountForm";
+import AccountBalance from "@/components/AccountBalance/AccountBalance";
+import TransactionForm from "@/components/TransactionForm/TransactionForm";
+import TransactionList from "@/components/TransactionList/TransactionList";
+
+import TransactionFilter from "@/components/TransactionFilter/TransactionFilter";
 
 // ====================
 // STYLES
