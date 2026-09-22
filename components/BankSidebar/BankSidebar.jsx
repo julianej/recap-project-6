@@ -136,13 +136,11 @@ export function BankSidebar({
 }) {
 
   const [lastSyncedAt, setLastSyncedAt] = useState(null);
-  const fetcher = (url) => fetch(url).then((res) => res.json());
 
-  const { data: accounts = [], 
-    error, 
-    isLoading, 
-    mutate: mutateAccounts,} 
-  = useSWR("/api/bankaccounts", fetcher);
+  const {
+    data: accounts = [],
+    mutate: mutateAccounts,
+  } = useSWR("/api/bankaccounts");
 
   console.log("accounts:", accounts);
 
