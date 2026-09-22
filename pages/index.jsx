@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { useState } from "react";
 import { X, Plus } from "lucide-react";
 import styled, { keyframes }  from "styled-components";
-import { BankSidebar } from "../components/BankSidebar/BankSidebar";
+import { BankSidebar } from "../components/BankSidebar/BankSideBar";
 import BankAccountForm from "../components/BankSidebar/BankAccountForm";
 import TransactionFilter from "../components/TransactionFilter/TransactionFilter";
 import AccountBalance from "../components/AccountBalance/AccountBalance";

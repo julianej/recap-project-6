@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import BankAccountCard from "../BankSideBar/BankAccountCard";
+import BankAccountCard from "./BankAccountCard";
 import { Plus } from "lucide-react";
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
