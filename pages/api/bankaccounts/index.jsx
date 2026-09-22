@@ -2,7 +2,7 @@
 // import { mockAccounts } from "../../../db-assets/bankaccounts"; // JS FILE
 
 import dbConnect from "@/db/connect";
-import BankAccounts from "@/db/models/Bankaccounts/Bankaccounts";
+import BankAccounts from "@/db/models/BankAccounts/BankAccounts";
 
 export default async function handler(request, response) {
   try {
