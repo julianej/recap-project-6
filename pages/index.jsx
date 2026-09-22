@@ -246,7 +246,7 @@ export default function HomePage() {
       {message && <Toast>{message}</Toast>}
 
       <SidebarWrapper>
-       <BankSidebar
+       <BankSideBar
           accounts={accounts}
           selectedAccount={selectedAccount}
           setSelectedAccount={handleAccountSelect}
