@@ -1,6 +1,3 @@
-
-// import { mockAccounts } from "../../../db-assets/bankaccounts"; // JS FILE
-
 import dbConnect from "@/db/connect";
 import BankAccounts from "@/db/models/BankAccounts/BankAccounts";
 

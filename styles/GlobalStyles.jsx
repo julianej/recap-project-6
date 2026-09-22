@@ -14,6 +14,7 @@ export const GlobalStyle = createGlobalStyle`
     background-repeat: repeat;
     background-size: 600px 300px;
   }
+  
    input,
   select,
   textarea {
