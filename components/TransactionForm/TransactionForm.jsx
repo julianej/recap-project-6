@@ -340,7 +340,7 @@ export default function TransactionForm({
   // TRANSACTION MUTATE
   // ====================
 
-    await mutate("/api/transactions");
+    await mutate();
 
     // If editing, call onSave updates the TransactionCard
     if (isEditing) {
