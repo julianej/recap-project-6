@@ -103,7 +103,7 @@ const SyncStatus = styled.span`
 `;
 
 
-export function BankSidebar({
+export default function BankSideBar({
   selectedAccount,
   setSelectedAccount,
   onAddAccount,
