@@ -72,7 +72,7 @@ const ErrorMessage = styled.span`
   color: #d00;
 `;
 
-export default function BankAccountForm({ onCancel, mutate }) {
+export default function BankAccountForm({ onCancel }) {
     const [name, setName] = useState("");
     const [bank, setBank] = useState("");
     const [iban, setIban] = useState("");
@@ -157,7 +157,6 @@ export default function BankAccountForm({ onCancel, mutate }) {
         return;
         }
 
-        await mutate();
         onCancel();
 
     console.log(data);

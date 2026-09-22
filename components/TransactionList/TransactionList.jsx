@@ -49,7 +49,13 @@ const EmptyState = styled.p`
 // ====================
 
 
-export default function TransactionList({ transactions, mutate, showToast }) {
+export default function TransactionList({
+  transactions,
+  mutate,
+  showToast,
+  selectedAccount,
+}) {
+
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
   const [deletingTransactionPopup, setDeletingTransactionPopup] = useState(null);
@@ -73,22 +79,17 @@ export default function TransactionList({ transactions, mutate, showToast }) {
     setEditingTransaction(null);
   }
 
-  function handleDeleteClick(transaction) {
-    setDeletingTransaction(transaction);
-  }
+function handleDeleteClick(transaction) {
+  setDeletingTransactionPopup(transaction);
+}
 
-  function handleCancelDelete() {
-    setDeletingTransaction(null);
-  }
-
-  async function handleConfirmDelete(id) {
-  // 1. Close edit form
-  setEditingTransaction(null);
-
-  // 2. Close confirmation popup
+function handleCancelDelete() {
   setDeletingTransactionPopup(null);
+}
 
-  // 3. Show spinner on the card
+async function handleConfirmDelete(id) {
+  setEditingTransaction(null);
+  setDeletingTransactionPopup(null);
   setDeletingId(id);
 
   try {
@@ -100,13 +101,10 @@ export default function TransactionList({ transactions, mutate, showToast }) {
       throw new Error("Failed to delete transaction");
     }
 
-    // Keep spinner visible
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    // 4. Hide spinner
     setDeletingId(null);
 
-    // 5. Refresh transactions
     await mutate();
   } catch (error) {
     console.error(error);
@@ -114,10 +112,15 @@ export default function TransactionList({ transactions, mutate, showToast }) {
   }
 }
 
+ console.log("selectedAccount:", selectedAccount);
+console.log("transactions:", transactions);
+
   return (
+
   <>
     <List>
       <h2>Your Transaction List</h2>
+
 
       {/* Empty State */}
       {transactions.length === 0 ? (
@@ -140,11 +143,13 @@ export default function TransactionList({ transactions, mutate, showToast }) {
             />
 
             {editingTransaction?._id === transaction._id && (
-              <TransactionForm
+             <TransactionForm
                 transaction={editingTransaction}
-                 onDelete={() => handleDeleteClick(transaction)}
-                 onCancel={handleCancel}
-                 onSave={handleSave}
+                selectedAccount={selectedAccount}
+                onDelete={() => handleDeleteClick(transaction)}
+                onCancel={handleCancel}
+                onSave={handleSave}
+                mutate={mutate}
                 showToast={showToast}
               />
             )}

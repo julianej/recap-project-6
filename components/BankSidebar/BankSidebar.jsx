@@ -5,31 +5,6 @@ import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
 
-// const accounts = [
-//   {
-//     id: 1,
-//     name: "Girokonto",
-//     bank: "Deutsche Bank",
-//     iban: "DE89 3704 0044 0532 0130 00",
-//     bic: "COBADEFFXXX",
-//   },
-//   {
-//     id: 2,
-//     name: "Tagesgeld",
-//     bank: "ING",
-//     iban: "DE12 3456 7890 1234 5678 90",
-//     bic: "INGDDEFFXXX",
-//   },
-//   {
-//     id: 3,
-//     name: "Business",
-//     bank: "N26",
-//     iban: "DE98 7654 3210 9876 5432 10",
-//     bic: "NTSBDEB1XXX",
-//   },
-// ];
-
-
 const SidebarTitle = styled.h2`
   margin: 0 0 1.5rem;
   font-size: 1.2rem;

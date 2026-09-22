@@ -128,18 +128,14 @@ const BankAccountFormWrapper = styled.div`
 // COMPONENT
 // ====================
 
- export default function HomePage() {
-const [selectedAccount, setSelectedAccount] = useState(1);
-const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
-function handleAccountSelect(accountId) {
-  setSelectedAccount(accountId);
-  setIsBankFormOpen(false);
-}
+export default function HomePage() {
+  // ====================
+  // STATE
+  // ====================
 
-function handleAddAccount() {
-  setIsBankFormOpen(true);
-}
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
@@ -148,11 +144,40 @@ function handleAddAccount() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [message, setSuccessMessage] = useState("");
 
+
+  // ====================
+  // DATA
+  // ====================
+
+  const {
+    data: accounts = [],
+    mutate: mutateAccounts,
+  } = useSWR("/api/bankaccounts");
+
   const { data, error, isLoading, mutate } = useSWR(
     selectedAccount
       ? `/api/transactions?account=${selectedAccount}`
       : null
   );
+
+
+  // ====================
+  // ACCOUNT
+  // ====================
+
+  function handleAccountSelect(accountId) {
+    setSelectedAccount(accountId);
+    setIsBankFormOpen(false);
+  }
+
+  function handleAddAccount() {
+    setIsBankFormOpen(true);
+  }
+
+
+  // ====================
+  // FILTER
+  // ====================
 
   const matchesFilter = (transaction) => {
     const transactionYear = new Date(transaction.date)
@@ -181,6 +206,7 @@ function handleAddAccount() {
   const filteredTransactions =
     data?.filter(matchesFilter) ?? [];
 
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -208,6 +234,12 @@ function handleAddAccount() {
     }, 2000);
   }
 
+
+  const selectedAccountData = accounts.find(
+  (account) => account._id === selectedAccount
+);
+
+
   return (
     <Main>
 
@@ -215,6 +247,7 @@ function handleAddAccount() {
 
       <SidebarWrapper>
        <BankSidebar
+          accounts={accounts}
           selectedAccount={selectedAccount}
           setSelectedAccount={handleAccountSelect}
           onAddAccount={handleAddAccount}
@@ -223,24 +256,22 @@ function handleAddAccount() {
       </SidebarWrapper>
 
 
- <MainContent>
-{/* BANK ACCOUNT FORM */}
-
-  {isBankFormOpen && (
-    <BankAccountFormWrapper>
+    {/* BANK ACCOUNT FORM */}
+      {isBankFormOpen && (
+        <BankAccountFormWrapper>
           <BankAccountForm
             onCancel={() => setIsBankFormOpen(false)}
-            mutate={mutate}
+            mutate={mutateAccounts}
           />
-    </BankAccountFormWrapper>
+        </BankAccountFormWrapper>
         )}
 
-
+    <MainContent>
 
           <Title>
-            Deutsche Bank <br />
-            Girokonto
-          </Title>
+          {selectedAccountData?.bank} <br />
+          {selectedAccountData?.name}
+        </Title>
 
           <TransactionFilter
             transactions={data ?? []}
@@ -275,14 +306,17 @@ function handleAddAccount() {
           </AddButton>
 
           {isFormOpen && (
-            <TransactionForm
-              onCancel={() => setIsFormOpen(false)}
-              showToast={showToast}
-            />
-          )}
+              <TransactionForm
+                selectedAccount={selectedAccount}
+                onCancel={() => setIsFormOpen(false)}
+                showToast={showToast}
+                mutate={mutate}
+              />
+            )}
 
           <TransactionList
             transactions={filteredTransactions}
+            selectedAccount={selectedAccount}
             mutate={mutate}
             showToast={showToast}
           />

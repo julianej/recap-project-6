@@ -2,19 +2,20 @@ import dbConnect from "@/db/connect";
 import Transactions from "@/db/models/Transactions/Transactions";
 
 export default async function handler(request, response) {
-  await dbConnect();
-  const { id } = request.query;
+  try {
+    await dbConnect();
 
-  if (request.method === "PATCH") {
-    try {
-      // Data sent by the frontend
-      const transactionData = request.body;
+    const { id } = request.query;
 
+    if (request.method === "PATCH") {
       const transaction = await Transactions.findByIdAndUpdate(
         id,
-          transactionData,
-          { runValidators: true }
-        );
+        request.body,
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
 
       if (!transaction) {
         return response.status(404).json({
@@ -22,43 +23,29 @@ export default async function handler(request, response) {
         });
       }
 
-      response.status(200).json({
-        status: "Success",
-      });
-      return;
-
-    } catch (error) {
-      response.status(500).json({
-        error: "Internal Server Error",
-      });
-      return;
-    }
-  }
-
-  if (request.method === "DELETE") {
-  try {
-    const transaction = await Transactions.findByIdAndDelete(id);
-
-    if (!transaction) {
-      return response.status(404).json({
-        error: "Transaction not found",
-      });
+      return response.status(200).json(transaction);
     }
 
-    return response.status(200).json({
-      message: "Transaction deleted",
+    if (request.method === "DELETE") {
+      const transaction = await Transactions.findByIdAndDelete(id);
+
+      if (!transaction) {
+        return response.status(404).json({
+          error: "Transaction not found",
+        });
+      }
+
+      return response.status(200).json(transaction);
+    }
+
+    return response.status(405).json({
+      error: "Method not allowed",
     });
   } catch (error) {
     console.error(error);
 
     return response.status(500).json({
-      error: "Failed to delete transaction",
+      error: "Internal server error",
     });
   }
-}
-
-
-  response.status(405).json({
-    status: "Method not allowed.",
-  });
 }
