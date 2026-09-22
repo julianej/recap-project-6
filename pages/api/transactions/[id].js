@@ -1,5 +1,5 @@
 import dbConnect from "@/db/connect";
-import Project from "@/db/models/Projects/Project";
+import Transactions from "@/db/models/Transactions/Transactions";
 
 export default async function handler(request, response) {
   await dbConnect();
@@ -10,7 +10,7 @@ export default async function handler(request, response) {
       // Data sent by the frontend
       const transactionData = request.body;
 
-      const transaction = await Project.findByIdAndUpdate(
+      const transaction = await Transactions.findByIdAndUpdate(
         id,
           transactionData,
           { runValidators: true }
@@ -37,7 +37,7 @@ export default async function handler(request, response) {
 
   if (request.method === "DELETE") {
   try {
-    const transaction = await Project.findByIdAndDelete(id);
+    const transaction = await Transactions.findByIdAndDelete(id);
 
     if (!transaction) {
       return response.status(404).json({

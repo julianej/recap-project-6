@@ -4,7 +4,6 @@ import { Plus } from "lucide-react";
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 
-
 const accounts = [
   {
     id: 1,
@@ -47,18 +46,25 @@ const AccountList = styled.div`
   gap: 0.75rem;
 `;
 
-const AddAccountButton = styled.button`
+
+const AddBankAccountButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
   width: 100%;
   margin-top: 1.5rem;
   padding: 0.75rem;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
   border: 1px solid #000;
   border-radius: 8px;
-  background: #fff;
+
+  background: ${({ $selected }) =>
+    $selected ? "#000" : "#fff"};
+
+  color: ${({ $selected }) =>
+    $selected ? "#fff" : "#000"};
 
   cursor: pointer;
 `;
@@ -121,49 +127,57 @@ const SyncStatus = styled.span`
 `;
 
 
-export function BankSidebar({ onAddAccount }) {
-const [selectedAccount, setSelectedAccount] = useState(1);
-const [lastSyncedAt, setLastSyncedAt] = useState(null);
+export function BankSidebar({
+  selectedAccount,
+  setSelectedAccount,
+  onAddAccount,
+  isBankFormOpen,
+}) {
+
+  const [lastSyncedAt, setLastSyncedAt] = useState(null);
 
   return (
     <SidebarSection>
-        <Title>Money Manager</Title>
+      <Title>Money Manager</Title>
+
       <SidebarTitle>Bank Accounts</SidebarTitle>
 
-      <AccountList>
-        {accounts.map((account) => (
-            <BankAccountCard
+     <AccountList>
+      {accounts.map((account) => (
+      <BankAccountCard
             key={account.id}
             account={account}
-            selected={selectedAccount === account.id}
+            selected={!isBankFormOpen && selectedAccount === account.id}
+            disabled={isBankFormOpen}
             onClick={() => setSelectedAccount(account.id)}
-            />
-        ))}
-        </AccountList>
-      <AddAccountButton
-        type="button"
-        onClick={onAddAccount}
-      >
-        Add Bank Account
-        <Plus size={18} />
-      </AddAccountButton>
+        />))}
+    </AccountList>
+
+    <AddBankAccountButton
+      type="button"
+      $selected={isBankFormOpen}
+      onClick={onAddAccount}
+    >
+      <span>Add Bank Account</span>
+      <Plus size={18} />
+    </AddBankAccountButton>
 
       <SyncSection>
         <SyncButton
-            type="button"
-            onClick={() => setLastSyncedAt(new Date())}
-            >
-            Synchronisieren
-              <RefreshCw size={16} />
-            </SyncButton>
+          type="button"
+          onClick={() => setLastSyncedAt(new Date())}
+        >
+          Synchronisieren
+          <RefreshCw size={16} />
+        </SyncButton>
 
-            <SyncStatus>
-            Zuletzt synchronisiert:{" "}
-            {lastSyncedAt
-                ? lastSyncedAt.toLocaleString("de-DE")
-                : "Noch nie"}
-            </SyncStatus>
-        </SyncSection>
+        <SyncStatus>
+          Zuletzt synchronisiert:{" "}
+          {lastSyncedAt
+            ? lastSyncedAt.toLocaleString("de-DE")
+            : "Noch nie"}
+        </SyncStatus>
+      </SyncSection>
     </SidebarSection>
   );
 }

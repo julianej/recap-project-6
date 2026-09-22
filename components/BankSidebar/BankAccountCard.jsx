@@ -1,24 +1,55 @@
 import styled from "styled-components";
+import { Plus } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const AccountCard = styled.div`
-  width: 100%;
   padding: 1rem;
-  text-align: center;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-
   border: 2px solid #000;
   border-radius: 12px;
 
-  background: ${({ $selected }) =>
-    $selected ? "#000" : "#fff"};
+  background: ${({ $disabled, $selected }) =>
+    $disabled
+      ? "#ccc"
+      : $selected
+        ? "#000"
+        : "#fff"};
 
-  color: ${({ $selected }) =>
-    $selected ? "#fff" : "#000"};
+  color: ${({ $disabled, $selected }) =>
+    $disabled
+      ? "#000"
+      : $selected
+        ? "#fff"
+        : "#000"};
+
+  cursor: ${({ $disabled }) =>
+    $disabled ? "default" : "pointer"};
+`;
+
+const EditButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  border: 1px solid currentColor;
+  border-radius: 6px;
+
+  background: transparent;
+  color: inherit;
 
   cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
 `;
 
 const CardHeader = styled.div`
@@ -27,8 +58,21 @@ const CardHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 `;
 
+const AccountInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ItemBank = styled.div`
+  /* bank */
+`;
+
+const ItemName = styled.div`
+  /* account name */
+`;
 
 const AccountDetails = styled.div`
   margin-top: 1rem;
@@ -57,21 +101,34 @@ const Detail = styled.div`
 export default function BankAccountCard({
   account,
   selected,
+  disabled,
   onClick,
+  onEdit,
 }) {
   return (
     <AccountCard
       $selected={selected}
-      onClick={onClick}
+      $disabled={disabled}
+      onClick={disabled ? undefined : onClick}
     >
-      <CardHeader>
-        <strong>{account.name}</strong>
-             <span>{account.bank}</span>
+
+     <CardHeader>
+          <div className="accountInfo">
+            <div className="itemBank">{account.bank}</div>
+            <div className="itemName">{account.name}</div>
+          </div>
+        {/* <EditButton
+          type="button"
+          aria-label={`Edit ${account.name}`}
+          onClick={(event) => {
+            event.stopPropagation();
+            onEdit(account);
+          }}
+        >
+        </EditButton> */}
       </CardHeader>
 
-
-     {/* Show IBAN + BIC only when this card is selected */}
-      {selected && (
+      {selected && !disabled && (
         <AccountDetails>
           <Detail>
             <span>IBAN</span>
@@ -84,7 +141,6 @@ export default function BankAccountCard({
           </Detail>
         </AccountDetails>
       )}
-
     </AccountCard>
   );
 }

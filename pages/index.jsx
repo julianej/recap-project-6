@@ -3,6 +3,7 @@ import { useState } from "react";
 import { X, Plus } from "lucide-react";
 import styled, { keyframes }  from "styled-components";
 import { BankSidebar } from "../components/BankSidebar/BankSidebar";
+import BankAccountForm from "../components/BankSidebar/BankAccountForm";
 import TransactionFilter from "../components/TransactionFilter/TransactionFilter";
 import AccountBalance from "../components/AccountBalance/AccountBalance";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
@@ -112,68 +113,74 @@ const Toast = styled.div`
   color: white;
 `;
 
-
-const BankAccountForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  padding: 1.5rem;
-
-  border: 2px solid #000;
-  border-radius: 16px;
-  background: #fff;
+const BankAccountFormWrapper = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    left: 20%;
+    top: 0%;
+    z-index: 77;
+    height: 100vh;
 `;
-
 
 // ====================
 // COMPONENT
 // ====================
 
-  
-export default function HomePage() {
-  const [isBankFormOpen, setIsBankFormOpen] = useState(false);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [message, setSuccessMessage] = useState("");
+ export default function HomePage() {
+const [selectedAccount, setSelectedAccount] = useState(1);
+const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
-  // SWR HOOK Destructoring
-  const { data, error, isLoading, mutate } = useSWR(
-    "/api/transactions"
-  );
+function handleAccountSelect(accountId) {
+  setSelectedAccount(accountId);
+  setIsBankFormOpen(false);
+}
 
-  // FILTER 
+function handleAddAccount() {
+  setIsBankFormOpen(true);
+}
+
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const filteredTransactions = data?.filter(matchesFilter);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [message, setSuccessMessage] = useState("");
 
-  // FILTER YEAR & TYPE
-  function matchesFilter(transaction) {
-      //// checks SWR data "2025-08-20"
+  const { data, error, isLoading, mutate } = useSWR(
+    selectedAccount
+      ? `/api/transactions?account=${selectedAccount}`
+      : null
+  );
+
+  const matchesFilter = (transaction) => {
     const transactionYear = new Date(transaction.date)
-    .getFullYear()
-    .toString();
+      .getFullYear()
+      .toString();
 
-   const matchesYear =
-          //true || anything → true
-          selectedYear === "all" || 
-          //// checks SWR data "2025-08-20"
-           transactionYear === selectedYear;
+    const matchesYear =
+      selectedYear === "all" ||
+      transactionYear === selectedYear;
 
-  const matchesType =
-        selectedType === "all" ||
-        //// checks SWR data
-        transaction.type === selectedType;
+    const matchesType =
+      selectedType === "all" ||
+      transaction.type === selectedType;
 
-  const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes(transaction.category);
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(transaction.category);
 
-  return matchesYear && matchesType && matchesCategory;
-};
+    return (
+      matchesYear &&
+      matchesType &&
+      matchesCategory
+    );
+  };
 
-  // LOADING
+  const filteredTransactions =
+    data?.filter(matchesFilter) ?? [];
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -183,16 +190,17 @@ export default function HomePage() {
       <div>
         <p>Failed to load transactions.</p>
 
-        {/* ANONYME WRAPPER FUNCTION onClick={(e)*/}
-        <PrimaryButton type="button" onClick={() => mutate()}> 
+        <PrimaryButton
+          type="button"
+          onClick={() => mutate()}
+        >
           Try again
         </PrimaryButton>
       </div>
     );
   }
 
-  // TOAST 
-    function showToast(message) {
+  function showToast(message) {
     setSuccessMessage(message);
 
     setTimeout(() => {
@@ -204,63 +212,83 @@ export default function HomePage() {
     <Main>
 
       {message && <Toast>{message}</Toast>}
-        <SidebarWrapper>
-         <BankSidebar
-              onAddAccount={() => setIsBankFormOpen(true)}
-            />
 
-        </SidebarWrapper>
+      <SidebarWrapper>
+       <BankSidebar
+          selectedAccount={selectedAccount}
+          setSelectedAccount={handleAccountSelect}
+          onAddAccount={handleAddAccount}
+          isBankFormOpen={isBankFormOpen}
+        />
+      </SidebarWrapper>
 
-      <MainContent>
-        <Title> Deutsche Bank <br></br>Girokonto</Title>
-     {isBankFormOpen && (
-        <BankAccountForm
+
+ <MainContent>
+{/* BANK ACCOUNT FORM */}
+
+  {isBankFormOpen && (
+    <BankAccountFormWrapper>
+          <BankAccountForm
             onCancel={() => setIsBankFormOpen(false)}
           />
+                            </BankAccountFormWrapper>
         )}
 
-      <TransactionFilter
-        transactions={data ?? []}
-        selectedYear={selectedYear}
-        setSelectedYear={setSelectedYear}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        selectedCategories={selectedCategories}
-        setSelectedCategories={setSelectedCategories}
-      />
 
-      <AccountBalance transactions={data} />
 
-      {/* "Create" new transaction */}
-     <AddButton onClick={() => setIsFormOpen((isOpen) => !isOpen)}>
-      
-      {isFormOpen ? (
-        <>
-          Close Transaction Form
-          <X />
-        </>
-      ) : (
-        <>
-          Add Transaction
-          <Plus />
-        </>
-      )}
-    </AddButton>
+          <Title>
+            Deutsche Bank <br />
+            Girokonto
+          </Title>
 
-      {isFormOpen && (
-        <TransactionForm
-          onCancel={() => setIsFormOpen(false)}
-          showToast={showToast}
-        />
-      )}
+          <TransactionFilter
+            transactions={data ?? []}
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+          />
 
-      {/* "Edit" and "Delete" existing transaction */}
-      <TransactionList
-           transactions={filteredTransactions}
-          mutate={mutate}
-          showToast={showToast}
-        />
+          <AccountBalance
+            transactions={filteredTransactions}
+          />
+
+          <AddButton
+            onClick={() =>
+              setIsFormOpen((isOpen) => !isOpen)
+            }
+          >
+            {isFormOpen ? (
+              <>
+                Close Transaction Form
+                <X />
+              </>
+            ) : (
+              <>
+                Add Transaction
+                <Plus />
+              </>
+            )}
+          </AddButton>
+
+          {isFormOpen && (
+            <TransactionForm
+              onCancel={() => setIsFormOpen(false)}
+              showToast={showToast}
+            />
+          )}
+
+          <TransactionList
+            transactions={filteredTransactions}
+            mutate={mutate}
+            showToast={showToast}
+          />
+
         </MainContent>
+
+      {/* )} */}
 
     </Main>
   );
