@@ -113,6 +113,23 @@ export default function BankAccountForm({ onCancel }) {
       }
     }
 
+    // BIC
+    if (!bic.trim()) {
+      newErrors.bic = "BIC is required.";
+    } else {
+      const cleanBIC = bic
+        .replace(/\s/g, "")
+        .toUpperCase();
+
+      if (
+        !/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/.test(
+          cleanBIC
+        )
+      ) {
+        newErrors.bic = "Please enter a valid BIC.";
+      }
+    }
+
     // Balance
     if (balance === "") {
       newErrors.balance = "Balance is required.";
