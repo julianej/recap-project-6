@@ -126,12 +126,8 @@ function toggleCategory(category) {
 // ====================
 
 useEffect(() => {
-  setSelectedCategories((current) =>
-    current.filter((category) =>
-      availableCategories.includes(category)
-    )
-  );
-}, [selectedYear, selectedType]);
+  setSelectedCategories([]);
+}, [selectedYear, selectedType, setSelectedCategories]);
 
   return (
     <FilterWrapper>
