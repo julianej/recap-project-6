@@ -72,13 +72,13 @@ const ErrorMessage = styled.span`
   color: #d00;
 `;
 
-export default function BankAccountForm({ onCancel }) {
-  const [name, setName] = useState("");
-  const [bank, setBank] = useState("");
-  const [iban, setIban] = useState("");
-  const [balance, setBalance] = useState("");
-
-  const [errors, setErrors] = useState({});
+export default function BankAccountForm({ onCancel, mutate }) {
+    const [name, setName] = useState("");
+    const [bank, setBank] = useState("");
+    const [iban, setIban] = useState("");
+    const [bic, setBic] = useState("");
+    const [balance, setBalance] = useState("");
+    const [errors, setErrors] = useState({});
 
   function validateForm() {
     const newErrors = {};
@@ -143,11 +143,22 @@ export default function BankAccountForm({ onCancel }) {
         iban: iban
           .replace(/\s/g, "")
           .toUpperCase(),
+        bic: bic
+          .replace(/\s/g, "")
+          .toUpperCase(),
         balance: Number(balance),
       }),
     });
 
     const data = await response.json();
+
+    if (!response.ok) {
+        console.error(data);
+        return;
+        }
+
+        await mutate();
+        onCancel();
 
     console.log(data);
   }
@@ -216,6 +227,22 @@ export default function BankAccountForm({ onCancel }) {
         {errors.iban && (
           <ErrorMessage>
             {errors.iban}
+          </ErrorMessage>
+        )}
+      </Field>
+      <Field>
+        <input
+          type="text"
+          placeholder="BIC"
+          value={bic}
+          onChange={(event) =>
+            setBic(event.target.value)
+          }
+        />
+
+        {errors.bic && (
+          <ErrorMessage>
+            {errors.bic}
           </ErrorMessage>
         )}
       </Field>

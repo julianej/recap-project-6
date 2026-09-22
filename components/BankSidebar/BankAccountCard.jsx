@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { Plus } from "lucide-react";
-import { ArrowRight } from "lucide-react";
 
 const AccountCard = styled.div`
   padding: 1rem;

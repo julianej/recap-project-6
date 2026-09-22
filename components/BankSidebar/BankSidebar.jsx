@@ -3,30 +3,31 @@ import BankAccountCard from "../BankSideBar/BankAccountCard";
 import { Plus } from "lucide-react";
 import { RefreshCw } from "lucide-react";
 import { useState } from "react";
+import useSWR from "swr";
 
-const accounts = [
-  {
-    id: 1,
-    name: "Girokonto",
-    bank: "Deutsche Bank",
-    iban: "DE89 3704 0044 0532 0130 00",
-    bic: "COBADEFFXXX",
-  },
-  {
-    id: 2,
-    name: "Tagesgeld",
-    bank: "ING",
-    iban: "DE12 3456 7890 1234 5678 90",
-    bic: "INGDDEFFXXX",
-  },
-  {
-    id: 3,
-    name: "Business",
-    bank: "N26",
-    iban: "DE98 7654 3210 9876 5432 10",
-    bic: "NTSBDEB1XXX",
-  },
-];
+// const accounts = [
+//   {
+//     id: 1,
+//     name: "Girokonto",
+//     bank: "Deutsche Bank",
+//     iban: "DE89 3704 0044 0532 0130 00",
+//     bic: "COBADEFFXXX",
+//   },
+//   {
+//     id: 2,
+//     name: "Tagesgeld",
+//     bank: "ING",
+//     iban: "DE12 3456 7890 1234 5678 90",
+//     bic: "INGDDEFFXXX",
+//   },
+//   {
+//     id: 3,
+//     name: "Business",
+//     bank: "N26",
+//     iban: "DE98 7654 3210 9876 5432 10",
+//     bic: "NTSBDEB1XXX",
+//   },
+// ];
 
 
 const SidebarTitle = styled.h2`
@@ -135,8 +136,18 @@ export function BankSidebar({
 }) {
 
   const [lastSyncedAt, setLastSyncedAt] = useState(null);
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+
+  const { data: accounts = [], 
+    error, 
+    isLoading, 
+    mutate: mutateAccounts,} 
+  = useSWR("/api/bankaccounts", fetcher);
+
+  console.log("accounts:", accounts);
 
   return (
+    
     <SidebarSection>
       <Title>Money Manager</Title>
 
@@ -145,11 +156,11 @@ export function BankSidebar({
      <AccountList>
       {accounts.map((account) => (
       <BankAccountCard
-            key={account.id}
+            key={account._id}
             account={account}
-            selected={!isBankFormOpen && selectedAccount === account.id}
+            selected={selectedAccount === account._id}
             disabled={isBankFormOpen}
-            onClick={() => setSelectedAccount(account.id)}
+            onClick={() => setSelectedAccount(account._id)}
         />))}
     </AccountList>
 

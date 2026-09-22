@@ -1,4 +1,4 @@
-import { GlobalStyle } from "@/styles/styles";
+import { GlobalStyle } from "@/styles/GlobalStyles";
 import { SWRConfig } from "swr";
 
 

@@ -1,31 +1,48 @@
 import mongoose from "mongoose";
 
-const accountSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const { Schema } = mongoose;
+
+const bankAccountSchema = new Schema(
+  {
+    bank: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    iban: {
+      type: String,
+      trim: true,
+    },
+
+    bic: {
+      type: String,
+      trim: true,
+    },
+
+    balance: {
+      type: Number,
+      default: 0,
+    },
+
+    lastSyncedAt: {
+      type: Date,
+      default: null,
+    },
   },
-  bank: {
-    type: String,
-    required: true,
-  },
-  iban: {
-    type: String,
-    required: true,
-  },
-  balance: {
-    type: Number,
-    default: 0,
-  },
-  currency: {
-    type: String,
-    default: "EUR",
-  },
-  lastSyncedAt: {
-    type: Date,
-    default: null,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
+
+export default mongoose.models.BankAccounts ||
+  mongoose.model("BankAccounts", bankAccountSchema);
 
 // existing model || create new model
 
@@ -37,8 +54,8 @@ const accountSchema = new mongoose.Schema({
 //   Accounts = mongoose.model("Accounts", accountSchema);
 // }
 
-const BankAccounts =
-  mongoose.models.BankAccounts ||
-  mongoose.model("BankAccounts", accountSchema);
+// const BankAccounts =
+//   mongoose.models.BankAccounts ||
+//   mongoose.model("BankAccounts", accountSchema);
 
-export default BankAccounts;
+// export default BankAccounts;

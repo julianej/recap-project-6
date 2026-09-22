@@ -230,8 +230,9 @@ function handleAddAccount() {
     <BankAccountFormWrapper>
           <BankAccountForm
             onCancel={() => setIsBankFormOpen(false)}
+            mutate={mutate}
           />
-                            </BankAccountFormWrapper>
+    </BankAccountFormWrapper>
         )}
 
 
