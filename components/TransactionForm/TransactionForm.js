@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
 import useSWR, { mutate } from "swr";
 import styled from "styled-components";
 
@@ -106,6 +107,14 @@ const RadioLabel = styled.label`
     border-radius: 0.5rem;
 `;
 
+const DeleteButton = styled.button`
+  background: lightgrey;
+  padding: 0.5rem 0.5rem 0.4rem;
+  border-radius: 0.5rem;
+  border: 1px solid lightgray;
+  color: #0d0d0d ;
+`;
+
 const Button = styled.button`
   padding: 0.8rem 1.2rem;
   border: none;
@@ -177,7 +186,7 @@ const EditRow = styled.div`
 // COMPONENT
 // ====================
 
-export default function TransactionForm({ transaction, onCancel, onSave, showToast }) {
+export default function TransactionForm({ transaction, onCancel, onDelete, onSave, isDeleting, showToast }) {
 
   // ====================
   // STATE
@@ -462,20 +471,29 @@ export default function TransactionForm({ transaction, onCancel, onSave, showToa
         required
       />
     </Field>
+      {transaction ? (
+        <EditRow>
+          <ButtonWrapper>
+            <SaveButton type="submit">
+              Save
+            </SaveButton>
 
-    {transaction ? (
-      <EditRow>
-        <ButtonWrapper>
-          <SaveButton type="submit">Save</SaveButton>
-          <CancelButton type="button" onClick={onCancel}>
-            Cancel
-          </CancelButton>
-        </ButtonWrapper>
-      </EditRow>
-    ) : (
-      <SubmitButton type="submit">
-        Add transaction
-      </SubmitButton>
-    )}
+            <CancelButton type="button" onClick={onCancel}>
+              Cancel
+            </CancelButton>
+
+              <DeleteButton
+                type="button"
+                onClick={onDelete}
+              >
+                <Trash2 size={18} />
+              </DeleteButton>
+          </ButtonWrapper>
+        </EditRow>
+      ) : (
+        <SubmitButton type="submit">
+          Add transaction
+        </SubmitButton>
+      )}
   </FormComponent>
 )};

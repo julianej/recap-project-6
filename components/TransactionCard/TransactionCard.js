@@ -1,4 +1,5 @@
 import styled from "styled-components";
+// import { X, Plus } from "lucide-react";
 
 // ====================
 // STYLES
@@ -17,14 +18,6 @@ const EditButton = styled.button`
   border-radius: 0.5rem;
   padding: 0.7rem;
   color:grey;
-`;
-
-const DeleteButton = styled.button`
-  background: lightgrey;
-  padding: 0.7rem 0.7rem 0.6rem;
-  border-radius: 0.5rem;
-  border: 1px solid lightgray;
-  color: #0d0d0d ;
 `;
 
 const Transaction = styled.article`
@@ -70,6 +63,36 @@ const Transaction = styled.article`
   }
 `;
 
+const Loading = styled.div`
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.8);
+`;
+
+const Spinner = styled.div`
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top: 2px solid #000;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 
 const TransactionTitle = styled.h2`
 
@@ -108,33 +131,6 @@ const Amount = styled.p`
     $isIncome ? "black" : "red"};
 `;
 
-
-const Loading = styled.div`
-  position: absolute;
-  inset: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(255, 255, 255, 0.8);
-`;
-
-const Spinner = styled.div`
-  width: 24px;
-  height: 24px;
-  border: 3px solid #ddd;
-  border-top: 3px solid #333;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-`;
-
 // ====================
 // COMPONENT
 // ====================
@@ -144,7 +140,6 @@ export default function TransactionCard({
   onEdit,
   isSelected,
   isHighlighted,
-  onDelete,
   isDeleting,
 }) {
   
@@ -156,9 +151,7 @@ export default function TransactionCard({
         $isSelected={isSelected}
         $isHighlighted={isHighlighted}
       >
-
-      {/*LOADING SPINNER */}
-       {isDeleting && (
+        {isDeleting && (
           <Loading>
             <Spinner />
           </Loading>
@@ -194,23 +187,6 @@ export default function TransactionCard({
         </Amount>
 
         <ButtonWrapper>
-          <DeleteButton type="button" aria-label="Delete transaction" onClick={onDelete}>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6 6L18 18M18 6L6 18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </DeleteButton>
-
           <EditButton type="button" onClick={onEdit}>
             Edit
           </EditButton>

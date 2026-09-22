@@ -213,7 +213,7 @@ export default function HomePage() {
         />
       )}
 
-      {/* "Edit" existing transaction */}
+      {/* "Edit" and "Delete" existing transaction */}
       <TransactionList
            transactions={filteredTransactions}
           mutate={mutate}

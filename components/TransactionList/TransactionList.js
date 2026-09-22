@@ -52,15 +52,13 @@ const EmptyState = styled.p`
 export default function TransactionList({ transactions, mutate, showToast }) {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
-  const [deletingTransaction, setDeletingTransaction] = useState(null);
+  const [deletingTransactionPopup, setDeletingTransactionPopup] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
-  // handle EDIT
   function handleEdit(transaction) {
     setEditingTransaction(transaction);
   }
 
-  // handle editSAVE
   function handleSave(id) {
     setEditingTransaction(null);
     setHighlightedId(id);
@@ -70,24 +68,26 @@ export default function TransactionList({ transactions, mutate, showToast }) {
     }, 1500);
   }
 
-  // handle CANCEL EDIT
   function handleCancel() {
     setEditingTransaction(null);
   }
 
-  // handle DELETE button on TransactionCard
   function handleDeleteClick(transaction) {
     setDeletingTransaction(transaction);
   }
 
-  // handle CANCEL in DialogPopup
   function handleCancelDelete() {
     setDeletingTransaction(null);
   }
 
-  // handle DELETE in DialogPopup
-async function handleDelete(id) {
-  setDeletingTransaction(null);
+  async function handleConfirmDelete(id) {
+  // 1. Close edit form
+  setEditingTransaction(null);
+
+  // 2. Close confirmation popup
+  setDeletingTransactionPopup(null);
+
+  // 3. Show spinner on the card
   setDeletingId(id);
 
   try {
@@ -99,23 +99,19 @@ async function handleDelete(id) {
       throw new Error("Failed to delete transaction");
     }
 
-    // Wait 1.2 seconds to load spinner
+    // Keep spinner visible
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    // Stop spinner
+    // 4. Hide spinner
     setDeletingId(null);
 
-    // Update transaction list
+    // 5. Refresh transactions
     await mutate();
-
-    showToast("Transaction deleted successfully.");
-
   } catch (error) {
     console.error(error);
     setDeletingId(null);
   }
 }
-
 
   return (
   <>
@@ -145,8 +141,9 @@ async function handleDelete(id) {
             {editingTransaction?._id === transaction._id && (
               <TransactionForm
                 transaction={editingTransaction}
-                onCancel={handleCancel}
-                onSave={handleSave}
+                 onDelete={() => handleDeleteClick(transaction)}
+                 onCancel={handleCancel}
+                 onSave={handleSave}
                 showToast={showToast}
               />
             )}
@@ -155,11 +152,11 @@ async function handleDelete(id) {
       )}
     </List>
 
-    {deletingTransaction && (
+    {deletingTransactionPopup && (
       <DialogPopup
-        transaction={deletingTransaction}
+        transaction={deletingTransactionPopup}
         onCancel={handleCancelDelete}
-        onDelete={() => handleDelete(deletingTransaction._id)}
+        onDelete={() => handleConfirmDelete(deletingTransactionPopup._id)}
       />
     )}
   </>
