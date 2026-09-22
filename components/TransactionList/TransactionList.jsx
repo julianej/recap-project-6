@@ -52,7 +52,7 @@ const EmptyState = styled.p`
 export default function TransactionList({ transactions, mutate, showToast }) {
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
-  const [deletingTransactionPopup, setDeletingTransaction] = useState(null);
+  const [deletingTransactionPopup, setDeletingTransactionPopup] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
 
@@ -86,7 +86,7 @@ export default function TransactionList({ transactions, mutate, showToast }) {
   setEditingTransaction(null);
 
   // 2. Close confirmation popup
-  setDeletingTransaction(null);
+  setDeletingTransactionPopup(null);
 
   // 3. Show spinner on the card
   setDeletingId(id);
@@ -143,8 +143,8 @@ export default function TransactionList({ transactions, mutate, showToast }) {
               <TransactionForm
                 transaction={editingTransaction}
                  onDelete={() => handleDeleteClick(transaction)}
-                onCancel={handleCancel}
-                onSave={handleSave}
+                 onCancel={handleCancel}
+                 onSave={handleSave}
                 showToast={showToast}
               />
             )}
