@@ -1,10 +1,31 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { X } from "lucide-react";
+import { X, LoaderCircle } from "lucide-react";
 import {
   SubmitButton,
   CancelButton,
 } from "@/styles/ButtonStyles";
+
+
+const LoadingSpinner = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  svg {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
 
 const Form = styled.form`
   display: flex;
@@ -61,6 +82,7 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+
 const Field = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,13 +94,17 @@ const ErrorMessage = styled.span`
   color: #d00;
 `;
 
-export default function BankAccountForm({ onCancel }) {
-    const [name, setName] = useState("");
-    const [bank, setBank] = useState("");
-    const [iban, setIban] = useState("");
-    const [bic, setBic] = useState("");
-    const [balance, setBalance] = useState("");
-    const [errors, setErrors] = useState({});
+
+export default function BankAccountForm({
+  onCancel,
+  setIsAddingAccount,
+}) {
+  const [name, setName] = useState("");
+  const [bank, setBank] = useState("");
+  const [iban, setIban] = useState("");
+  const [bic, setBic] = useState("");
+  const [balance, setBalance] = useState("");
+  const [errors, setErrors] = useState({});
 
   function validateForm() {
     const newErrors = {};
@@ -105,9 +131,7 @@ export default function BankAccountForm({ onCancel }) {
         .toUpperCase();
 
       if (
-        !/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/.test(
-          cleanIBAN
-        )
+        !/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/.test(cleanIBAN)
       ) {
         newErrors.iban = "Please enter a valid IBAN.";
       }
@@ -122,11 +146,12 @@ export default function BankAccountForm({ onCancel }) {
         .toUpperCase();
 
       if (
-        !/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/.test(
+        !/^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(
           cleanBIC
         )
       ) {
-        newErrors.bic = "Please enter a valid BIC.";
+        newErrors.bic =
+          "BIC must contain 8 or 11 characters.";
       }
     }
 
@@ -149,34 +174,42 @@ export default function BankAccountForm({ onCancel }) {
       return;
     }
 
-    const response = await fetch("/api/bankaccounts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name.trim(),
-        bank: bank.trim(),
-        iban: iban
-          .replace(/\s/g, "")
-          .toUpperCase(),
-        bic: bic
-          .replace(/\s/g, "")
-          .toUpperCase(),
-        balance: Number(balance),
-      }),
-    });
+    setIsAddingAccount(true);
 
-    const data = await response.json();
+    try {
+      const response = await fetch("/api/bankaccounts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          bank: bank.trim(),
+          iban: iban
+            .replace(/\s/g, "")
+            .toUpperCase(),
+          bic: bic
+            .replace(/\s/g, "")
+            .toUpperCase(),
+          balance: Number(balance),
+        }),
+      });
 
-    if (!response.ok) {
+      const data = await response.json();
+
+      if (!response.ok) {
         console.error(data);
         return;
-        }
+      }
 
-        onCancel();
+      console.log(data);
 
-    console.log(data);
+      onCancel();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsAddingAccount(false);
+    }
   }
 
   return (
@@ -195,7 +228,8 @@ export default function BankAccountForm({ onCancel }) {
         Account Details
       </FormTitle>
 
-    <FormSubTitle>Bank Account Info</FormSubTitle>
+      <FormSubTitle>Bank Account Info</FormSubTitle>
+
       <Field>
         <input
           type="text"
@@ -207,9 +241,7 @@ export default function BankAccountForm({ onCancel }) {
         />
 
         {errors.name && (
-          <ErrorMessage>
-            {errors.name}
-          </ErrorMessage>
+          <ErrorMessage>{errors.name}</ErrorMessage>
         )}
       </Field>
 
@@ -224,9 +256,7 @@ export default function BankAccountForm({ onCancel }) {
         />
 
         {errors.bank && (
-          <ErrorMessage>
-            {errors.bank}
-          </ErrorMessage>
+          <ErrorMessage>{errors.bank}</ErrorMessage>
         )}
       </Field>
 
@@ -241,11 +271,10 @@ export default function BankAccountForm({ onCancel }) {
         />
 
         {errors.iban && (
-          <ErrorMessage>
-            {errors.iban}
-          </ErrorMessage>
+          <ErrorMessage>{errors.iban}</ErrorMessage>
         )}
       </Field>
+
       <Field>
         <input
           type="text"
@@ -257,9 +286,7 @@ export default function BankAccountForm({ onCancel }) {
         />
 
         {errors.bic && (
-          <ErrorMessage>
-            {errors.bic}
-          </ErrorMessage>
+          <ErrorMessage>{errors.bic}</ErrorMessage>
         )}
       </Field>
 

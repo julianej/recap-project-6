@@ -24,6 +24,9 @@ const bankAccountSchema = new Schema(
     bic: {
       type: String,
       trim: true,
+      uppercase: true,
+      match: /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/,
+
     },
 
     balance: {

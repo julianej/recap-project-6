@@ -174,6 +174,8 @@ export default function HomePage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [message, setSuccessMessage] = useState("");
 
+  const [isAddingAccount, setIsAddingAccount] = useState(false);
+
 
   // ====================
   // DATA
@@ -204,6 +206,34 @@ export default function HomePage() {
   function handleAddAccount() {
     setIsBankFormOpen(true);
   }
+
+  async function handleDeleteAccount() {
+  if (!selectedAccount) return;
+
+  try {
+    const response = await fetch(
+      `/api/bankaccounts/${selectedAccount}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error(data);
+      return;
+    }
+
+    await mutateAccounts();
+
+    setSelectedAccount(null);
+
+    showToast("Bank account deleted successfully.");
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 
   // ====================
@@ -287,18 +317,14 @@ export default function HomePage() {
       </SidebarWrapper>
 
 
-    {/* BANK ACCOUNT FORM */}
-      {isBankFormOpen && (
-        <BankAccountFormWrapper>
-          <BankAccountForm
-            onCancel={() => setIsBankFormOpen(false)}
-            mutate={mutateAccounts}
-          />
-        </BankAccountFormWrapper>
-        )}
-
    <MainContent>
-  {selectedAccount ? (
+    
+    {isAddingAccount ? (
+      <div>
+          <p>Adding bank account...</p>
+        <Spinner />
+      </div>
+) : selectedAccount ? (
     <>
       <Title>
         {selectedAccountData?.bank} <br />
@@ -347,6 +373,7 @@ export default function HomePage() {
       <TransactionList
         transactions={filteredTransactions}
         selectedAccount={selectedAccount}
+        onDeleteAccount={handleDeleteAccount}
         mutate={mutate}
         showToast={showToast}
       />
@@ -364,6 +391,16 @@ export default function HomePage() {
       </Welcome>
     )}
   </MainContent>
+      {/* BANK ACCOUNT FORM */}
+      {isBankFormOpen && (
+        <BankAccountFormWrapper>
+          <BankAccountForm
+            onCancel={() => setIsBankFormOpen(false)}
+            mutate={mutateAccounts}
+            setIsAddingAccount={setIsAddingAccount}
+          />
+        </BankAccountFormWrapper>
+        )}
 
       {/* )} */}
 

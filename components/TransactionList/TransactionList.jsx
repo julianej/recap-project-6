@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Trash2 } from "lucide-react";
 import styled from "styled-components";
 import TransactionCard from "../TransactionCard/TransactionCard";
 import TransactionForm from "../TransactionForm/TransactionForm";
@@ -41,7 +42,35 @@ const EmptyState = styled.p`
   padding: 40px 20px;
 `;
 
+const DeleteAccountButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  bottom: 0;
+  position: relative;
+  position: relative;
+  bottom: 0;
+  margin-top: 5rem;
 
+  padding: 0.75rem 1rem;
+
+  border-radius: 2rem;
+  border: 0.1rem solid lightgrey;
+  background: transparent;
+  color: #000;
+
+  cursor: pointer;
+  text-align: left;
+
+  span {
+    font-size: 0.875rem;
+  }
+
+  &:hover {
+    background: #000;
+    color: #fff;
+  }
+`;
 
 
 // ====================
@@ -54,6 +83,7 @@ export default function TransactionList({
   mutate,
   showToast,
   selectedAccount,
+  onDeleteAccount,
 }) {
 
   const [editingTransaction, setEditingTransaction] = useState(null);
@@ -157,6 +187,18 @@ console.log("transactions:", transactions);
         ))
       )}
     </List>
+      <DeleteAccountButton
+          type="button"
+          onClick={onDeleteAccount}
+          aria-label="Delete bank account"
+          title="Delete bank account"
+        >
+          <Trash2 size={18} />
+
+          <span>
+            Delete the bank account and all its transactions
+          </span>
+        </DeleteAccountButton>
 
     {deletingTransactionPopup && (
       <DialogPopup
