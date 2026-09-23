@@ -1,8 +1,13 @@
 import styled from "styled-components";
 import { Wallet, List, Plus } from "lucide-react";
 
-const FloatingMenuWrapper = styled.nav`
-  position: fixed;
+const FloatingNavigationWrapper = styled.nav`
+    position: fixed;
+
+    left: 58%;
+    bottom: 1rem;
+
+    transform: translateX(-50%);
 
     z-index: 1000;
     width: auto;
@@ -65,7 +70,7 @@ export default function FloatingNavigation({
   onAddTransaction,
 }) {
   return (
-    <FloatingMenuWrapper>
+    <FloatingNavigationWrapper>
       <MenuItem
         type="button"
         $active={activeSection === "accounts"}
@@ -100,6 +105,6 @@ export default function FloatingNavigation({
         <Plus size={22} />
         <span>Add</span>
       </MenuItem>
-    </FloatingMenuWrapper>
+    </FloatingNavigationWrapper>
   );
 }
