@@ -1,10 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { X, LoaderCircle } from "lucide-react";
-import {
-  SubmitButton,
-  CancelButton,
-} from "@/styles/ButtonStyles";
+import { SubmitButton,CancelButton,} from "@/styles/ButtonStyles";
 
 
 const LoadingSpinner = styled.div`

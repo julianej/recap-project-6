@@ -1,8 +1,11 @@
 import useSWR from "swr";
 import { useState } from "react";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Menu } from "lucide-react";
 import styled, { keyframes }  from "styled-components";
 import { Loading, Spinner } from "@/styles/LoadingStyles";
+import { MenuButton,} from "@/styles/ButtonStyles";
+import FloatingNavigation from "@/components/FloatingNavigation/FloatingNavigation";
+
 
 import BankSideBar from "@/components/BankSideBar/BankSideBar";
 import BankAccountForm from "@/components/BankSideBar/BankAccountForm";
@@ -18,11 +21,11 @@ import TransactionFilter from "@/components/TransactionFilter/TransactionFilter"
 
 
 const Main = styled.main`
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column-reverse;
 
   @media (min-width: 740px) {
-   grid-template-columns: 1fr 4fr;
+   flex-direction: row;
   }
 `;
 
@@ -35,8 +38,27 @@ const MainContent = styled.div`
   }
 `;
 
+const MenuProfileWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 250px;
+    border: 2px solid black;
+    background-color: white;
+    margin-bottom: 2rem;
+    border-radius: 1rem;
+    /* position: fixed; */
+    margin-bottom: 2rem;
+    @media (min-width: 740px) {
+   width: 100%;
+   height: 63px;
+  }
+`;
+
 const SidebarWrapper = styled.aside`
-  padding: 3rem 2rem;
+  padding: 1.5rem 2rem;
   border-right: 2px solid black;
 `;
 
@@ -51,7 +73,7 @@ const Welcome = styled.div`
     min-width: 100%;
 
     @media (min-width: 740px) {
-    top: 24%;
+    top: 4%;
     position: relative;}
 
   h1 {
@@ -164,7 +186,7 @@ export default function HomePage() {
   // ====================
   // STATE
   // ====================
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
@@ -177,6 +199,7 @@ export default function HomePage() {
 
   const [isAddingAccount, setIsAddingAccount] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+
 
   // ====================
   // DATA
@@ -318,12 +341,25 @@ export default function HomePage() {
           setSelectedAccount={handleAccountSelect}
           onAddAccount={handleAddAccount}
           isBankFormOpen={isBankFormOpen}
+          isMenuOpen={isMenuOpen}
         />
       </SidebarWrapper>
 
 
    <MainContent>
-    
+        <FloatingNavigation
+        onAddTransaction={() => setIsFormOpen(true)}
+      />
+      <MenuProfileWrapper>
+        <p>Hallo Juliane</p>
+      <MenuButton
+          type="button"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        > 
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </MenuButton>
+        </MenuProfileWrapper>
     {isAddingAccount || isDeletingAccount ? (
         <div>
           <p>
@@ -390,11 +426,11 @@ export default function HomePage() {
     </>
   ) : (
       <Welcome>
-        <h1>Welcome to Money Manager</h1>
-        <p>
+        <h1>Welcome to Money Manager<br></br>
+
           Keep track of your finances, manage your bank accounts,
           and stay on top of your spending.
-        </p>
+        </h1>
         <p>
           Select a bank account from the sidebar to get started.
         </p>
