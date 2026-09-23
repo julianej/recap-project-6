@@ -15,6 +15,7 @@ import TransactionFilter from "@/components/TransactionFilter/TransactionFilter"
 // STYLES
 // ====================
 
+
 const Main = styled.main`
   display: grid;
   grid-template-columns: 1fr;
@@ -36,6 +37,33 @@ const MainContent = styled.div`
 const SidebarWrapper = styled.aside`
   padding: 3rem 2rem;
   border-right: 2px solid black;
+`;
+
+const Welcome = styled.div`
+  max-width: 600px;
+  padding: 4rem 0;
+
+    background: white;
+    padding: 5rem;
+    border: 2px solid black;
+    border-radius: 1rem;
+    min-width: 100%;
+
+    @media (min-width: 740px) {
+    top: 24%;
+    position: relative;}
+
+  h1 {
+    font-size: 40px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
 `;
 
 const slideUp = keyframes`
@@ -170,6 +198,7 @@ export default function HomePage() {
   function handleAccountSelect(accountId) {
     setSelectedAccount(accountId);
     setIsBankFormOpen(false);
+    setIsFormOpen(false);
   }
 
   function handleAddAccount() {
@@ -268,62 +297,73 @@ export default function HomePage() {
         </BankAccountFormWrapper>
         )}
 
-    <MainContent>
+   <MainContent>
+  {selectedAccount ? (
+    <>
+      <Title>
+        {selectedAccountData?.bank} <br />
+        {selectedAccountData?.name}
+      </Title>
 
-          <Title>
-          {selectedAccountData?.bank} <br />
-          {selectedAccountData?.name}
-        </Title>
+      <TransactionFilter
+        transactions={data ?? []}
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        selectedType={selectedType}
+        setSelectedType={setSelectedType}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
+      />
 
-          <TransactionFilter
-            transactions={data ?? []}
-            selectedYear={selectedYear}
-            setSelectedYear={setSelectedYear}
-            selectedType={selectedType}
-            setSelectedType={setSelectedType}
-            selectedCategories={selectedCategories}
-            setSelectedCategories={setSelectedCategories}
-          />
+      <AccountBalance
+        transactions={filteredTransactions}
+      />
 
-          <AccountBalance
-            transactions={filteredTransactions}
-          />
+      <AddButton
+        onClick={() => setIsFormOpen((isOpen) => !isOpen)}
+      >
+        {isFormOpen ? (
+          <>
+            Close Transaction Form
+            <X />
+          </>
+        ) : (
+          <>
+            Add Transaction
+            <Plus />
+          </>
+        )}
+      </AddButton>
 
-          <AddButton
-            onClick={() =>
-              setIsFormOpen((isOpen) => !isOpen)
-            }
-          >
-            {isFormOpen ? (
-              <>
-                Close Transaction Form
-                <X />
-              </>
-            ) : (
-              <>
-                Add Transaction
-                <Plus />
-              </>
-            )}
-          </AddButton>
+      {isFormOpen && (
+        <TransactionForm
+          selectedAccount={selectedAccount}
+          onCancel={() => setIsFormOpen(false)}
+          showToast={showToast}
+          mutate={mutate}
+        />
+      )}
 
-          {isFormOpen && (
-              <TransactionForm
-                selectedAccount={selectedAccount}
-                onCancel={() => setIsFormOpen(false)}
-                showToast={showToast}
-                mutate={mutate}
-              />
-            )}
-
-          <TransactionList
-            transactions={filteredTransactions}
-            selectedAccount={selectedAccount}
-            mutate={mutate}
-            showToast={showToast}
-          />
-
-        </MainContent>
+      <TransactionList
+        transactions={filteredTransactions}
+        selectedAccount={selectedAccount}
+        mutate={mutate}
+        showToast={showToast}
+      />
+    </>
+  ) : (
+      <Welcome>
+        <h1>Welcome to Money Manager</h1>
+        <p>
+          Keep track of your finances, manage your bank accounts,
+          and stay on top of your spending.
+        </p>
+        <p>
+          Select a bank account from the sidebar to get started.
+        </p>
+      </Welcome>
+    )}
+  </MainContent>
 
       {/* )} */}
 
