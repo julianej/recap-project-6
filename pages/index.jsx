@@ -9,14 +9,13 @@ export default function HomePage() {
   const router = useRouter();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoginFormOpen, setIsLoginFormOpen] = useState(false);
-
+  const [isLoginFormOpen, setIsLoginFormOpen] = useState(false); // HERE SET LOGIN-FORM
+ 
   // NOT LOGGED IN by default
   const isLoggedIn = false;
 
-  function handleShowLoginForm() {
-    // show login form
-
+  function onLogIn() {
+    setIsLoginFormOpen(true);
   }
 
   function handleLogout() {
@@ -30,8 +29,8 @@ export default function HomePage() {
         <MenuProfile
           isMenuOpen={isMenuOpen}
           setIsMenuOpen={setIsMenuOpen}
-          isLoggedIn={isLoggedIn}
-          onLogin={handleShowLoginForm}
+          isLoggedIn={isLoggedIn} 
+          onLogIn={setIsLogInFormOpen} // LOGIN FORM PROPS
         />
 
          {isLoginFormOpen && (

@@ -6,7 +6,7 @@ export default function MenuProfile({
   isMenuOpen,
   setIsMenuOpen,
   isLoggedIn,
-  handleShowLoginForm,
+  onLogIn,
   onProfile,
 }) {
   return (
@@ -21,7 +21,7 @@ export default function MenuProfile({
         {!isLoggedIn && (
           <LoginButton
             type="button"
-            onClick={handleShowLoginForm}
+             onClick={onLogIn}
             aria-label="Login"
             title="Login"
           >
