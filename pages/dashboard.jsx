@@ -1,12 +1,12 @@
 import useSWR from "swr";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/router"; // MENU LINK
 // ...your existing imports
 
-import { X, Plus, Menu } from "lucide-react";
+import { X, Plus, User, LogOut } from "lucide-react";
 import styled, { keyframes }  from "styled-components";
 import { Loading, Spinner } from "@/styles/LoadingStyles";
-import { MenuButton,} from "@/styles/ButtonStyles";
+import MenuProfile from "@/components/MenuProfile/MenuProfile";
 import FloatingNavigation from "@/components/FloatingNavigation/FloatingNavigation";
 
 import Welcome from "@/components/Welcome/Welcome";
@@ -17,6 +17,7 @@ import TransactionForm from "@/components/TransactionForm/TransactionForm";
 import TransactionList from "@/components/TransactionList/TransactionList";
 
 import TransactionFilter from "@/components/TransactionFilter/TransactionFilter";
+
 
 // ====================
 // STYLES
@@ -170,6 +171,28 @@ const BankAccountFormWrapper = styled.div`
 
 
 export default function Dashboard() {
+
+    const profileItems = [
+        {
+        label: "Profile Settings",
+        icon: <User size={20} />,
+        onClick: () => {
+            router.push("/profile.jsx");
+        },
+        // onClick: () => {
+        //     console.log("Profile Settings");
+        // },
+        },
+        {
+        label: "Log Out",
+        icon: <LogOut size={20} />,
+        onClick: () => {
+            router.push("/");
+        },
+        },
+    ];
+
+
   // ====================
   // STATE
   // ====================
@@ -190,6 +213,7 @@ export default function Dashboard() {
   const [isAddingAccount, setIsAddingAccount] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
+
   // ====================
   // DATA
   // ====================
@@ -204,6 +228,18 @@ export default function Dashboard() {
       ? `/api/transactions?account=${selectedAccount}`
       : null
   );
+
+
+  const router = useRouter();
+
+  function handleProfile() {
+    console.log("Open profile settings");
+    }
+
+  function handleLogout() {
+    // clear login/session
+    // redirect to homepage
+    }
 
 
   // ====================
@@ -363,13 +399,12 @@ export default function Dashboard() {
 
       <MenuProfileWrapper>
         <p>Hallo Juliane</p>
-        <MenuButton
-            type="button"
-            onClick={() => setIsMenuOpen((open) => !open)}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            > 
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </MenuButton>
+       <MenuProfile
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+            isLoggedIn={true}
+            listItems={profileItems}
+            />
     </MenuProfileWrapper>
 
     {/* BANK ACCOUNT SPINNER */}

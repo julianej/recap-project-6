@@ -5,39 +5,40 @@ import AsciiBackground from "@/components/AsciiBackground/AsciiBackground";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
+
 export default function HomePage() {
   const router = useRouter();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoginFormOpen, setIsLoginFormOpen] = useState(false); // HERE SET LOGIN-FORM
+  // const [isLoginFormOpen, setIsLoginFormOpen] = useState(false); // HERE SET LOGIN-FORM LATER
  
   // NOT LOGGED IN by default
   const isLoggedIn = false;
 
+  // function onLogIn() {
+  //   setIsLoginFormOpen(true);
+  // }
   function onLogIn() {
-    setIsLoginFormOpen(true);
+    router.push("/dashboard");
   }
 
-  function handleLogout() {
-    // logout logic later
-  }
   return (
     <main>
       <Welcome variant="default" />
       <AsciiBackground />
       
-        <MenuProfile
-          isMenuOpen={isMenuOpen}
-          setIsMenuOpen={setIsMenuOpen}
-          isLoggedIn={isLoggedIn}
-          onLogin={onLogIn}
-        />
+       <MenuProfile
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        isLoggedIn={isLoggedIn}
+        onLogin={onLogIn}
+      />
 
     {/* LOGIN FORM */}
-         {isLoginFormOpen && ( 
+         {/* {isLoginFormOpen && ( 
           <LoginForm
             onClose={() => setIsLoginFormOpen(false)}
           />
-        )}
+        )} */}
     </main>
   )};

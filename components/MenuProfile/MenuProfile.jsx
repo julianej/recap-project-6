@@ -1,45 +1,67 @@
+
 import { Menu, X, User, LogIn } from "lucide-react";
 import styled from "styled-components";
-
 
 export default function MenuProfile({
   isMenuOpen,
   setIsMenuOpen,
   isLoggedIn,
-  onLogIn,
-  onProfile,
+  onLogin,
+  listItems = [],
 }) {
   return (
-      <MenuProfileWrapper>
+    <MenuProfileWrapper>
+      {/* Homepage menu */}
+      {!isLoggedIn && (
         <MenuButton
           type="button"
           onClick={() => setIsMenuOpen((open) => !open)}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </MenuButton>
+      )}
 
-        {!isLoggedIn && (
-          <LoginButton
-            type="button"
-             onClick={onLogIn}
-            aria-label="Login"
-            title="Login"
-          >
-            <LogIn size={22} />
-          </LoginButton>
-        )}
+      {/* Login on homepage */}
+      {!isLoggedIn && (
+        <LoginButton
+          type="button"
+          onClick={onLogin}
+          aria-label="Login"
+          title="Login"
+        >
+          <LogIn size={22} />
+        </LoginButton>
+      )}
 
-        {isLoggedIn && (
-          <ProfileButton
-            type="button"
-            onClick={onProfile}
-            aria-label="Profile"
-            title="Profile"
-          >
-            <User size={22} />
-          </ProfileButton>
-        )}
-      </MenuProfileWrapper>
+      {/* Profile on dashboard */}
+      {isLoggedIn && (
+      <ProfileButton
+        type="button"
+        onClick={() => setIsMenuOpen((open) => !open)}
+        aria-label="Profile"
+        title="Profile"
+      >
+        <User size={22} />
+      </ProfileButton>
+    )}
+
+      {/* Menu / profile list */}
+      {isMenuOpen && listItems.length > 0 && (
+        <ProfileMenu>
+          {listItems.map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              onClick={item.onClick}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </ProfileMenu>
+      )}
+    </MenuProfileWrapper>
   );
 }
 
@@ -53,6 +75,11 @@ const MenuProfileWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
+
+  @media (min-width: 740px) {
+    top: 3rem;
+    right: 5rem;
+    }
 `;
 
 const MenuButton = styled.button`
