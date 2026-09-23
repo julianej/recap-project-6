@@ -29,14 +29,15 @@ export default function HomePage() {
         <MenuProfile
           isMenuOpen={isMenuOpen}
           setIsMenuOpen={setIsMenuOpen}
-          isLoggedIn={isLoggedIn} 
-          onLogIn={setIsLogInFormOpen} // LOGIN FORM PROPS
+          isLoggedIn={isLoggedIn}
+          onLogin={onLogIn}
         />
 
-         {isLoginFormOpen && (
-          <div>
-            {/* Login form goes here */}
-          </div>
-         )}
+    {/* LOGIN FORM */}
+         {isLoginFormOpen && ( 
+          <LoginForm
+            onClose={() => setIsLoginFormOpen(false)}
+          />
+        )}
     </main>
   )};
