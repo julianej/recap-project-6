@@ -90,6 +90,7 @@ export default function TransactionList({
   const [highlightedId, setHighlightedId] = useState(null);
   const [deletingTransactionPopup, setDeletingTransactionPopup] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [showDeleteAccountPopup, setShowDeleteAccountPopup] = useState(false);
 
 
   function handleEdit(transaction) {
@@ -187,9 +188,9 @@ console.log("transactions:", transactions);
         ))
       )}
     </List>
-      <DeleteAccountButton
+     <DeleteAccountButton
           type="button"
-          onClick={onDeleteAccount}
+          onClick={() => setShowDeleteAccountPopup(true)}
           aria-label="Delete bank account"
           title="Delete bank account"
         >
@@ -200,12 +201,23 @@ console.log("transactions:", transactions);
           </span>
         </DeleteAccountButton>
 
-    {deletingTransactionPopup && (
-      <DialogPopup
-        transaction={deletingTransactionPopup}
-        onCancel={handleCancelDelete}
-        onDelete={() => handleConfirmDelete(deletingTransactionPopup._id)}
-      />
-    )}
+        {showDeleteAccountPopup && (
+          <DialogPopup
+            title="Delete bank account?"
+            message="This will permanently delete the bank account and all of its transactions."
+            onCancel={() => setShowDeleteAccountPopup(false)}
+            onDelete={async () => {
+              await onDeleteAccount();
+              setShowDeleteAccountPopup(false);
+            }}
+          />
+        )}
+      {deletingTransactionPopup && (
+        <DialogPopup
+          transaction={deletingTransactionPopup}
+          onCancel={handleCancelDelete}
+          onDelete={() => handleConfirmDelete(deletingTransactionPopup._id)}
+        />
+      )}
   </>
 )};

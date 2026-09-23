@@ -2,6 +2,7 @@ import useSWR from "swr";
 import { useState } from "react";
 import { X, Plus } from "lucide-react";
 import styled, { keyframes }  from "styled-components";
+import { Loading, Spinner } from "@/styles/LoadingStyles";
 
 import BankSideBar from "@/components/BankSideBar/BankSideBar";
 import BankAccountForm from "@/components/BankSideBar/BankAccountForm";
@@ -175,7 +176,7 @@ export default function HomePage() {
   const [message, setSuccessMessage] = useState("");
 
   const [isAddingAccount, setIsAddingAccount] = useState(false);
-
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
   // ====================
   // DATA
@@ -210,6 +211,8 @@ export default function HomePage() {
   async function handleDeleteAccount() {
   if (!selectedAccount) return;
 
+  setIsDeletingAccount(true);
+
   try {
     const response = await fetch(
       `/api/bankaccounts/${selectedAccount}`,
@@ -228,13 +231,15 @@ export default function HomePage() {
     await mutateAccounts();
 
     setSelectedAccount(null);
+    setIsFormOpen(false);
 
     showToast("Bank account deleted successfully.");
   } catch (error) {
     console.error(error);
+  } finally {
+    setIsDeletingAccount(false);
   }
 }
-
 
   // ====================
   // FILTER
@@ -319,12 +324,17 @@ export default function HomePage() {
 
    <MainContent>
     
-    {isAddingAccount ? (
-      <div>
-          <p>Adding bank account...</p>
-        <Spinner />
-      </div>
-) : selectedAccount ? (
+    {isAddingAccount || isDeletingAccount ? (
+        <div>
+          <p>
+            {isAddingAccount
+              ? "Adding bank account..."
+              : "Deleting bank account..."}
+          </p>
+
+          <Spinner />
+        </div>
+      ) : selectedAccount ? (
     <>
       <Title>
         {selectedAccountData?.bank} <br />

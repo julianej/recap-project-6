@@ -54,28 +54,45 @@ const DeleteButton = styled.button`
 // ====================
 
 
-export default function DialogPopup({ transaction, onCancel, onDelete }) {
+export default function DialogPopup({ 
+  transaction,
+  title,
+  message,
+  onCancel,
+  onDelete,
+}) {
   return (
     <PopupWrapper>
-    <Popup>
-      <p>
-        Are you sure you want to delete{" "}
-        <strong>{transaction.title}</strong> (
+      <Popup>
+        {transaction ? (
+          <p>
+            Are you sure you want to delete{" "}
+            <strong>{transaction.title}</strong>{" "}
+            (
             {transaction.amount.toLocaleString("de-DE", {
-                style: "currency",
-                currency: "EUR",
+              style: "currency",
+              currency: "EUR",
             })}
-        )?
-        </p>
+            )?
+          </p>
+        ) : (
+          <p>
+            <strong>{title}</strong>
+            <br />
+            {message}
+          </p>
+        )}
+
         <ButtonWrapper>
-        <DeleteButton onClick={onDelete}>
+          <DeleteButton onClick={onDelete}>
             Delete
-            </DeleteButton>
-        <CancelButton onClick={onCancel}>
+          </DeleteButton>
+
+          <CancelButton onClick={onCancel}>
             Cancel
-            </CancelButton>
+          </CancelButton>
         </ButtonWrapper>
-    </Popup>
+      </Popup>
     </PopupWrapper>
   );
 }

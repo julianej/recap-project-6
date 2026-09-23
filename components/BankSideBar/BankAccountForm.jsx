@@ -97,6 +97,7 @@ const ErrorMessage = styled.span`
 
 export default function BankAccountForm({
   onCancel,
+  mutate,
   setIsAddingAccount,
 }) {
   const [name, setName] = useState("");
@@ -202,9 +203,11 @@ export default function BankAccountForm({
         return;
       }
 
-      console.log(data);
-
+      // SUCCESS
+      await mutate();
       onCancel();
+
+
     } catch (error) {
       console.error(error);
     } finally {
