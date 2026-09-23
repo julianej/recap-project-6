@@ -9,7 +9,7 @@ import { Loading, Spinner } from "@/styles/LoadingStyles";
 import { MenuButton,} from "@/styles/ButtonStyles";
 import FloatingNavigation from "@/components/FloatingNavigation/FloatingNavigation";
 
-
+import Welcome from "@/components/Welcome/Welcome";
 import BankSideBar from "@/components/BankSideBar/BankSideBar";
 import BankAccountForm from "@/components/BankSideBar/BankAccountForm";
 import AccountBalance from "@/components/AccountBalance/AccountBalance";
@@ -47,7 +47,7 @@ const MenuProfileWrapper = styled.div`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 250px;
+    height: 55px;
     border: 2px solid black;
     background-color: white;
     margin-bottom: 2rem;
@@ -55,8 +55,8 @@ const MenuProfileWrapper = styled.div`
     /* position: fixed; */
     margin-bottom: 2rem;
     @media (min-width: 740px) {
-   width: 100%;
-   height: 63px;
+    width: 100%;
+    height: 63px;
   }
 `;
 
@@ -64,35 +64,8 @@ const SidebarWrapper = styled.aside`
   padding: 1.5rem 2rem;
   width: 100%;
   border-right: 2px solid black;
-`;
-
-const Welcome = styled.div`
-  max-width: 600px;
-  padding: 4rem 0;
-
-    background: white;
-    border: 2px solid black;
-    border-radius: 1rem;
-    min-width: 100%;
-    padding: 2rem;
     @media (min-width: 740px) {
-    top: 4%;
-    padding: 5rem;
-    position: relative;}
-
-  h1 {
-     @media (min-width: 740px) {
-    font-size: 40px;}
-    font-size: 1rem;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-  }
-
-  p {
-    font-size: 18px;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-  }
+     width: 25%;}
 `;
 
 const slideUp = keyframes`
@@ -127,9 +100,17 @@ const AddButton = styled.button`
 `;
 
 const Title = styled.h1`
-  font-size: 40px;
-  text-transform: uppercase;
-  margin-bottom: 30px;
+    font-size: 40px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    background-color: white;
+    padding: 3rem;
+`;
+
+const DashboardTitle = styled.h1`
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
 `;
 
 
@@ -177,7 +158,7 @@ const BankAccountFormWrapper = styled.div`
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.8);
-    left: 20%;
+    left: 25%;
     top: 0%;
     z-index: 77;
     height: 100vh;
@@ -193,7 +174,10 @@ export default function Dashboard() {
   // STATE
   // ====================
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [activeSection, setActiveSection] = useState("home");
   const [selectedAccount, setSelectedAccount] = useState(null);
+  
   const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
   const [selectedYear, setSelectedYear] = useState("all");
@@ -205,7 +189,6 @@ export default function Dashboard() {
 
   const [isAddingAccount, setIsAddingAccount] = useState(false);
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
-
 
   // ====================
   // DATA
@@ -221,6 +204,24 @@ export default function Dashboard() {
       ? `/api/transactions?account=${selectedAccount}`
       : null
   );
+
+
+  // ====================
+  // FLOATING NAVIGATION
+  // ====================
+
+    function handleHomeClick() {
+    setActiveSection("home");
+    setSelectedAccount(null);
+    }
+
+    function handleAccountsClick() {
+    setActiveSection("accounts");
+
+    if (accounts?.length > 0) {
+        setSelectedAccount(accounts[0]._id);
+    }
+    }
 
 
   // ====================
@@ -353,19 +354,25 @@ export default function Dashboard() {
 
 
    <MainContent>
-        <FloatingNavigation
+     <FloatingNavigation
+        activeSection={activeSection}
+        onHome={handleHomeClick}
+        onAccounts={handleAccountsClick}
         onAddTransaction={() => setIsFormOpen(true)}
-      />
+        />
+
       <MenuProfileWrapper>
         <p>Hallo Juliane</p>
-      <MenuButton
-          type="button"
-          onClick={() => setIsMenuOpen((open) => !open)}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        > 
+        <MenuButton
+            type="button"
+            onClick={() => setIsMenuOpen((open) => !open)}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            > 
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </MenuButton>
-        </MenuProfileWrapper>
+    </MenuProfileWrapper>
+
+    {/* BANK ACCOUNT SPINNER */}
     {isAddingAccount || isDeletingAccount ? (
         <div>
           <p>
@@ -378,6 +385,7 @@ export default function Dashboard() {
         </div>
       ) : selectedAccount ? (
     <>
+
       <Title>
         {selectedAccountData?.bank} <br />
         {selectedAccountData?.name}
@@ -431,16 +439,7 @@ export default function Dashboard() {
       />
     </>
   ) : (
-      <Welcome>
-        <h1>Welcome to Money Manager<br></br>
-
-          Keep track of your finances, manage your bank accounts,
-          and stay informed about your transactions.
-        </h1>
-        <p>
-          Select a bank account from the sidebar to get started.
-        </p>
-      </Welcome>
+         <Welcome variant="dashboard" />
     )}
   </MainContent>
       {/* BANK ACCOUNT FORM */}

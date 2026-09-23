@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Wallet, List, Plus } from "lucide-react";
+import { House, Wallet, List, Plus } from "lucide-react";
 
 const FloatingNavigationWrapper = styled.nav`
     position: fixed;
@@ -39,12 +39,11 @@ const MenuItem = styled.button`
   gap: 0.2rem;
 
   width: 64px;
-  height: 52px;
-
-  padding: 0;
+  height: 43px;
+  padding: 0 4rem;
 
   border: 0;
-  border-radius: 999px;
+  border-radius: 3rem;
 
   background: transparent;
   color: #000;
@@ -66,26 +65,27 @@ const MenuItem = styled.button`
 
 export default function FloatingNavigation({
   activeSection,
-  setActiveSection,
+  onHome,
+  onAccounts,
   onAddTransaction,
 }) {
   return (
     <FloatingNavigationWrapper>
       <MenuItem
         type="button"
-        $active={activeSection === "accounts"}
-        onClick={() => setActiveSection("accounts")}
+        $active={activeSection === "home"}
+        onClick={onHome}
       >
-        <Wallet size={20} />
+        <House size={20} />
         <span>Home</span>
       </MenuItem>
 
-       <MenuItem
+      <MenuItem
         type="button"
-        $active={activeSection === "transactions"}
-        onClick={() => setActiveSection("transactions")}
+        $active={activeSection === "accounts"}
+        onClick={onAccounts}
       >
-        <List size={20} />
+        <Wallet size={20} />
         <span>Accounts</span>
       </MenuItem>
 

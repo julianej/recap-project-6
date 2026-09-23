@@ -23,7 +23,7 @@ export default function HomePage() {
   }
   return (
     <main>
-      <Welcome />
+      <Welcome variant="default" />
       <AsciiBackground />
       
         <MenuProfile

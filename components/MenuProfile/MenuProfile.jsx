@@ -49,7 +49,6 @@ const MenuProfileWrapper = styled.div`
   right: 1rem;
 
   z-index: 1000;
-
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -69,8 +68,8 @@ const MenuButton = styled.button`
   border: 2px solid #000;
   border-radius: 50%;
 
-  background: #fff;
-  color: #000;
+  background: black;
+  color: #fff;
 
   cursor: pointer;
 `;
