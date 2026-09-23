@@ -143,9 +143,6 @@ async function handleConfirmDelete(id) {
   }
 }
 
- console.log("selectedAccount:", selectedAccount);
-console.log("transactions:", transactions);
-
   return (
 
   <>

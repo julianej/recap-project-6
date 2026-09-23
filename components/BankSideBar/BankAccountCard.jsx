@@ -59,19 +59,6 @@ const CardHeader = styled.div`
   gap: 1rem;
 `;
 
-const AccountInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ItemBank = styled.div`
-  /* bank */
-`;
-
-const ItemName = styled.div`
-  /* account name */
-`;
-
 const AccountDetails = styled.div`
   margin-top: 1rem;
 

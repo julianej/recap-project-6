@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { CancelButton, DeleteButton } from "@/styles/ButtonStyles";
 
 const Popup = styled.div`
   position: fixed;
@@ -29,25 +30,6 @@ const ButtonWrapper = styled.div`
   align-items: center;
 `;
 
-const CancelButton = styled.button`
-  text-align: center;
-  background: transparent;
-  border: 1px solid black;
-  color: black;
-  padding: 0.7rem 0;
-  width: 20%;
-  border-radius: 8px;
-`;
-
-const DeleteButton = styled.button`
- text-align: center;
-  background: black;
-  border: none;
-  color: white;
-  width: 80%;
-  padding: 0.8rem 0;
-  border-radius: 8px;
-`;
 
 // ====================
 // COMPONENT
