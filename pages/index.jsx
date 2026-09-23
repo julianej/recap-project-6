@@ -9,11 +9,18 @@ export default function HomePage() {
   const router = useRouter();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isLoginFormOpen, setIsLoginFormOpen] = useState(false);
+
+  // NOT LOGGED IN by default
+  const isLoggedIn = false;
+
+  function handleShowLoginForm() {
+    // show login form
+
+  }
 
   function handleLogout() {
     // logout logic later
-    console.log("Logout");
   }
   return (
     <main>
@@ -26,6 +33,11 @@ export default function HomePage() {
           isLoggedIn={isLoggedIn}
           onLogin={handleShowLoginForm}
         />
+
+         {isLoginFormOpen && (
+          <div>
+            {/* Login form goes here */}
+          </div>
+         )}
     </main>
-  );
-}
+  )};
