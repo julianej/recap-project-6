@@ -93,6 +93,7 @@ const Title = styled.h1`
     margin-bottom: 30px;
     background-color: white;
     padding: 3rem;
+    text-align: center; 
 `;
 
 
