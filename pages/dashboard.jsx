@@ -155,16 +155,16 @@ const BankAccountFormWrapper = styled.div`
 export default function Dashboard() {
 
     const profileItems = [
-        {
-        label: "Profile Settings",
-        icon: <User size={20} />,
-        onClick: () => {
-            router.push("/profile.jsx");
-        },
+        // {
+        // label: "Profile Settings",
+        // icon: <User size={20} />,
         // onClick: () => {
-        //     console.log("Profile Settings");
+        //     router.push("/profile.jsx");
         // },
-        },
+        // // onClick: () => {
+        // //     console.log("Profile Settings");
+        // // },
+        // },
         {
         label: "Log Out",
         icon: <LogOut size={20} />,
