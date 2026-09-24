@@ -10,6 +10,30 @@ export default function HomePage() {
   const router = useRouter();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const listMenuItems = [
+    {
+      label: "About",
+      href: "#about",
+    },
+    {
+      label: "Benefits",
+      href: "#projects",
+    },
+    {
+      label: "Prices",
+      href: "#projects",
+    },
+    {
+      label: "Contact",
+      href: "#contact",
+    },
+  ];
+
+  function onLogIn() {
+    router.push("/dashboard");
+  }
+
   // const [isLoginFormOpen, setIsLoginFormOpen] = useState(false); // HERE SET LOGIN-FORM LATER
  
   // NOT LOGGED IN by default
@@ -26,13 +50,12 @@ export default function HomePage() {
     <main>
       <Welcome variant="default" />
       <AsciiBackground />
-      
-       <MenuProfile
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        isLoggedIn={isLoggedIn}
-        onLogin={onLogIn}
-      />
+       <MenuProfile 
+       isMenuOpen={isMenuOpen} 
+       setIsMenuOpen={setIsMenuOpen} 
+       isLoggedIn={false} 
+       onLogin={onLogIn} 
+       listItems={listMenuItems} />
 
     {/* LOGIN FORM */}
          {/* {isLoginFormOpen && ( 

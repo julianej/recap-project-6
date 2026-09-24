@@ -9,56 +9,83 @@ export default function MenuProfile({
   onLogin,
   listItems = [],
 }) {
+  function toggleMenu() {
+    setIsMenuOpen((open) => !open);
+  }
+
+  function closeMenu() {
+    setIsMenuOpen(false);
+  }
+
   return (
     <MenuProfileWrapper>
-      {/* Homepage menu */}
       {!isLoggedIn && (
-        <MenuButton
-          type="button"
-          onClick={() => setIsMenuOpen((open) => !open)}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </MenuButton>
+        <>
+          {/* MENU BUTTON */}
+          <MenuButton
+            type="button"
+            onClick={toggleMenu}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </MenuButton>
+
+          {/* LOGIN BUTTON */}
+          <LoginButton
+            type="button"
+            onClick={onLogin}
+            aria-label="Login"
+            title="Login"
+          >
+            <LogIn size={22} />
+          </LoginButton>
+        </>
       )}
 
-      {/* Login on homepage */}
-      {!isLoggedIn && (
-        <LoginButton
-          type="button"
-          onClick={onLogin}
-          aria-label="Login"
-          title="Login"
-        >
-          <LogIn size={22} />
-        </LoginButton>
-      )}
-
-      {/* Profile on dashboard */}
       {isLoggedIn && (
-      <ProfileButton
-        type="button"
-        onClick={() => setIsMenuOpen((open) => !open)}
-        aria-label="Profile"
-        title="Profile"
-      >
-        <User size={22} />
-      </ProfileButton>
-    )}
+        <ProfileButton
+          type="button"
+          onClick={toggleMenu}
+          aria-label="Profile"
+          aria-expanded={isMenuOpen}
+          title="Profile"
+        >
+          <User size={22} />
+        </ProfileButton>
+      )}
 
-      {/* Menu / profile list */}
+      {/* MENU ITEMS */}
       {isMenuOpen && listItems.length > 0 && (
         <ProfileMenu>
-          {listItems.map((item) => (
-            <button
-              key={item.label}
-              type="button"
-              onClick={item.onClick}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {listItems.map((item) => {
+            if (item.href) {
+              return (
+                <MenuLink
+                  key={item.label}
+                  href={item.href}
+                  onClick={closeMenu}
+                >
+                  {item.icon}
+                  <span>{item.label}</span>
+                </MenuLink>
+              );
+            }
+
+            return (
+              <MenuItem
+                key={item.label}
+                type="button"
+                onClick={() => {
+                  item.onClick?.();
+                  closeMenu();
+                }}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </MenuItem>
+            );
+          })}
         </ProfileMenu>
       )}
     </MenuProfileWrapper>
@@ -71,6 +98,7 @@ const MenuProfileWrapper = styled.div`
   right: 1rem;
 
   z-index: 1000;
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -79,7 +107,7 @@ const MenuProfileWrapper = styled.div`
   @media (min-width: 740px) {
     top: 3rem;
     right: 5rem;
-    }
+  }
 `;
 
 const MenuButton = styled.button`
@@ -95,10 +123,15 @@ const MenuButton = styled.button`
   border: 2px solid #000;
   border-radius: 50%;
 
-  background: black;
+  background: #000;
   color: #fff;
 
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 4px;
+  }
 `;
 
 const LoginButton = styled.button`
@@ -151,35 +184,67 @@ const ProfileButton = styled.button`
   color: #000;
 
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 4px;
+  }
 `;
 
 const ProfileMenu = styled.div`
-  position: absolute;
-  top: 56px;
-  right: 0;
+    position: absolute;
+    top: -3px;
+    right: 0rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 480px;
+    padding: 0.5rem;
+    background: #fff;
+    border: 2px solid transparent;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: -777;
+`;
 
+const MenuLink = styled.a`
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 
-  min-width: 160px;
+  width: 100%;
+  padding: 0.75rem 1rem;
 
-  padding: 0.5rem;
+  color: #000;
+  text-decoration: none;
 
-  background: #fff;
-  border: 2px solid #000;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
 
-  button {
-    padding: 0.75rem 1rem;
-
-    border: 0;
-    background: transparent;
-
-    text-align: left;
-    cursor: pointer;
-
-    &:hover {
-      background: #f2f2f2;
-    }
+  &:hover {
+    background: #f2f2f2;
   }
 `;
+
+const MenuItem = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  width: 100%;
+  padding: 0.75rem 1rem;
+
+  border: 0;
+  border-radius: 0.5rem;
+
+  background: transparent;
+  color: #000;
+
+  font: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  &:hover {
+    background: #f2f2f2;
+  }
+`;
+
