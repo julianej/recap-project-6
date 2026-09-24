@@ -4,7 +4,7 @@ import { House, Wallet, List, Plus } from "lucide-react";
 const FloatingNavigationWrapper = styled.nav`
     position: fixed;
 
-    left: 58%;
+    left: 50%;
     bottom: 1rem;
 
     transform: translateX(-50%);
@@ -23,11 +23,13 @@ const FloatingNavigationWrapper = styled.nav`
     background: #fff;
     border: 2px solid #000;
     border-radius: 999px;
-    gap: 3rem;
+    gap: 0rem;
 
   @media (min-width: 740px) {
     display: flex;
     flex-direction: row;
+    gap: 3rem;
+    left: 58%;
   }
 `;
 

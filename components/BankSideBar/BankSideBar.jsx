@@ -1,10 +1,8 @@
 import styled from "styled-components";
+import { Plus, RefreshCw } from "lucide-react";
+import { useState } from "react";
 
 import BankAccountCard from "./BankAccountCard";
-import { Plus } from "lucide-react";
-import { RefreshCw } from "lucide-react";
-import { useState } from "react";
-import useSWR from "swr";
 
 const SidebarTitle = styled.h2`
   margin: 0 0 1.5rem;
@@ -12,14 +10,14 @@ const SidebarTitle = styled.h2`
 `;
 
 const Title = styled.h1`
-  @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap');
-
   font-family: "Silkscreen", sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 4rem;
   text-transform: uppercase;
-  margin: 0rem 0 2rem;
+
+  margin: 0 0 2rem;
+
   line-height: 3rem;
 `;
 
@@ -28,7 +26,6 @@ const AccountList = styled.div`
   flex-direction: column;
   gap: 0.75rem;
 `;
-
 
 const AddBankAccountButton = styled.button`
   display: flex;
@@ -43,32 +40,33 @@ const AddBankAccountButton = styled.button`
   border: 1px solid #000;
   border-radius: 8px;
 
-  background: ${({ $selected }) =>
-    $selected ? "#000" : "#fff"};
-
-  color: ${({ $selected }) =>
-    $selected ? "#fff" : "#000"};
+  background: ${({ $selected }) => ($selected ? "#000" : "#fff")};
+  color: ${({ $selected }) => ($selected ? "#fff" : "#000")};
 
   cursor: pointer;
 `;
 
 const SidebarSection = styled.section`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-    position: sticky;
-    top: 0;
-    align-self: start;
-    left: 0;
-    background: black;
-    color: #fff;
-    padding: 2rem;
-    border-radius: 1rem;
-    @media (min-width: 740px) {
-       min-height: 90vh;
-       color: black;
-       background-color: transparent;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-height: 90vh;
+
+  position: sticky;
+  top: 0;
+  align-self: start;
+
+  padding: 2rem;
+
+  background: #000;
+  color: #fff;
+
+  border-radius: 1rem;
+
+  @media (min-width: 740px) {
+    background: transparent;
+    color: #000;
   }
 `;
 
@@ -77,22 +75,19 @@ const SyncSection = styled.div`
 
   display: flex;
   flex-direction: column;
-  gap: 0.35rem; 
+  gap: 0.35rem;
 `;
 
 const SyncButton = styled.button`
-  width: 100%;
-  padding: 0.75rem 1rem;
-
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 
+  width: 100%;
+  padding: 0.75rem 1rem;
+
   border: none;
-  /* border-radius: 8px;
-  background: #000;
-  color: #fff; */
 
   font: inherit;
   font-weight: 500;
@@ -114,53 +109,41 @@ const SyncStatus = styled.span`
   text-align: center;
 `;
 
-
 export default function BankSideBar({
+  accounts = [],
   selectedAccount,
   setSelectedAccount,
   onAddAccount,
   isBankFormOpen,
 }) {
-
   const [lastSyncedAt, setLastSyncedAt] = useState(null);
 
-  const {
-    data: accounts = [],
-    mutate: mutateAccounts,
-  } = useSWR("/api/bankaccounts");
-
-  // console.log("accounts:", accounts);
-
   return (
-    
     <SidebarSection>
-
-      <Title className="silkscreen-regular">
-        Money Manager
-      </Title>
-
+      <Title>Money Manager</Title>
 
       <SidebarTitle>Bank Accounts</SidebarTitle>
 
-     <AccountList>
-      {accounts.map((account) => (
-      <BankAccountCard
+      <AccountList>
+        {accounts.map((account) => (
+          <BankAccountCard
             key={account._id}
             account={account}
             selected={selectedAccount === account._id}
             disabled={isBankFormOpen}
             onClick={() => setSelectedAccount(account._id)}
-        />))}
-    </AccountList>
+          />
+        ))}
+      </AccountList>
 
-    <AddBankAccountButton
-      type="button"
-      $selected={isBankFormOpen}
-      onClick={onAddAccount}
-    >
-      <span>Add Bank Account</span>
-      <Plus size={18} />
-    </AddBankAccountButton>
+      <AddBankAccountButton
+        type="button"
+        $selected={isBankFormOpen}
+        onClick={onAddAccount}
+      >
+        <span>Add Bank Account</span>
+        <Plus size={18} />
+      </AddBankAccountButton>
 
       <SyncSection>
         <SyncButton
