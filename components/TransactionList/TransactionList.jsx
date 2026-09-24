@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Trash2 } from "lucide-react";
 import styled from "styled-components";
 import TransactionCard from "../TransactionCard/TransactionCard";
 import TransactionForm from "../TransactionForm/TransactionForm";
@@ -41,7 +42,35 @@ const EmptyState = styled.p`
   padding: 40px 20px;
 `;
 
+const DeleteAccountButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  bottom: 0;
+  position: relative;
+  position: relative;
+  bottom: 0;
+  margin-top: 5rem;
 
+  padding: 0.75rem 1rem;
+
+  border-radius: 2rem;
+  border: 0.1rem solid lightgrey;
+  background: transparent;
+  color: #000;
+
+  cursor: pointer;
+  text-align: left;
+
+  span {
+    font-size: 0.875rem;
+  }
+
+  &:hover {
+    background: #000;
+    color: #fff;
+  }
+`;
 
 
 // ====================
@@ -49,11 +78,20 @@ const EmptyState = styled.p`
 // ====================
 
 
-export default function TransactionList({ transactions, mutate, showToast }) {
+export default function TransactionList({
+  transactions,
+  mutate,
+  showToast,
+  selectedAccount,
+  onDeleteAccount,
+}) {
+
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [highlightedId, setHighlightedId] = useState(null);
   const [deletingTransactionPopup, setDeletingTransactionPopup] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [showDeleteAccountPopup, setShowDeleteAccountPopup] = useState(false);
+
 
   function handleEdit(transaction) {
     setEditingTransaction(transaction);
@@ -72,22 +110,17 @@ export default function TransactionList({ transactions, mutate, showToast }) {
     setEditingTransaction(null);
   }
 
-  function handleDeleteClick(transaction) {
-    setDeletingTransaction(transaction);
-  }
+function handleDeleteClick(transaction) {
+  setDeletingTransactionPopup(transaction);
+}
 
-  function handleCancelDelete() {
-    setDeletingTransaction(null);
-  }
-
-  async function handleConfirmDelete(id) {
-  // 1. Close edit form
-  setEditingTransaction(null);
-
-  // 2. Close confirmation popup
+function handleCancelDelete() {
   setDeletingTransactionPopup(null);
+}
 
-  // 3. Show spinner on the card
+async function handleConfirmDelete(id) {
+  setEditingTransaction(null);
+  setDeletingTransactionPopup(null);
   setDeletingId(id);
 
   try {
@@ -99,13 +132,10 @@ export default function TransactionList({ transactions, mutate, showToast }) {
       throw new Error("Failed to delete transaction");
     }
 
-    // Keep spinner visible
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    // 4. Hide spinner
     setDeletingId(null);
 
-    // 5. Refresh transactions
     await mutate();
   } catch (error) {
     console.error(error);
@@ -114,9 +144,11 @@ export default function TransactionList({ transactions, mutate, showToast }) {
 }
 
   return (
+
   <>
     <List>
       <h2>Your Transaction List</h2>
+
 
       {/* Empty State */}
       {transactions.length === 0 ? (
@@ -139,11 +171,13 @@ export default function TransactionList({ transactions, mutate, showToast }) {
             />
 
             {editingTransaction?._id === transaction._id && (
-              <TransactionForm
+             <TransactionForm
                 transaction={editingTransaction}
-                 onDelete={() => handleDeleteClick(transaction)}
-                 onCancel={handleCancel}
-                 onSave={handleSave}
+                selectedAccount={selectedAccount}
+                onDelete={() => handleDeleteClick(transaction)}
+                onCancel={handleCancel}
+                onSave={handleSave}
+                mutate={mutate}
                 showToast={showToast}
               />
             )}
@@ -151,13 +185,36 @@ export default function TransactionList({ transactions, mutate, showToast }) {
         ))
       )}
     </List>
+     <DeleteAccountButton
+          type="button"
+          onClick={() => setShowDeleteAccountPopup(true)}
+          aria-label="Delete bank account"
+          title="Delete bank account"
+        >
+          <Trash2 size={18} />
 
-    {deletingTransactionPopup && (
-      <DialogPopup
-        transaction={deletingTransactionPopup}
-        onCancel={handleCancelDelete}
-        onDelete={() => handleConfirmDelete(deletingTransactionPopup._id)}
-      />
-    )}
+          <span>
+            Delete the bank account and all its transactions
+          </span>
+        </DeleteAccountButton>
+
+        {showDeleteAccountPopup && (
+          <DialogPopup
+            title="Delete bank account?"
+            message="This will permanently delete the bank account and all of its transactions."
+            onCancel={() => setShowDeleteAccountPopup(false)}
+            onDelete={async () => {
+              await onDeleteAccount();
+              setShowDeleteAccountPopup(false);
+            }}
+          />
+        )}
+      {deletingTransactionPopup && (
+        <DialogPopup
+          transaction={deletingTransactionPopup}
+          onCancel={handleCancelDelete}
+          onDelete={() => handleConfirmDelete(deletingTransactionPopup._id)}
+        />
+      )}
   </>
 )};

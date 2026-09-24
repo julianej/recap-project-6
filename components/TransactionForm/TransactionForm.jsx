@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import styled from "styled-components";
 
 
@@ -186,7 +186,16 @@ const EditRow = styled.div`
 // COMPONENT
 // ====================
 
-export default function TransactionForm({ transaction, onCancel, onDelete, onSave, isDeleting, showToast }) {
+export default function TransactionForm({
+  transaction,
+  selectedAccount,
+  onCancel,
+  onDelete,
+  onSave,
+  isDeleting,
+  showToast,
+  mutate
+}) {
 
   // ====================
   // STATE
@@ -306,6 +315,7 @@ export default function TransactionForm({ transaction, onCancel, onDelete, onSav
           category,
           type,
           date: transactionDate.toISOString(),
+          account: selectedAccount,
         }),
       }
     );
@@ -330,7 +340,7 @@ export default function TransactionForm({ transaction, onCancel, onDelete, onSav
   // TRANSACTION MUTATE
   // ====================
 
-    await mutate("/api/transactions");
+    await mutate();
 
     // If editing, call onSave updates the TransactionCard
     if (isEditing) {

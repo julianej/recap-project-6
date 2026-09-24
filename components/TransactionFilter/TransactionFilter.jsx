@@ -6,6 +6,10 @@ const FilterWrapper = styled.div`
   flex-direction: column;
   gap: 1rem;
   padding: 2rem 0;
+
+    @media (min-width: 739px) {
+        flex-direction: row;
+  }
 `;
 
 const FilterRow = styled.div`
@@ -45,7 +49,7 @@ const FilterButton = styled.button`
   }
 `;
 
-export default function Filter({
+export default function TransactionFilter({
   transactions = [],
   selectedYear,
   setSelectedYear,
@@ -122,12 +126,8 @@ function toggleCategory(category) {
 // ====================
 
 useEffect(() => {
-  setSelectedCategories((current) =>
-    current.filter((category) =>
-      availableCategories.includes(category)
-    )
-  );
-}, [selectedYear, selectedType]);
+  setSelectedCategories([]);
+}, [selectedYear, selectedType, setSelectedCategories]);
 
   return (
     <FilterWrapper>
@@ -209,7 +209,6 @@ useEffect(() => {
         </FilterGroup>
     </FilterRow>
 
-    {/* ====================  ROW 2:CATEGORY ==================== */}
        {/* ==================== ROW 2: CATEGORY ==================== */}
 <FilterRow>
   <FilterGroup>

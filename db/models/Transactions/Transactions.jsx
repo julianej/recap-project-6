@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const projectSchema = new mongoose.Schema({
+const transactionSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -28,10 +28,16 @@ const projectSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+
+  account: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "BankAccounts",
+    required: true,
+  },
 });
 
-const Project =
-  mongoose.models.Project ||
-  mongoose.model("Project", projectSchema);
+const Transactions =
+  mongoose.models.Transactions ||
+  mongoose.model("Transactions", transactionSchema);
 
-export default Project;
+export default Transactions;
