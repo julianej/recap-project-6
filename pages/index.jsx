@@ -154,7 +154,9 @@ const BankAccountFormWrapper = styled.div`
     z-index: 77;
 
     @media (min-width: 740px) {
-    top: 20%;
+    top: 0%;
+    left: 20%;
+    height: 100%;
     }
 `;
 
