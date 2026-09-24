@@ -198,7 +198,7 @@ export default function Dashboard() {
   // ====================
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [activeSection, setActiveSection] = useState("home");
+  const [activeSection, setActiveSection] = useState("home"); // DASHBOARD DEFAULT
   const [selectedAccount, setSelectedAccount] = useState(null);
   
   const [isBankFormOpen, setIsBankFormOpen] = useState(false);
@@ -232,32 +232,22 @@ export default function Dashboard() {
 
   const router = useRouter();
 
-  function handleProfile() {
-    console.log("Open profile settings");
-    }
+// ====================
+// FLOATING NAVIGATION
+// ====================
 
-  function handleLogout() {
-    // clear login/session
-    // redirect to homepage
-    }
+function handleHomeClick() {
+  setActiveSection("home");
+  setSelectedAccount(null);
+}
 
+function handleAccountsClick() {
+  setActiveSection("accounts");
 
-  // ====================
-  // FLOATING NAVIGATION
-  // ====================
-
-    function handleHomeClick() {
-    setActiveSection("home");
-    setSelectedAccount(null);
-    }
-
-    function handleAccountsClick() {
-    setActiveSection("accounts");
-
-    if (accounts?.length > 0) {
-        setSelectedAccount(accounts[0]._id);
-    }
-    }
+  if (accounts?.length > 0) {
+    setSelectedAccount(accounts[0]._id);
+  }
+}
 
 
   // ====================
@@ -265,10 +255,11 @@ export default function Dashboard() {
   // ====================
 
   function handleAccountSelect(accountId) {
+    setActiveSection("accounts");
     setSelectedAccount(accountId);
     setIsBankFormOpen(false);
     setIsFormOpen(false);
-  }
+    }
 
   function handleAddAccount() {
     setIsBankFormOpen(true);
@@ -378,14 +369,14 @@ export default function Dashboard() {
       {message && <Toast>{message}</Toast>}
 
       <SidebarWrapper>
-       <BankSideBar
-          accounts={accounts}
-          selectedAccount={selectedAccount}
-          setSelectedAccount={handleAccountSelect}
-          onAddAccount={handleAddAccount}
-          isBankFormOpen={isBankFormOpen}
-          isMenuOpen={isMenuOpen}
-        />
+        <BankSideBar
+            accounts={accounts}
+            selectedAccount={selectedAccount}
+            setSelectedAccount={handleAccountSelect}
+            onAddAccount={handleAddAccount}
+            isBankFormOpen={isBankFormOpen}
+            isMenuOpen={isMenuOpen}
+            />
       </SidebarWrapper>
 
 

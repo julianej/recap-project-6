@@ -87,8 +87,8 @@ export const DeleteButton = styled.button`
   border: 2px solid #000;
   border-radius: 8px;
 
-  background: transparent;
-  color: #000;
+  background: black;
+  color: #fff;
 
   font-family: inherit;
   font-size: 1rem;

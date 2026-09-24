@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import BankAccountCard from "./BankAccountCard";
 import { Plus } from "lucide-react";
 import { RefreshCw } from "lucide-react";
@@ -11,9 +12,15 @@ const SidebarTitle = styled.h2`
 `;
 
 const Title = styled.h1`
-  font-size: 40px;
+  @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap');
+
+  font-family: "Silkscreen", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 4rem;
   text-transform: uppercase;
-  margin-bottom: 30px;
+  margin: 2rem 0;
+  line-height: 3rem;
 `;
 
 const AccountList = styled.div`
@@ -121,7 +128,11 @@ export default function BankSideBar({
   return (
     
     <SidebarSection>
-      <Title>Money Manager</Title>
+
+      <Title className="silkscreen-regular">
+        Money Manager
+      </Title>
+
 
       <SidebarTitle>Bank Accounts</SidebarTitle>
 

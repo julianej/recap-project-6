@@ -24,6 +24,7 @@ export default function MenuProfile({
           {/* MENU BUTTON */}
           <MenuButton
             type="button"
+            $variant="primary"
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
@@ -217,13 +218,18 @@ const MenuLink = styled.a`
   width: 100%;
   padding: 0.75rem 1rem;
 
-  color: #000;
+  color: #fff;
   text-decoration: none;
 
   border-radius: 0.5rem;
 
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+
   &:hover {
     background: #f2f2f2;
+    color: #000;
   }
 `;
 

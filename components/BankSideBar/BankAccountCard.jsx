@@ -24,6 +24,8 @@ const AccountCard = styled.button`
 
   &:disabled {
     cursor: not-allowed;
+      background: grey;
+      color: black
   }
 `;
 
