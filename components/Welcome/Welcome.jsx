@@ -44,11 +44,17 @@ const WelcomeWrapper = styled.section`
       h1 {
         font-size: 1rem;
       }
+      h2 {
+       font-size: 2rem;
+       }
 
     @media (min-width: 740px) {
       h1 {
-        font-size: 1rem;
-      }
+        font-size: 1rem;}
+      h2 {
+       font-size: 4rem;
+       }
+
         font-size: 3rem;
         width: 100%;
         padding-right: 0;
