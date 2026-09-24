@@ -33,6 +33,11 @@ const WelcomeWrapper = styled.section`
     margin-bottom: 1.5rem;
   }
 
+  @media (min-width: 740px) {
+    h2 {
+      font-size: 3rem;
+    }}
+
   p {
     font-size: 18px;
     line-height: 1.5;
