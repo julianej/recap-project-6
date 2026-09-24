@@ -4,10 +4,10 @@ import styled from "styled-components";
 export default function Welcome({ variant = "default" }) {
   return (
     <WelcomeWrapper $variant={variant}>
-      <h1>Welcome to Money Manager<br></br>
-        Keep track of your finances, manage your bank accounts,
+      <h1>Welcome to Money Manager</h1>
+       <h2>Keep track of your finances, manage your bank accounts,
         and stay informed about your transactions.
-      </h1>
+      </h2> 
     </WelcomeWrapper>
   );
 }
@@ -18,6 +18,7 @@ const WelcomeWrapper = styled.section`
   border: 2px solid black;
   border-radius: 1rem;
   width: 100%;
+  font-size: 2rem;
 
   @media (min-width: 740px) {
    width: 100%;
@@ -40,17 +41,21 @@ const WelcomeWrapper = styled.section`
   /* DASHBOARD */
   ${({ $variant }) =>
     $variant === "dashboard" && `
+      h1 {
+        font-size: 1rem;
+      }
 
     @media (min-width: 740px) {
+      h1 {
+        font-size: 1rem;
+      }
+        font-size: 3rem;
         width: 100%;
         padding-right: 0;
         }
       width: 100%;
       padding: 2.5rem;
 
-      h1 {
-        font-size: 2rem;
-      }
     `}
 
 `;

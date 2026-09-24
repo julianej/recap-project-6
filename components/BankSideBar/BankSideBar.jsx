@@ -19,7 +19,7 @@ const Title = styled.h1`
   font-style: normal;
   font-size: 4rem;
   text-transform: uppercase;
-  margin: 2rem 0;
+  margin: 0rem 0 2rem;
   line-height: 3rem;
 `;
 
@@ -61,8 +61,14 @@ const SidebarSection = styled.section`
     top: 0;
     align-self: start;
     left: 0;
+    background: black;
+    color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
     @media (min-width: 740px) {
        min-height: 90vh;
+       color: black;
+       background-color: transparent;
   }
 `;
 

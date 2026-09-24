@@ -89,14 +89,15 @@ export default function FloatingNavigation({
         <span>Accounts</span>
       </MenuItem>
 
-      <MenuItem
+    {/* NEW FEATURE SITE */}
+      {/* <MenuItem
         type="button"
         $active={activeSection === "transactions"}
         onClick={() => setActiveSection("transactions")}
       >
         <List size={20} />
         <span>Transactions</span>
-      </MenuItem>
+      </MenuItem> */}
 
       <MenuItem
         type="button"

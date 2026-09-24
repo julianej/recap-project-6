@@ -1,6 +1,6 @@
-
 import { Menu, X, User, LogIn } from "lucide-react";
 import styled from "styled-components";
+import { IconButton } from "@/styles/ButtonStyles";
 
 export default function MenuProfile({
   isMenuOpen,
@@ -19,44 +19,41 @@ export default function MenuProfile({
 
   return (
     <MenuProfileWrapper>
-      {!isLoggedIn && (
+      {!isLoggedIn ? (
         <>
-          {/* MENU BUTTON */}
-          <MenuButton
+          <IconButton
             type="button"
-            $variant="primary"
+            $variant="dark"
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </MenuButton>
+          </IconButton>
 
-          {/* LOGIN BUTTON */}
-          <LoginButton
+          <IconButton
             type="button"
+            $variant="dark"
             onClick={onLogin}
             aria-label="Login"
             title="Login"
           >
             <LogIn size={22} />
-          </LoginButton>
+          </IconButton>
         </>
-      )}
-
-      {isLoggedIn && (
-        <ProfileButton
+      ) : (
+        <IconButton
           type="button"
+          $variant="light"
           onClick={toggleMenu}
           aria-label="Profile"
           aria-expanded={isMenuOpen}
           title="Profile"
         >
           <User size={22} />
-        </ProfileButton>
+        </IconButton>
       )}
 
-      {/* MENU ITEMS */}
       {isMenuOpen && listItems.length > 0 && (
         <ProfileMenu>
           {listItems.map((item) => {
@@ -101,7 +98,6 @@ const MenuProfileWrapper = styled.div`
   z-index: 1000;
 
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 0.5rem;
 
@@ -111,102 +107,26 @@ const MenuProfileWrapper = styled.div`
   }
 `;
 
-const MenuButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 48px;
-  height: 48px;
-
-  padding: 0;
-
-  border: 2px solid #000;
-  border-radius: 50%;
-
-  background: #000;
-  color: #fff;
-
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid #000;
-    outline-offset: 4px;
-  }
-`;
-
-const LoginButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 48px;
-  height: 48px;
-
-  padding: 0;
-
-  border: 2px solid #000;
-  border-radius: 50%;
-
-  background: #000;
-  color: #fff;
-
-  cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
-
-  &:hover {
-    background: #fff;
-    color: #000;
-  }
-
-  &:focus-visible {
-    outline: 2px solid #000;
-    outline-offset: 4px;
-  }
-`;
-
-const ProfileButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 48px;
-  height: 48px;
-
-  padding: 0;
-
-  border: 2px solid #000;
-  border-radius: 50%;
-
-  background: #fff;
-  color: #000;
-
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid #000;
-    outline-offset: 4px;
-  }
-`;
-
 const ProfileMenu = styled.div`
-    position: absolute;
-    top: -3px;
-    right: -0.5rem;
-    display: flex;
-    flex-direction: column;
-    width: 90vw;
-    padding: 0.5rem;
-    background: #000;
-    border: 2px solid transparent;
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    z-index: -777;
-    @media (min-width: 740px) {
-      width: 25vw;
+  position: absolute;
+  top: -3px;
+  right: -0.5rem;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 90vw;
+  padding: 0.5rem;
+
+  background: #000;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  z-index: -777;
+
+  @media (min-width: 740px) {
+    width: 25vw;
   }
 `;
 
@@ -257,4 +177,3 @@ const MenuItem = styled.button`
     background: #f2f2f2;
   }
 `;
-

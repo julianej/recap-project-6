@@ -101,3 +101,39 @@ export const DeleteButton = styled.button`
     color: #fff;
   }
 `;
+
+export const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+  padding: 0;
+
+  border: 2px solid #000;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  ${({ $variant }) =>
+    $variant === "dark"
+      ? `
+        background: #000;
+        color: #fff;
+
+        &:hover {
+          background: #fff;
+          color: #000;
+        }
+      `
+      : `
+        background: #fff;
+        color: #000;
+
+        &:hover {
+          background: #000;
+          color: #fff;
+        }
+      `}
+`;

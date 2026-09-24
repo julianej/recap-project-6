@@ -36,15 +36,7 @@ export default function HomePage() {
 
   // const [isLoginFormOpen, setIsLoginFormOpen] = useState(false); // HERE SET LOGIN-FORM LATER
  
-  // NOT LOGGED IN by default
-  const isLoggedIn = false;
 
-  // function onLogIn() {
-  //   setIsLoginFormOpen(true);
-  // }
-  function onLogIn() {
-    router.push("/dashboard");
-  }
 
   return (
     <main>
@@ -57,7 +49,7 @@ export default function HomePage() {
        onLogin={onLogIn} 
        listItems={listMenuItems} />
 
-    {/* LOGIN FORM */}
+    {/* LOGIN FORM AS ANOTHER FEATURE*/}
          {/* {isLoginFormOpen && ( 
           <LoginForm
             onClose={() => setIsLoginFormOpen(false)}

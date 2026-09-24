@@ -1,11 +1,10 @@
 import useSWR from "swr";
 import { useState } from "react";
 import { useRouter } from "next/router"; // MENU LINK
-// ...your existing imports
 
 import { X, Plus, User, LogOut } from "lucide-react";
-import styled, { keyframes }  from "styled-components";
-import { Loading, Spinner } from "@/styles/LoadingStyles";
+import styled from "styled-components";
+import { Spinner } from "@/styles/LoadingStyles";
 import MenuProfile from "@/components/MenuProfile/MenuProfile";
 import FloatingNavigation from "@/components/FloatingNavigation/FloatingNavigation";
 
@@ -69,18 +68,6 @@ const SidebarWrapper = styled.aside`
      width: 25%;}
 `;
 
-const slideUp = keyframes`
-  from {
-    transform: translate(-50%, 100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-`;
-
 const AddButton = styled.button`
   background: white;
   width: 100%;
@@ -106,12 +93,6 @@ const Title = styled.h1`
     margin-bottom: 30px;
     background-color: white;
     padding: 3rem;
-`;
-
-const DashboardTitle = styled.h1`
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 700;
 `;
 
 
