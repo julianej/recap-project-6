@@ -32,6 +32,10 @@ const WelcomeWrapper = styled.section`
     text-transform: uppercase;
     margin-bottom: 1.5rem;
   }
+  
+  h2 {
+      font-size: 2rem;
+    }
 
   @media (min-width: 740px) {
     h2 {
