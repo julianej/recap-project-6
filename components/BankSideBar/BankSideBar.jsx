@@ -1,19 +1,60 @@
 import styled from "styled-components";
-import BankAccountCard from "./BankAccountCard";
-import { Plus } from "lucide-react";
-import { RefreshCw } from "lucide-react";
+import { Plus, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
-import useSWR from "swr";
+
+import BankAccountCard from "./BankAccountCard";
 
 const SidebarTitle = styled.h2`
-  margin: 0 0 1.5rem;
+  margin: 1rem 0 1.5rem;
   font-size: 1.2rem;
+  text-align: center;
 `;
 
 const Title = styled.h1`
-  font-size: 40px;
+  font-family: "Silkscreen", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 4rem;
   text-transform: uppercase;
-  margin-bottom: 30px;
+
+  margin: 0 0 2rem;
+
+  line-height: 3rem;
+`;
+
+const SidebarHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (min-width: 740px) {
+    display: block;
+  }
+`;
+
+const CollapseButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+  position: relative;
+  right: -45%;
+
+  border: 1px solid currentColor;
+  border-radius: 50%;
+
+  background: transparent;
+  color: inherit;
+
+  cursor: pointer;
+
+  @media (min-width: 740px) {
+    display: none;
+  }
 `;
 
 const AccountList = styled.div`
@@ -22,7 +63,6 @@ const AccountList = styled.div`
   gap: 0.75rem;
 `;
 
-
 const AddBankAccountButton = styled.button`
   display: flex;
   align-items: center;
@@ -30,32 +70,48 @@ const AddBankAccountButton = styled.button`
   gap: 8px;
 
   width: 100%;
-  margin-top: 1.5rem;
+  margin: 1.5rem 0;
   padding: 0.75rem;
 
   border: 1px solid #000;
   border-radius: 8px;
 
-  background: ${({ $selected }) =>
-    $selected ? "#000" : "#fff"};
-
-  color: ${({ $selected }) =>
-    $selected ? "#fff" : "#000"};
+  background: ${({ $selected }) => ($selected ? "#000" : "#fff")};
+  color: ${({ $selected }) => ($selected ? "#fff" : "#000")};
 
   cursor: pointer;
 `;
 
 const SidebarSection = styled.section`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-    position: sticky;
-    top: 0;
-    align-self: start;
-    left: 0;
-    @media (min-width: 740px) {
-       min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: auto;
+
+  position: sticky;
+  top: 0;
+  align-self: start;
+
+  padding: 2rem;
+
+  background: #000;
+  color: #fff;
+
+  border-radius: 1rem;
+
+  @media (min-width: 740px) {
+    background: transparent;
+    min-height:90vh;
+    color: #000;
+  }
+`;
+
+const SidebarContent = styled.div`
+  display: ${({ $isCollapsed }) => ($isCollapsed ? "none" : "block")};
+
+  @media (min-width: 740px) {
+    display: block;
   }
 `;
 
@@ -64,22 +120,19 @@ const SyncSection = styled.div`
 
   display: flex;
   flex-direction: column;
-  gap: 0.35rem; 
+  gap: 0.35rem;
 `;
 
 const SyncButton = styled.button`
-  width: 100%;
-  padding: 0.75rem 1rem;
-
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 
+  width: 100%;
+  padding: 0.75rem 1rem;
+
   border: none;
-  /* border-radius: 8px;
-  background: #000;
-  color: #fff; */
 
   font: inherit;
   font-weight: 500;
@@ -101,49 +154,60 @@ const SyncStatus = styled.span`
   text-align: center;
 `;
 
-
 export default function BankSideBar({
+  accounts = [],
   selectedAccount,
   setSelectedAccount,
   onAddAccount,
   isBankFormOpen,
 }) {
-
   const [lastSyncedAt, setLastSyncedAt] = useState(null);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
-  const {
-    data: accounts = [],
-    mutate: mutateAccounts,
-  } = useSWR("/api/bankaccounts");
-
-  // console.log("accounts:", accounts);
-
-  return (
-    
-    <SidebarSection>
+ return (
+  <SidebarSection>
+    <SidebarHeader>
       <Title>Money Manager</Title>
 
-      <SidebarTitle>Bank Accounts</SidebarTitle>
+    </SidebarHeader>
 
-     <AccountList>
-      {accounts.map((account) => (
-      <BankAccountCard
+
+  <SidebarTitle>Bank Accounts</SidebarTitle>
+   <CollapseButton
+        type="button"
+        onClick={() => setIsCollapsed((collapsed) => !collapsed)}
+        aria-expanded={!isCollapsed}
+        aria-label={
+          isCollapsed ? "Open bank accounts" : "Close bank accounts"
+        }
+      >
+        {isCollapsed ? (
+          <ChevronDown size={20} />
+        ) : (
+          <ChevronUp size={20} />
+        )}
+      </CollapseButton>
+          <SidebarContent $isCollapsed={isCollapsed}>
+      <AccountList>
+        {accounts.map((account) => (
+          <BankAccountCard
             key={account._id}
             account={account}
             selected={selectedAccount === account._id}
             disabled={isBankFormOpen}
             onClick={() => setSelectedAccount(account._id)}
-        />))}
-    </AccountList>
+          />
+        ))}
+      </AccountList>
 
-    <AddBankAccountButton
-      type="button"
-      $selected={isBankFormOpen}
-      onClick={onAddAccount}
-    >
-      <span>Add Bank Account</span>
-      <Plus size={18} />
-    </AddBankAccountButton>
+      <AddBankAccountButton
+        type="button"
+        $selected={isBankFormOpen}
+        onClick={onAddAccount}
+      >
+        <span>Add Bank Account</span>
+        <Plus size={18} />
+      </AddBankAccountButton>
 
       <SyncSection>
         <SyncButton
@@ -161,6 +225,6 @@ export default function BankSideBar({
             : "Noch nie"}
         </SyncStatus>
       </SyncSection>
-    </SidebarSection>
-  );
-}
+    </SidebarContent>
+  </SidebarSection>
+)};

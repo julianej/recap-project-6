@@ -1,5 +1,43 @@
 import styled from "styled-components";
 
+
+export const MenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+    padding: 0;
+    right: 2rem;
+    position: absolute;
+    border: 2px solid #000;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    top: 3rem;
+
+  border: 2px solid #000;
+  border-radius: 50%;
+
+  background: #fff;
+  color: #000;
+
+  cursor: pointer;
+
+  &:hover {
+    background: #000;
+    color: #fff;
+  }
+
+  @media (min-width: 740px) {
+    display:block;
+    right: 5rem;
+  }
+`;
+
 export const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem;
@@ -49,8 +87,8 @@ export const DeleteButton = styled.button`
   border: 2px solid #000;
   border-radius: 8px;
 
-  background: transparent;
-  color: #000;
+  background: black;
+  color: #fff;
 
   font-family: inherit;
   font-size: 1rem;
@@ -62,4 +100,40 @@ export const DeleteButton = styled.button`
     background: #000;
     color: #fff;
   }
+`;
+
+export const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+  padding: 0;
+
+  border: 2px solid #000;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  ${({ $variant }) =>
+    $variant === "dark"
+      ? `
+        background: #000;
+        color: #fff;
+
+        &:hover {
+          background: #fff;
+          color: #000;
+        }
+      `
+      : `
+        background: #fff;
+        color: #000;
+
+        &:hover {
+          background: #000;
+          color: #fff;
+        }
+      `}
 `;

@@ -110,18 +110,18 @@ export default function TransactionList({
     setEditingTransaction(null);
   }
 
-function handleDeleteClick(transaction) {
-  setDeletingTransactionPopup(transaction);
-}
+  function handleDeleteClick(transaction) {
+    setDeletingTransactionPopup(transaction);
+  }
 
-function handleCancelDelete() {
-  setDeletingTransactionPopup(null);
-}
+  function handleCancelDelete() {
+    setDeletingTransactionPopup(null);
+  }
 
-async function handleConfirmDelete(id) {
-  setEditingTransaction(null);
-  setDeletingTransactionPopup(null);
-  setDeletingId(id);
+  async function handleConfirmDelete(id) {
+    setEditingTransaction(null);
+    setDeletingTransactionPopup(null);
+    setDeletingId(id);
 
   try {
     const response = await fetch(`/api/transactions/${id}`, {
