@@ -25,7 +25,7 @@ import TransactionFilter from "@/components/TransactionFilter/TransactionFilter"
 
 const Main = styled.main`
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 
   @media (min-width: 740px) {
    flex-direction: row;
@@ -61,7 +61,7 @@ const MenuProfileWrapper = styled.div`
 `;
 
 const SidebarWrapper = styled.aside`
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 1rem;
   width: 100%;
   border-right: 2px solid black;
     @media (min-width: 740px) {

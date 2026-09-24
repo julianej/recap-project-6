@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import { Plus, RefreshCw } from "lucide-react";
+import { Plus, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 
 import BankAccountCard from "./BankAccountCard";
 
 const SidebarTitle = styled.h2`
-  margin: 0 0 1.5rem;
+  margin: 1rem 0 1.5rem;
   font-size: 1.2rem;
+  text-align: center;
 `;
 
 const Title = styled.h1`
@@ -19,6 +20,41 @@ const Title = styled.h1`
   margin: 0 0 2rem;
 
   line-height: 3rem;
+`;
+
+const SidebarHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (min-width: 740px) {
+    display: block;
+  }
+`;
+
+const CollapseButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+  position: relative;
+  right: -45%;
+
+  border: 1px solid currentColor;
+  border-radius: 50%;
+
+  background: transparent;
+  color: inherit;
+
+  cursor: pointer;
+
+  @media (min-width: 740px) {
+    display: none;
+  }
 `;
 
 const AccountList = styled.div`
@@ -34,7 +70,7 @@ const AddBankAccountButton = styled.button`
   gap: 8px;
 
   width: 100%;
-  margin-top: 1.5rem;
+  margin: 1.5rem 0;
   padding: 0.75rem;
 
   border: 1px solid #000;
@@ -51,7 +87,7 @@ const SidebarSection = styled.section`
   flex-direction: column;
 
   width: 100%;
-  min-height: 90vh;
+  height: auto;
 
   position: sticky;
   top: 0;
@@ -66,7 +102,16 @@ const SidebarSection = styled.section`
 
   @media (min-width: 740px) {
     background: transparent;
+    min-height:90vh;
     color: #000;
+  }
+`;
+
+const SidebarContent = styled.div`
+  display: ${({ $isCollapsed }) => ($isCollapsed ? "none" : "block")};
+
+  @media (min-width: 740px) {
+    display: block;
   }
 `;
 
@@ -117,13 +162,32 @@ export default function BankSideBar({
   isBankFormOpen,
 }) {
   const [lastSyncedAt, setLastSyncedAt] = useState(null);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
-  return (
-    <SidebarSection>
+ return (
+  <SidebarSection>
+    <SidebarHeader>
       <Title>Money Manager</Title>
 
-      <SidebarTitle>Bank Accounts</SidebarTitle>
+    </SidebarHeader>
 
+
+  <SidebarTitle>Bank Accounts</SidebarTitle>
+   <CollapseButton
+        type="button"
+        onClick={() => setIsCollapsed((collapsed) => !collapsed)}
+        aria-expanded={!isCollapsed}
+        aria-label={
+          isCollapsed ? "Open bank accounts" : "Close bank accounts"
+        }
+      >
+        {isCollapsed ? (
+          <ChevronDown size={20} />
+        ) : (
+          <ChevronUp size={20} />
+        )}
+      </CollapseButton>
+          <SidebarContent $isCollapsed={isCollapsed}>
       <AccountList>
         {accounts.map((account) => (
           <BankAccountCard
@@ -161,6 +225,6 @@ export default function BankSideBar({
             : "Noch nie"}
         </SyncStatus>
       </SyncSection>
-    </SidebarSection>
-  );
-}
+    </SidebarContent>
+  </SidebarSection>
+)};
