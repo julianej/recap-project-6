@@ -194,16 +194,19 @@ const ProfileButton = styled.button`
 const ProfileMenu = styled.div`
     position: absolute;
     top: -3px;
-    right: 0rem;
+    right: -0.5rem;
     display: flex;
     flex-direction: column;
-    min-width: 480px;
+    width: 90vw;
     padding: 0.5rem;
-    background: #fff;
+    background: #000;
     border: 2px solid transparent;
     border-radius: 0.75rem;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     z-index: -777;
+    @media (min-width: 740px) {
+      width: 25vw;
+  }
 `;
 
 const MenuLink = styled.a`
@@ -236,7 +239,7 @@ const MenuItem = styled.button`
   border-radius: 0.5rem;
 
   background: transparent;
-  color: #000;
+  color: #fff;
 
   font: inherit;
   text-align: left;
@@ -244,6 +247,7 @@ const MenuItem = styled.button`
   cursor: pointer;
 
   &:hover {
+    color: #000;
     background: #f2f2f2;
   }
 `;
