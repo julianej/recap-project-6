@@ -1,28 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { X, LoaderCircle } from "lucide-react";
-import { SubmitButton,CancelButton,} from "@/styles/ButtonStyles";
+import { X, } from "lucide-react";
+import {
+  SubmitButton,
+  CancelButton,
+} from "@/styles/ButtonStyles";
 
-
-const LoadingSpinner = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-
-  svg {
-    animation: spin 1s linear infinite;
-  }
-
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-
-    to {
-      transform: rotate(360deg);
-    }
-  }
-`;
 
 const Form = styled.form`
   display: flex;
@@ -231,6 +214,7 @@ export default function BankAccountForm({
       <FormSubTitle>Bank Account Info</FormSubTitle>
 
       <Field>
+         <label htmlFor="account-name">Account Name</label>
         <input
           type="text"
           placeholder="Account name"
@@ -246,6 +230,7 @@ export default function BankAccountForm({
       </Field>
 
       <Field>
+        <label htmlFor="bank-name">Bank Name</label>
         <input
           type="text"
           placeholder="Bank"
@@ -261,6 +246,8 @@ export default function BankAccountForm({
       </Field>
 
       <Field>
+          <label htmlFor="account-iban">IBAN</label>
+
         <input
           type="text"
           placeholder="IBAN"
@@ -276,6 +263,8 @@ export default function BankAccountForm({
       </Field>
 
       <Field>
+        <label htmlFor="account-bic">BIC</label>
+
         <input
           type="text"
           placeholder="BIC"
@@ -291,6 +280,8 @@ export default function BankAccountForm({
       </Field>
 
       <Field>
+          <label htmlFor="account-balance">Balance</label>
+
         <input
           type="number"
           placeholder="Balance"

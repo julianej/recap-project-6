@@ -1,26 +1,30 @@
 import styled from "styled-components";
 
-const AccountCard = styled.div`
+const AccountCard = styled.button`
+  width: 100%;
   padding: 1rem;
+
   border: 2px solid #000;
-  border-radius: 12px;
+  border-radius: 1rem;
 
-  background: ${({ $disabled, $selected }) =>
-    $disabled
-      ? "#ccc"
-      : $selected
-        ? "#000"
-        : "#fff"};
+  background: #fff;
+  color: #000;
 
-  color: ${({ $disabled, $selected }) =>
-    $disabled
-      ? "#000"
-      : $selected
-        ? "#fff"
-        : "#000"};
+  text-align: left;
+  font: inherit;
 
-  cursor: ${({ $disabled }) =>
-    $disabled ? "default" : "pointer"};
+  cursor: pointer;
+
+  ${({ $selected }) =>
+    $selected &&
+    `
+      background: #000;
+      color: #fff;
+    `}
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const EditButton = styled.button`
@@ -59,19 +63,6 @@ const CardHeader = styled.div`
   gap: 1rem;
 `;
 
-const AccountInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ItemBank = styled.div`
-  /* bank */
-`;
-
-const ItemName = styled.div`
-  /* account name */
-`;
-
 const AccountDetails = styled.div`
   margin-top: 1rem;
 
@@ -101,29 +92,19 @@ export default function BankAccountCard({
   selected,
   disabled,
   onClick,
-  onEdit,
 }) {
   return (
     <AccountCard
+      type="button"
       $selected={selected}
-      $disabled={disabled}
-      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      onClick={onClick}
     >
-
-     <CardHeader>
-          <div className="accountInfo">
-            <div className="itemBank">{account.bank}</div>
-            <div className="itemName">{account.name}</div>
-          </div>
-        {/* <EditButton
-          type="button"
-          aria-label={`Edit ${account.name}`}
-          onClick={(event) => {
-            event.stopPropagation();
-            onEdit(account);
-          }}
-        >
-        </EditButton> */}
+      <CardHeader>
+        <div className="accountInfo">
+          <div className="itemBank">{account.bank}</div>
+          <div className="itemName">{account.name}</div>
+        </div>
       </CardHeader>
 
       {selected && !disabled && (

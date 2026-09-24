@@ -49,13 +49,6 @@ export default mongoose.models.BankAccounts ||
 
 // existing model || create new model
 
-// let Accounts;
-
-// if (mongoose.models.Accounts) {
-//   Accounts = mongoose.models.Accounts;
-// } else {
-//   Accounts = mongoose.model("Accounts", accountSchema);
-// }
 
 // const BankAccounts =
 //   mongoose.models.BankAccounts ||

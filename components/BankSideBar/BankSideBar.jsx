@@ -50,7 +50,6 @@ const SidebarSection = styled.section`
     flex-direction: column;
     width: 100%;
     height: auto;
-    /* background: #fff; */
     position: sticky;
     top: 0;
     align-self: start;
@@ -117,7 +116,7 @@ export default function BankSideBar({
     mutate: mutateAccounts,
   } = useSWR("/api/bankaccounts");
 
-  console.log("accounts:", accounts);
+  // console.log("accounts:", accounts);
 
   return (
     
