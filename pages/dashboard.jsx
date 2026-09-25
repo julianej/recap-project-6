@@ -283,7 +283,7 @@ function handleAccountsClick() {
 }
 
   // ====================
-  // FILTER
+  // SEARCH
   // ====================
 
   // TRADITIONAL FUNCTION
@@ -295,6 +295,11 @@ function handleAccountsClick() {
   // const handleSearch = (searchTerm) => { {
   //   setSearchTerm(searchTerm);
   // }};
+
+  // ====================
+  // FILTER
+  // ====================
+
 
   const matchesFilter = (transaction) => {
     const transactionYear = new Date(transaction.date)
@@ -413,7 +418,6 @@ function handleAccountsClick() {
 
       <TransactionSearch
         onSubmit={handleSearch}
-        // onSubmit={setSearchTerm}
       />
 
       <TransactionFilter

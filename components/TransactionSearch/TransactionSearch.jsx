@@ -17,17 +17,25 @@ const SearchContainer = styled.div`
 `;
 
 
-export default function TransactionSearch() {
+export default function TransactionSearch({onSubmit}) {
   const [searchTerm, setSearchTerm] = useState("");
 
   function handleSubmit() {
     event.preventDefault();
     console.log("A new search term was submitted:", searchTerm);
+
+    onSubmit(searchTerm);
   }
+
+  // function handleSubmit() {
+  //   event.preventDefault();
+  //   console.log("A new search term was submitted:", searchTerm);
+  // }
 
   return (
     <SearchContainer>
-    <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+    {/* <form onSubmit={handleSubmit}> */}
       <label htmlFor="searchTerm">Search</label>
       <input
         name="searchTerm"
