@@ -286,19 +286,6 @@ function handleAccountsClick() {
 }
 
   // ====================
-  // SEARCH
-  // ====================
-
-  // TRADITIONAL FUNCTION for useSTATE
-  // function handleSearch(searchTerm) {
-  //     console.log("Parent received:", searchTerm);
-
-  // WRAPPER FUNCTION
-  // const handleSearch = (searchTerm) => { {
-  //   setSearchTerm(searchTerm);
-  // }};
-
-  // ====================
   // FILTER
   // ====================
 
