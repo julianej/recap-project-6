@@ -435,6 +435,7 @@ function handleAccountsClick() {
       <TransactionSearch
         onSubmit={handleSearch}
         onReset={handleSearchReset}
+        hasSearch={searchTerm !== ""}
       />
 
       <TransactionFilter

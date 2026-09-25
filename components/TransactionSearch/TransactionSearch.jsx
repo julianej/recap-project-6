@@ -17,8 +17,9 @@ const SearchContainer = styled.div`
 `;
 
 
-export default function TransactionSearch({onSubmit, onReset}) {
+export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -28,17 +29,14 @@ export default function TransactionSearch({onSubmit, onReset}) {
 
     // Clear the input after submitting
     setSearchTerm("");
+    setHasSearched(true);
   }
 
   function handleReset() {
     setSearchTerm("");
+    setHasSearched(false);
     onReset();
   }
-
-  // function handleSubmit() {
-  //   event.preventDefault();
-  //   console.log("A new search term was submitted:", searchTerm);
-  // }
 
   return (
     <SearchContainer>
@@ -56,7 +54,9 @@ export default function TransactionSearch({onSubmit, onReset}) {
  {/* Reset button just available after Search enter*/}
       <button type="button" >Search for {searchTerm}</button>
       {/*Reset Button*/}
-     <button type="button" onClick={handleReset}>Reset</button> 
+      {hasSearch && (
+       <button type="button" onClick={handleReset}>Reset</button>
+       )}
 
     </form>
     </SearchContainer>
