@@ -189,7 +189,6 @@ export default function Dashboard() {
   const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchInput, setSearchInput] = useState("");
 
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
@@ -291,15 +290,8 @@ function handleAccountsClick() {
   // ====================
 
   // TRADITIONAL FUNCTION for useSTATE
-  function handleSearch(searchTerm) {
-      console.log("Parent received:", searchTerm);
-
-    setSearchTerm(searchTerm);
-  }
-
-  function handleSearchReset() {
-    setSearchTerm("");
-  }
+  // function handleSearch(searchTerm) {
+  //     console.log("Parent received:", searchTerm);
 
   // WRAPPER FUNCTION
   // const handleSearch = (searchTerm) => { {
@@ -429,12 +421,8 @@ function handleAccountsClick() {
       </Title>
 
       <TransactionSearch
-        // searchInput={searchInput}
-        // setSearchInput={setSearchInput}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        // onSubmit={handleSearch}
-        // onReset={handleSearchReset}
         hasSearch={searchTerm !== ""} // SET RESET BUTTON
       />
 
