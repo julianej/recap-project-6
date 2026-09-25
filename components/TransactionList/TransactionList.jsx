@@ -50,7 +50,7 @@ const DeleteAccountButton = styled.button`
   position: relative;
   position: relative;
   bottom: 0;
-  margin-top: 5rem;
+  margin: 4rem auto 7rem; 
 
   padding: 0.75rem 1rem;
 
@@ -69,6 +69,10 @@ const DeleteAccountButton = styled.button`
   &:hover {
     background: #000;
     color: #fff;
+  }
+  @media (min-width: 740px) {
+      left: 70%;
+      margin: 3rem 0 3rem;
   }
 `;
 

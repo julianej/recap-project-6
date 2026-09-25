@@ -29,6 +29,7 @@ const FloatingNavigationWrapper = styled.nav`
     display: flex;
     flex-direction: row;
     gap: 3rem;
+    z-index: 77;
     left: 58%;
   }
 `;
