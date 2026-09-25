@@ -144,7 +144,7 @@ const BankAccountFormWrapper = styled.div`
     background-color: rgba(255, 255, 255, 0.8);
     left: 0%;
     top: 0%;
-    z-index: 77;
+    z-index: 77777;
     height: 100vh;
     @media (min-width: 740px) {
      left: 25%;}
