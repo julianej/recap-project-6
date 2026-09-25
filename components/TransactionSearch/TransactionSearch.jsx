@@ -75,25 +75,32 @@ const ResetButton = styled.button`
 `;
 
 
-export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
-  const [searchTerm, setSearchTerm] = useState("");
+export default function TransactionSearch({
+  searchInput,
+  setSearchInput,
+  onSubmit, 
+  onReset, 
+  hasSearch}) {
+
   
   function handleSubmit(event) {
     event.preventDefault();
     // console.log("A new search term was submitted:", searchTerm);
 
-    if (!searchTerm.trim()) {
-    return;
-  }
+    const value = searchInput.trim();
 
-    onSubmit(searchTerm.trim());
+    if (!value) {
+      return;
+    }
 
-    // Clear the input after submitting
-    setSearchTerm("");
+    onSubmit(value);
+
+    // Clear the input
+    setSearchInput("");
   }
 
   function handleReset() {
-    setSearchTerm("");
+    setSearchInput("");
     onReset();
   }
 
@@ -107,11 +114,11 @@ export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
         name="searchTerm"
         id="searchTerm"
         placeholder="Search for transaction Titel..."
-        value={searchTerm}
-        onChange={(event) => setSearchTerm(event.target.value)}
+        value={searchInput}
+        onChange={(event) => setSearchInput(event.target.value)}
         required
       />
-      <SearchButton type="submit">Search {searchTerm}</SearchButton>
+      <SearchButton type="submit">Search {searchInput}</SearchButton>
       {/*RESET BUTTON */}
       {hasSearch ? (
         <ResetButton type="button" onClick={handleReset}>

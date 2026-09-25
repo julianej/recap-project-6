@@ -189,6 +189,7 @@ export default function Dashboard() {
   const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState("");
 
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
@@ -428,6 +429,8 @@ function handleAccountsClick() {
       </Title>
 
       <TransactionSearch
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
         onSubmit={handleSearch}
         onReset={handleSearchReset}
         hasSearch={searchTerm !== ""} // SET RESET BUTTON
