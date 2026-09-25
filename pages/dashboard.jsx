@@ -187,6 +187,7 @@ export default function Dashboard() {
   const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
+
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -288,8 +289,14 @@ function handleAccountsClick() {
 
   // TRADITIONAL FUNCTION for useSTATE
   function handleSearch(searchTerm) {
-    setSearchTerm(searchTerm);}
+      console.log("Parent received:", searchTerm);
 
+    setSearchTerm(searchTerm);
+  }
+
+  function handleSearchReset() {
+    setSearchTerm("");
+  }
 
   // WRAPPER FUNCTION
   // const handleSearch = (searchTerm) => { {
@@ -307,14 +314,9 @@ function handleAccountsClick() {
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
-
-    const transactionYear = 
-      selectedYear === "All" ||
-      new Date(transaction.date).getFullYear().toString() === selectedYear;
-
     const matchesYear =
-      selectedYear === "all" ||
-      transactionYear === selectedYear;
+    selectedYear === "all" ||
+    new Date(transaction.date).getFullYear().toString() === selectedYear;
 
     const matchesType =
       selectedType === "all" ||
@@ -323,6 +325,13 @@ function handleAccountsClick() {
     const matchesCategory =
       selectedCategories.length === 0 ||
       selectedCategories.includes(transaction.category);
+
+  //   console.log(transaction.title, {
+  //   matchesSearch,
+  //   matchesYear,
+  //   matchesType,
+  //   matchesCategory,
+  // });
 
     return (
       matchesSearch &&
@@ -425,6 +434,7 @@ function handleAccountsClick() {
 
       <TransactionSearch
         onSubmit={handleSearch}
+        onReset={handleSearchReset}
       />
 
       <TransactionFilter
