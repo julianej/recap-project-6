@@ -80,9 +80,13 @@ export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
   
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("A new search term was submitted:", searchTerm);
+    // console.log("A new search term was submitted:", searchTerm);
 
-    onSubmit(searchTerm);
+    if (!searchTerm.trim()) {
+    return;
+  }
+
+    onSubmit(searchTerm.trim());
 
     // Clear the input after submitting
     setSearchTerm("");
@@ -105,6 +109,7 @@ export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
         placeholder="Search for transaction Titel..."
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
+        required
       />
       <SearchButton type="submit">Search {searchTerm}</SearchButton>
       {/*RESET BUTTON */}
