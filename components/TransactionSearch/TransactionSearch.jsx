@@ -25,6 +25,8 @@ export default function TransactionSearch({onSubmit}) {
     console.log("A new search term was submitted:", searchTerm);
 
     onSubmit(searchTerm);
+
+    setSearchValue("");
   }
 
   // function handleSubmit() {

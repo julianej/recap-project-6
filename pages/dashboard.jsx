@@ -286,7 +286,7 @@ function handleAccountsClick() {
   // SEARCH
   // ====================
 
-  // TRADITIONAL FUNCTION
+  // TRADITIONAL FUNCTION for useSTATE
   function handleSearch(searchTerm) {
     setSearchTerm(searchTerm);}
 
@@ -302,9 +302,15 @@ function handleAccountsClick() {
 
 
   const matchesFilter = (transaction) => {
-    const transactionYear = new Date(transaction.date)
-      .getFullYear()
-      .toString();
+    const matchesSearch =
+    transaction.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+
+    const transactionYear = 
+      selectedYear === "All" ||
+      new Date(transaction.date).getFullYear().toString() === selectedYear;
 
     const matchesYear =
       selectedYear === "all" ||
@@ -319,6 +325,7 @@ function handleAccountsClick() {
       selectedCategories.includes(transaction.category);
 
     return (
+      matchesSearch &&
       matchesYear &&
       matchesType &&
       matchesCategory
