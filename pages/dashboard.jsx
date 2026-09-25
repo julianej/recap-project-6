@@ -94,6 +94,7 @@ const Title = styled.h1`
     background-color: white;
     padding: 3rem;
     text-align: center; 
+    border-radius: 1rem;
 `;
 
 
