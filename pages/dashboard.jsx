@@ -429,10 +429,12 @@ function handleAccountsClick() {
       </Title>
 
       <TransactionSearch
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
-        onSubmit={handleSearch}
-        onReset={handleSearchReset}
+        // searchInput={searchInput}
+        // setSearchInput={setSearchInput}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        // onSubmit={handleSearch}
+        // onReset={handleSearchReset}
         hasSearch={searchTerm !== ""} // SET RESET BUTTON
       />
 

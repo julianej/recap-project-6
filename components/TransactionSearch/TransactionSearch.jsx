@@ -87,49 +87,46 @@ const ResetButton = styled.button`
 
 
 export default function TransactionSearch({
-  searchInput,
-  setSearchInput,
-  onSubmit, 
-  onReset, 
+  searchTerm,
+  setSearchTerm,
+  // searchInput,
+  // setSearchInput,
+  // onSubmit, 
+  // onReset, 
   hasSearch}) {
 
   
-  function handleSubmit(event) {
-    event.preventDefault();
-    // console.log("A new search term was submitted:", searchTerm);
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  // console.log("A new search term was submitted:", searchTerm);
 
-    const value = searchInput.trim();
-
-    if (!value) {
-      return;
-    }
-
-    onSubmit(value);
-
-    // Clear the input
-    setSearchInput("");
+    function handleSearch(event) {
+        setSearchTerm(event.target.value);
   }
 
   function handleReset() {
-    setSearchInput("");
-    onReset();
+    setSearchTerm("");
   }
 
   return (
     <SearchContainer>
-      <SearchForm onSubmit={handleSubmit}>
+      <SearchForm >
+      {/* <SearchForm onSubmit={handleSubmit}> / // ON SUBMIT /*/}
       <InputLabel htmlFor="searchTerm">
           Search transactions
        </InputLabel>
-      <SearchInput
-        name="searchTerm"
-        id="searchTerm"
-        placeholder="Search for transaction Titel..."
-        value={searchInput}
-        onChange={(event) => setSearchInput(event.target.value)}
-        required
-      />
-      <SearchButton type="submit">Search {searchInput}</SearchButton>
+        <SearchInput
+          name="searchTerm"
+          id="searchTerm"
+          placeholder="Search for transaction Titel..."
+          value={searchTerm}
+          onChange={handleSearch}
+          // ON SUBMIT /*/
+          // value={searchInput}
+          // onChange={(event) => setSearchInput(event.target.value)}
+          required
+        />
+      <SearchButton>Search {searchTerm}</SearchButton>
       {/*RESET BUTTON */}
       {hasSearch ? (
         <ResetButton type="button" onClick={handleReset}>
