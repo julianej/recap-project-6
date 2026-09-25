@@ -326,13 +326,6 @@ function handleAccountsClick() {
       selectedCategories.length === 0 ||
       selectedCategories.includes(transaction.category);
 
-  //   console.log(transaction.title, {
-  //   matchesSearch,
-  //   matchesYear,
-  //   matchesType,
-  //   matchesCategory,
-  // });
-
     return (
       matchesSearch &&
       matchesYear &&
@@ -435,7 +428,7 @@ function handleAccountsClick() {
       <TransactionSearch
         onSubmit={handleSearch}
         onReset={handleSearchReset}
-        hasSearch={searchTerm !== ""}
+        hasSearch={searchTerm !== ""} // SET RESET BUTTON
       />
 
       <TransactionFilter

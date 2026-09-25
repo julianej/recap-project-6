@@ -76,8 +76,7 @@ const ResetButton = styled.button`
 
 export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
   const [searchTerm, setSearchTerm] = useState("");
-  // const [hasSearched, setHasSearched] = useState(false);
-
+  
   function handleSubmit(event) {
     event.preventDefault();
     console.log("A new search term was submitted:", searchTerm);
@@ -86,12 +85,10 @@ export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
 
     // Clear the input after submitting
     setSearchTerm("");
-    // setHasSearched(true);
   }
 
   function handleReset() {
     setSearchTerm("");
-    // setHasSearched(false);
     onReset();
   }
 
@@ -109,12 +106,13 @@ export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
         onChange={(event) => setSearchTerm(event.target.value)}
       />
       <SearchButton type="submit">Search for {searchTerm}</SearchButton>
-      {/*Reset Button*/}
-      {hasSearch && (
-       <ResetButton type="button" onClick={handleReset}>
-         <RotateCcw size={16} />
-         Reset</ResetButton>
-       )}
+      {/*RESET BUTTON */}
+      {hasSearch ? (
+        <ResetButton type="button" onClick={handleReset}>
+          <RotateCcw size={16} />
+          Reset
+        </ResetButton>
+      ) : null}
 
     </SearchForm>
     </SearchContainer>
