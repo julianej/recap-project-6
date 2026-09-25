@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { useState } from "react";
 import { useRouter } from "next/router"; // MENU LINK
 
-import { X, Plus, User, LogOut } from "lucide-react";
+import { X, Plus,LogOut } from "lucide-react";
 import styled from "styled-components";
 import { Spinner } from "@/styles/LoadingStyles";
 import MenuProfile from "@/components/MenuProfile/MenuProfile";
@@ -15,6 +15,7 @@ import AccountBalance from "@/components/AccountBalance/AccountBalance";
 import TransactionForm from "@/components/TransactionForm/TransactionForm";
 import TransactionList from "@/components/TransactionList/TransactionList";
 
+import TransactionSearch from "@/components/TransactionSearchTransactionSearch";
 import TransactionFilter from "@/components/TransactionFilter/TransactionFilter";
 
 
@@ -185,6 +186,7 @@ export default function Dashboard() {
   
   const [isBankFormOpen, setIsBankFormOpen] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -398,6 +400,10 @@ function handleAccountsClick() {
         {selectedAccountData?.bank} <br />
         {selectedAccountData?.name}
       </Title>
+
+      <TransactionSearch
+        onSubmit={handleSearch}
+      />
 
       <TransactionFilter
         transactions={data ?? []}
