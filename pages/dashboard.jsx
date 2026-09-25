@@ -15,7 +15,7 @@ import AccountBalance from "@/components/AccountBalance/AccountBalance";
 import TransactionForm from "@/components/TransactionForm/TransactionForm";
 import TransactionList from "@/components/TransactionList/TransactionList";
 
-import TransactionSearch from "@/components/TransactionSearchTransactionSearch";
+import TransactionSearch from "@/components/TransactionSearch/TransactionSearch";
 import TransactionFilter from "@/components/TransactionFilter/TransactionFilter";
 
 
@@ -286,6 +286,16 @@ function handleAccountsClick() {
   // FILTER
   // ====================
 
+  // TRADITIONAL FUNCTION
+  function handleSearch(searchTerm) {
+    setSearchTerm(searchTerm);}
+
+
+  // WRAPPER FUNCTION
+  // const handleSearch = (searchTerm) => { {
+  //   setSearchTerm(searchTerm);
+  // }};
+
   const matchesFilter = (transaction) => {
     const transactionYear = new Date(transaction.date)
       .getFullYear()
@@ -403,6 +413,7 @@ function handleAccountsClick() {
 
       <TransactionSearch
         onSubmit={handleSearch}
+        // onSubmit={setSearchTerm}
       />
 
       <TransactionFilter
