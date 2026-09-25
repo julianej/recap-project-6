@@ -68,13 +68,13 @@ const DeleteAccountButton = styled.button`
   }
 
   &:hover {
-    background: #000;
-    color: #fff;
+    background: grey;
+    color: #000;
   }
 
     @media (min-width: 740px) {
-       left: 70%;
-       margin: 3rem 0 3rem;
+       left: 82%;
+        margin: 5rem 0 0.5rem;
     }
 `;
 
@@ -200,7 +200,7 @@ export default function TransactionList({
           <Trash2 size={18} />
 
           <span>
-            Delete the bank account and all its transactions
+            Delete the Bank Account 
           </span>
         </DeleteAccountButton>
 
