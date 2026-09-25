@@ -40,6 +40,7 @@ const SearchInput = styled.input`
 const SearchButton = styled.button`
   padding: 0.75rem 1rem;
   border: none;
+  text-transform: uppercase;
   border-radius: 0.5rem;
   background: #000;
   color: #fff;
@@ -105,7 +106,7 @@ export default function TransactionSearch({onSubmit, onReset, hasSearch}) {
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
       />
-      <SearchButton type="submit">Search for {searchTerm}</SearchButton>
+      <SearchButton type="submit">Search {searchTerm}</SearchButton>
       {/*RESET BUTTON */}
       {hasSearch ? (
         <ResetButton type="button" onClick={handleReset}>

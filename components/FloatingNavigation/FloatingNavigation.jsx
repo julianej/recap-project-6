@@ -20,7 +20,7 @@ const FloatingNavigationWrapper = styled.nav`
     justify-content: space-around;
     height: 50px;
     padding: 0.5rem;
-    background: #fff;
+    background: #000;
     border: 2px solid #000;
     border-radius: 999px;
     gap: 0rem;
@@ -49,6 +49,7 @@ const MenuItem = styled.button`
 
   background: transparent;
   color: #000;
+  color: #fff;
 
   cursor: pointer;
 
@@ -62,6 +63,7 @@ const MenuItem = styled.button`
     `
       background: #000;
       color: #fff;
+      border: 1px solid #575757;
     `}
 `;
 
