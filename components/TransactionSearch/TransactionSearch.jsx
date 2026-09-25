@@ -36,6 +36,17 @@ const SearchInput = styled.input`
     border-color: #000;
   }
 `;
+const InputLabel = styled.label`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+`;
 
 const SearchButton = styled.button`
   padding: 0.75rem 1rem;
@@ -107,9 +118,9 @@ export default function TransactionSearch({
   return (
     <SearchContainer>
       <SearchForm onSubmit={handleSubmit}>
-      <label className="hidden" htmlFor="searchTerm">
-        Search transactions
-      </label>
+      <InputLabel htmlFor="searchTerm">
+          Search transactions
+       </InputLabel>
       <SearchInput
         name="searchTerm"
         id="searchTerm"
