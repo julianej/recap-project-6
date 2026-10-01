@@ -1,7 +1,6 @@
 import { pdf } from "@react-pdf/renderer";
 import styled from "styled-components";
 import { Download} from "lucide-react";
-// import { useState } from "react";
 
 import MoneyManagerReport from "./MoneyManagerReport";
 
@@ -28,9 +27,10 @@ const DownloadIcon = styled.span`
 
 export default function DownloadButton({
   transactions = [],
+  categories = [],
   account,
   setPdfLoading,
-  selectedType = "all",
+  selectedType = "all"
 }) {
 
   async function handleDownload() {
@@ -50,10 +50,12 @@ export default function DownloadButton({
     // Give React one frame to render the loading overlay
     await new Promise((resolve) => requestAnimationFrame(resolve));
 
+
     try {
       const blob = await pdf(
         <MoneyManagerReport
           transactions={transactions}
+          categories={categories}
           account={account}
         />
       ).toBlob();
@@ -88,6 +90,7 @@ export default function DownloadButton({
     > 
       <DownloadIcon>
         <Download size={18} />
+        
       </DownloadIcon>
     </PDFDownloadButton>
   );

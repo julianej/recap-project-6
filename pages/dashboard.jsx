@@ -123,19 +123,18 @@ const PrimaryButton = styled.button`
 
 const Toast = styled.div`
   position: fixed;
-  top: 2rem;
+  bottom: 2rem;
   left: 0;
   right: 0;
 
   width: fit-content;
-  margin: 0 auto;
 
   z-index: 9999;
 
-  padding: 0.75rem 1.5rem;
+  padding: 2rem 2rem;
   border-radius: 8px;
 
-  background: black;
+  background: #a80505;
   color: white;
 `;
 
@@ -193,6 +192,7 @@ export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedYear, setSelectedYear] = useState("all");
+  const [selectedMonth, setSelectedMonth] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedCategories, setSelectedCategories] = useState([]);
 
@@ -220,6 +220,15 @@ export default function Dashboard() {
       : null
   );
 
+  const { data: categories, error: categoriesError, } = useSWR(
+    selectedAccount
+      ? `/api/categories?account=${selectedAccount}`
+      : null
+  );
+
+console.log("DASHBOARD selectedAccount:", selectedAccount);
+console.log("DASHBOARD categories:", categories);
+console.log("DASHBOARD categoriesError:", categoriesError);
 
   const router = useRouter();
 
@@ -295,6 +304,8 @@ function handleAccountsClick() {
 
 
   const matchesFilter = (transaction) => {
+     const transactionDate = new Date(transaction.date);
+
     const matchesSearch =
     transaction.title
       .toLowerCase()
@@ -303,6 +314,10 @@ function handleAccountsClick() {
     const matchesYear =
     selectedYear === "all" ||
     new Date(transaction.date).getFullYear().toString() === selectedYear;
+
+    const matchesMonth =
+    selectedMonth === "all" ||
+    transactionDate.getMonth() === Number(selectedMonth);
 
     const matchesType =
       selectedType === "all" ||
@@ -315,6 +330,7 @@ function handleAccountsClick() {
     return (
       matchesSearch &&
       matchesYear &&
+      matchesMonth &&
       matchesType &&
       matchesCategory
     );
@@ -418,11 +434,14 @@ function handleAccountsClick() {
 
       <TransactionFilter
           transactions={data ?? []}
+          categories={categories}
           accounts={accounts}
-          selectedAccount={selectedAccountData}
+          selectedAccount={selectedAccount}
           filteredTransactions={filteredTransactions}
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
+          selectedMonth={selectedMonth}
+          setSelectedMonth={setSelectedMonth}
           selectedType={selectedType}
           setSelectedType={setSelectedType}
           selectedCategories={selectedCategories}
@@ -453,6 +472,7 @@ function handleAccountsClick() {
 
       {isFormOpen && (
         <TransactionForm
+          categories={categories}
           selectedAccount={selectedAccount}
           onCancel={() => setIsFormOpen(false)}
           showToast={showToast}
@@ -462,6 +482,7 @@ function handleAccountsClick() {
 
       <TransactionList
         transactions={filteredTransactions}
+        categories={categories}
         selectedAccount={selectedAccount}
         onDeleteAccount={handleDeleteAccount}
         mutate={mutate}
@@ -478,6 +499,7 @@ function handleAccountsClick() {
         <BankAccountFormWrapper>
           <BankAccountForm
             onCancel={() => setIsBankFormOpen(false)}
+            // mutateACCOUNTS
             mutate={mutateAccounts}
             setIsAddingAccount={setIsAddingAccount}
           />
